@@ -22,8 +22,9 @@
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{9cd07b4c-cd32-4d5e-a38d-353d15703f7d}</ProjectGuid>
-    <RootNamespace>OpenGLSetup</RootNamespace>
+    <RootNamespace>AmuEngine</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>AmuEngine</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -71,18 +72,18 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)OpenGL Setup\Extern\json;$(SolutionDir)OpenGL Setup\Extern\include;$(includePath)</IncludePath>
+    <IncludePath>$(SolutionDir)AmuEngine\Extern\json;$(SolutionDir)AmuEngine\Extern\include;$(includePath)</IncludePath>
     <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)OpenGL Setup\Extern\json;$(SolutionDir)OpenGL Setup\Extern\include;$(includePath)</IncludePath>
+    <IncludePath>$(SolutionDir)AmuEngine\Extern\json;$(SolutionDir)AmuEngine\Extern\include;$(includePath)</IncludePath>
     <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)OpenGL Setup\Extern\json;$(SolutionDir)OpenGL Setup\Extern\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(SolutionDir)AmuEngine\Extern\json;$(SolutionDir)AmuEngine\Extern\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)OpenGL Setup\Extern\json;$(SolutionDir)OpenGL Setup\Extern\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(SolutionDir)AmuEngine\Extern\json;$(SolutionDir)AmuEngine\Extern\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
