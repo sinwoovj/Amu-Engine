@@ -1,6 +1,7 @@
 #include "CollisionManager.h"
-#include "AEEngine.h"
+#include "AMEngine.h"
 #include "../Utils/Utils.h"
+#include <AMMath.h>
 
 CollisionManager::CollisionManager()
 {
@@ -86,17 +87,17 @@ bool CollisionManager::isCollisionSquareTri(ColliderComp* a, ColliderComp* b) co
 
 bool CollisionManager::isCollisionOBB(ColliderComp* a, ColliderComp* b) const
 {
-	f32 minDotProducts[4];
+	float minDotProducts[4];
 
-	f32 minDotProduct;
-	f32 maxDotProduct;
+	float minDotProduct;
+	float maxDotProduct;
 
 	// Check colA's normal vector
 	for (int i = 0; i < 4; i++)
 	{
 		int in = (i + 1) % 4;
 
-		AEVec2 normal{
+		Vec2 normal{
 			a->vertices[in].x - a->vertices[i].x,
 			a->vertices[in].y - a->vertices[i].y };
 
@@ -104,11 +105,11 @@ bool CollisionManager::isCollisionOBB(ColliderComp* a, ColliderComp* b) const
 
 		for (const Vec3& vB : b->vertices)
 		{
-			AEVec2 vecAB{
+			Vec2 vecAB{
 				vB.x - a->vertices[in].x, vB.y - a->vertices[in].y
 			};
 
-			f32 dotProduct = normal.x * vecAB.x + normal.y * vecAB.y;
+			float dotProduct = normal.x * vecAB.x + normal.y * vecAB.y;
 			if (minDotProduct > dotProduct)
 				minDotProduct = dotProduct;
 		}
@@ -162,7 +163,7 @@ bool CollisionManager::isCollisionCircleCircle(ColliderComp* a, ColliderComp* b)
 	return ((aR + bR) * (aR + bR)) >= GetSqDistance(aX, aY, bX, bY);
 }
 
-bool gIsCollisionAABB(AEVec2 aPos, AEVec2 aScale, AEVec2 bPos, AEVec2 bScale)
+bool gIsCollisionAABB(Vec2 aPos, Vec2 aScale, Vec2 bPos, Vec2 bScale)
 {
 	float aX = aPos.x;
 	float aY = aPos.y;
@@ -182,7 +183,7 @@ bool gIsCollisionAABB(AEVec2 aPos, AEVec2 aScale, AEVec2 bPos, AEVec2 bScale)
 	return true;
 }
 
-bool gIsCollisionSquareTri(AEVec2 aPos, AEVec2 aScale, GameObject::Type bType, AEVec2 bPos, AEVec2 bScale)
+bool gIsCollisionSquareTri(Vec2 aPos, Vec2 aScale, GameObject::Type bType, Vec2 bPos, Vec2 bScale)
 {
 	if (!gIsCollisionAABB(aPos, aScale, bPos, bScale)) return false;
 
@@ -560,7 +561,7 @@ bool CollisionManager::ProjectileSquareCheck(ColliderComp* a, ColliderComp* b)
 	return false;
 }
 
-bool CollisionManager::isCollision(GameObject::Type aType, AEVec2 aPos, AEVec2 aScale, GameObject::Type bType, AEVec2 bPos, AEVec2 bScale)
+bool CollisionManager::isCollision(GameObject::Type aType, Vec2 aPos, Vec2 aScale, GameObject::Type bType, Vec2 bPos, Vec2 bScale)
 {
 	switch (aType)
 	{

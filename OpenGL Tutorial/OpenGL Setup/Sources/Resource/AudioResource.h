@@ -1,6 +1,6 @@
 #pragma once
 #include "Resource.h"
-#include <Audio.h>
+#include <AMAudio.h>
 
 class AudioResource : public Resource
 {

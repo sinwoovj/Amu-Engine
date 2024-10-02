@@ -1,7 +1,7 @@
 /******************************************************************************/
 /*!
 \par        Project: Amu Engine
-\file       Graphics.h
+\file       AMGraphics.h
 
 \author     Shinwoo Choi
 \date       Oct 30, 2024
@@ -9,7 +9,7 @@
 \brief      Header file for the library settings.
 */
 /******************************************************************************/
-#include <Export.h>
+#include <AMExport.h>
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 

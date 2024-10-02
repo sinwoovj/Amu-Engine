@@ -1,7 +1,7 @@
 /******************************************************************************/
 /*!
 \par        Project: Amu Engine
-\file       Mtx33.h
+\file       AMMtx33.h
 
 \author     Shinwoo Choi
 \date       Oct 30, 2024
@@ -29,6 +29,10 @@
   m[1][0] m[1][1] m[1][2] \n
   m[2][0] m[2][1] m[2][2]
   */
+
+#include <AMExport.h>
+#include <AMMath.h>
+
 typedef struct Mtx33
 {
     float	m[3][3];

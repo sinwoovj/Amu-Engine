@@ -1,7 +1,7 @@
 /******************************************************************************/
 /*!
 \par        Project: Amu Engine
-\file       Engine.h
+\file       AMEngine.h
 
 \author     Shinwoo Choi
 \date       Oct 30, 2024
@@ -9,17 +9,17 @@
 \brief      Header file for the Amu Engine.
 
 \details    The Amu Engine consist of the following header files:
-				- Engine.h
-				- Type.h
-				- Math.h
-					- Vec2.h
-					- Mtx33.h
-					- LineSegment2.h
-				- Util.h
-				- FrameRateController.h (pending)
-				- System.h
-				- Graphcs.h
-				- Input.h
+				- AMEngine.h
+				- AMType.h
+				- AMMath.h
+					- AMVec2.h
+					- AMMtx33.h
+					- AMLineSegment2.h
+				- AMUtil.h
+				- AMFrameRateController.h (pending)
+				- AMSystem.h
+				- AMGraphcs.h
+				- AMInput.h
 */
 /******************************************************************************/
 
@@ -35,7 +35,7 @@
 
 #include <windows.h>
 
-#include <Export.h>
+#include <AMExport.h>
 
 
 // ---------------------------------------------------------------------------
@@ -168,14 +168,14 @@
 // ---------------------------------------------------------------------------
 // engine includes
 
-#include <Type.h>						//Typedefs
-#include <Math.h>						//Maths libraray
-#include <Util.h>						//Utility library
+#include <AMType.h>						//Typedefs
+#include <AMMath.h>						//Maths libraray
+#include <AMUtil.h>						//Utility library
 //#include "FrameRateController.h"      //Frame controller
-#include <System.h>						//System library
-#include <Graphics.h>					//Graphics library
-#include <Input.h>						//Input library
-#include <Audio.h>						//Audio library
+#include <AMSystem.h>						//System library
+#include <AMGraphics.h>					//Graphics library
+#include <AMInput.h>						//Input library
+#include <AMAudio.h>						//Audio library
 
 // ---------------------------------------------------------------------------
 

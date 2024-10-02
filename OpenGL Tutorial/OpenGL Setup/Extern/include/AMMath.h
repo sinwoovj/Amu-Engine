@@ -1,7 +1,7 @@
 /******************************************************************************/
 /*!
 \par        Project: Amu Engine
-\file       Math.h
+\file       AMMath.h
 
 \author     Shinwoo Choi
 \date       Oct 30, 2024
@@ -15,11 +15,12 @@
 
 // ---------------------------------------------------------------------------
 
-#include "Vec2.h"             //Vector 2D
-#include "Mtx33.h"            //Matrix 3x3
-#include "LineSegment2.h"     //LineSegment 2D
+#include <AMVec2.h>             //Vector 2D
+#include <AMVec3.h>             //Vector 3D
+#include <AMMtx33.h>            //Matrix 3x3
+#include <AMLineSegment2.h>     //LineSegment 2D
 
-#include <Export.h>
+#include <AMExport.h>
 #include <float.h>
 
 #include "math.h"

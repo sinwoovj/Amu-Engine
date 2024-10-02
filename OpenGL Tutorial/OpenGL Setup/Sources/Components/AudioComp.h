@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 #include "../ComponentManager/BaseComponent.h"
-#include <Audio.h>
+#include <AMAudio.h>
 
 class AudioComp : public BaseComponent
 {

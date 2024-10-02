@@ -1,5 +1,5 @@
 #pragma once
-#include <Type.h>
+#include <AMMath.h>
 #include "../ComponentManager/ComponentManager.h"
 #include "../ComponentManager/EngineComponent.h"
 #include "../Event/Entity.h"

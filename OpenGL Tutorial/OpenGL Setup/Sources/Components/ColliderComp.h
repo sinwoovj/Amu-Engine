@@ -3,7 +3,7 @@
 #include "../ComponentManager/ComponentManager.h"
 #include "../ComponentManager/EngineComponent.h"
 #include "../Event/Entity.h"
-#include <Type.h>
+#include <AMMath.h>
 
 class ColliderComp : public EngineComponent, public Entity
 {

@@ -1,7 +1,7 @@
 /******************************************************************************/
 /*!
 \par        Project: Amu Engine
-\file       Vec2.h
+\file       AMVec2.h
 
 \author     Shinwoo Choi
 \date       Oct 30, 2024
@@ -13,8 +13,8 @@
 #ifndef VEC2_H
 #define VEC2_H
 
-#include "Export.h"
-#include "Type.h"
+#include "AMExport.h"
+#include "AMType.h"
 
 // ---------------------------------------------------------------------------
 

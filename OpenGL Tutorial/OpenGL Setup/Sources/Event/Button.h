@@ -7,7 +7,7 @@
 
 class Button : public GameObject {
 public:
-    Button(const std::string& texturePath, const AEVec2& position, const AEVec2& scale) {
+    Button(const std::string& texturePath, const Vec2& position, const Vec2& scale) {
         AddComponent<SpriteComp>();
         AddComponent<TransformComp>();
 
@@ -22,8 +22,8 @@ public:
 
     bool IsClicked(int mouseX, int mouseY) const {
         TransformComp* transform = GetComponent<TransformComp>();
-        AEVec2 position = transform->GetPos();
-        AEVec2 scale = transform->GetScale();
+        Vec2 position = transform->GetPos();
+        Vec2 scale = transform->GetScale();
 
         return (mouseX > position.x - scale.x / 2 && mouseX < position.x + scale.x / 2 &&
             mouseY > position.y - scale.y / 2 && mouseY < position.y + scale.y / 2);

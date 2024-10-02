@@ -1,7 +1,7 @@
 /******************************************************************************/
 /*!
 \par        Project: Amu Engine
-\file       Type.h
+\file       AMType.h
 
 \author     Shinwoo Choi
 \date       Oct 30, 2024

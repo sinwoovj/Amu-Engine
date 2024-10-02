@@ -1,6 +1,6 @@
 #pragma once
 #include <queue>
-#include <Type.h>
+#include <AMType.h>
 #include "../ComponentManager/EngineComponent.h"
 #include "ColliderComp.h"
 

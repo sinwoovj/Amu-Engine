@@ -1,6 +1,7 @@
 ﻿#include "RigidbodyComp.h"
 #include "TransformComp.h"
 #include "../Utils/Direction.h"
+#include <AMFrameRateController.h>
 
 bool RigidbodyComp::CheckEpsilon(float v, float EP)
 {
@@ -132,8 +133,8 @@ void RigidbodyComp::AddAcceleration(const Vec2& other)
 	acceleration.x += other.x;
 	acceleration.y += other.y;
 
-	acceleration.x = AEClamp(acceleration.x, -maxAcceleration.x, maxAcceleration.x);
-	acceleration.y = AEClamp(acceleration.y, -maxAcceleration.y, maxAcceleration.y);
+	acceleration.x = Clamp(acceleration.x, -maxAcceleration.x, maxAcceleration.x);
+	acceleration.y = Clamp(acceleration.y, -maxAcceleration.y, maxAcceleration.y);
 }
 
 void RigidbodyComp::AddAcceleration(float x, float y)
@@ -144,11 +145,11 @@ void RigidbodyComp::AddAcceleration(float x, float y)
 	acceleration.x += x;
 	acceleration.y += y;
 
-	acceleration.x = AEClamp(acceleration.x, -maxAcceleration.x, maxAcceleration.x);
-	acceleration.y = AEClamp(acceleration.y, -maxAcceleration.y, maxAcceleration.y);
+	acceleration.x = Clamp(acceleration.x, -maxAcceleration.x, maxAcceleration.x);
+	acceleration.y = Clamp(acceleration.y, -maxAcceleration.y, maxAcceleration.y);
 }
 
-void RigidbodyComp::SetAcceleration(const AEVec2& other)
+void RigidbodyComp::SetAcceleration(const Vec2& other)
 {
 	acceleration.x = other.x;
 	acceleration.y = other.y;
@@ -168,8 +169,8 @@ void RigidbodyComp::ClearAcceleration()
 
 void RigidbodyComp::Update()
 {
-	float dt = (float)AEFrameRateControllerGetFrameTime();
-
+	float dt = (float)FrameRateControllerGetFrameTime();
+	
 	//Get the transform
 	TransformComp* t = owner->GetComponent<TransformComp>();
 	if (!t)	return;
@@ -183,8 +184,8 @@ void RigidbodyComp::Update()
 	velocity.x += acceleration.x * dt;
 	velocity.y += acceleration.y * dt + (useGravity ? -500.f * dt : 0.f);
 
-	velocity.x = AEClamp(velocity.x, -maxVelocity.x, maxVelocity.x);
-	velocity.y = AEClamp(velocity.y, -maxVelocity.y, maxVelocity.y);
+	velocity.x = Clamp(velocity.x, -maxVelocity.x, maxVelocity.x);
+	velocity.y = Clamp(velocity.y, -maxVelocity.y, maxVelocity.y);
 
 	float x = t->GetPos().x + velocity.x * dt;
 	float y = t->GetPos().y + velocity.y * dt;
@@ -235,7 +236,7 @@ void RigidbodyComp::Update()
 			if (type == GameObject::Square && !colliderType[GameObject::LeftTri] && !colliderType[GameObject::RightTri])
 			{
 				CorrectPosByAABB(oc, c, x, y);
-				targetRot = AEDegToRad(0);
+				targetRot = DegToRad(0);
 			}
 
 			else if (type == GameObject::RightTri)
@@ -243,13 +244,13 @@ void RigidbodyComp::Update()
 				if (colliderType[GameObject::Square] && c->GetPos().x > oc->GetPos().x)
 				{
 					CorrectPosByAABB(oc, c, x, y);
-					targetRot = AEDegToRad(0);
+					targetRot = DegToRad(0);
 				}
 				else
 				{
-					targetRot = AEATan(oc->GetScale().y / oc->GetScale().x);
+					targetRot = ATan(oc->GetScale().y / oc->GetScale().x);
 					y = oc->GetPos().y +
-						(c->GetPos().x + (c->GetScale().x / 2 * (abs(AESin(targetRot) * 0.5f))) - oc->GetPos().x) *
+						(c->GetPos().x + (c->GetScale().x / 2 * (abs(Sin(targetRot) * 0.5f))) - oc->GetPos().x) *
 						(oc->GetScale().y / oc->GetScale().x) +
 						c->GetScale().y / 2;
 				}
@@ -260,13 +261,13 @@ void RigidbodyComp::Update()
 				if (colliderType[GameObject::Square] && c->GetPos().x < oc->GetPos().x)
 				{
 					CorrectPosByAABB(oc, c, x, y);
-					targetRot = AEDegToRad(0);
+					targetRot = DegToRad(0);
 				}
 				else
 				{
-					targetRot = AEATan(-oc->GetScale().y / oc->GetScale().x);
+					targetRot = ATan(-oc->GetScale().y / oc->GetScale().x);
 					y = oc->GetPos().y +
-						(c->GetPos().x - (c->GetScale().x / 2 * (abs(AESin(targetRot) * 0.5f))) - oc->GetPos().x) *
+						(c->GetPos().x - (c->GetScale().x / 2 * (abs(Sin(targetRot) * 0.5f))) - oc->GetPos().x) *
 						(-oc->GetScale().y / oc->GetScale().x) +
 						c->GetScale().y / 2;
 				}

@@ -28,11 +28,11 @@ void TransformComp::CalculateMatrix()
 
 	if (affectedByZoom)
 	{
-		AEMtx33Concat(&transformMatrix, &Camera::GetInstance().GetMatrix(), &transformMatrix);
+		Mtx33Concat(&transformMatrix, &Camera::GetInstance().GetMatrix(), &transformMatrix);
 	}
 	else
 	{
-		AEMtx33Concat(&transformMatrix, &Camera::GetInstance().GetMatrix2(), &transformMatrix);
+		Mtx33Concat(&transformMatrix, &Camera::GetInstance().GetMatrix2(), &transformMatrix);
 	}
 }
 

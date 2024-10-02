@@ -1,7 +1,7 @@
 /******************************************************************************/
 /*!
 \par        Project: Amu Engine
-\file       Audio.h
+\file       AMAudio.h
 
 \author     Shinwoo Choi
 \date       Oct 30, 2024
@@ -13,8 +13,8 @@
 #define AUDIO_H
 
 
-#include "Export.h"
-#include "Type.h"
+#include "AMExport.h"
+#include "AMType.h"
 
 typedef struct Audio {
     struct FMOD_SOUND* fmod_sound; ///< internal FMOD variable. DO NOT TOUCH.

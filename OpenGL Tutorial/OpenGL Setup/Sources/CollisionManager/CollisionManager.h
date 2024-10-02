@@ -4,7 +4,7 @@
 #include "../Components/TransformComp.h"
 #include "../EventManager/EventManager.h"
 #include "../Event/CollisionEvent.h"
-#include "../Utils/Vector.h"
+#include <AMType.h>
 
 class CollisionManager
 {

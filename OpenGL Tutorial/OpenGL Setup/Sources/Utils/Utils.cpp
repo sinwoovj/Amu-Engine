@@ -3,7 +3,7 @@
 #include <chrono>
 #include <thread>
 #include "../Camera/Camera.h"
-#include <Input.h>
+#include <AMInput.h>
 
 void AESleep(long long t)
 {

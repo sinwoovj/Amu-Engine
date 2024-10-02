@@ -1,7 +1,7 @@
 /******************************************************************************/
 /*!
 \par        Project: Amu Engine
-\file       LineSegment2.h
+\file       AMLineSegment2.h
 
 \author     Shinwoo Choi
 \date       Oct 30, 2024

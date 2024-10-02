@@ -4,6 +4,8 @@
 #include "../CollisionManager/CollisionManager.h"
 #include "../EventManager/EventManager.h"
 
+#include <AMMath.h>
+
 ColliderComp::ColliderComp(GameObject* _owner) : EngineComponent(_owner), pos(), scale(), rot(0), vertices()
 {
 	CollisionManager::GetInstance().AddCollider(this);

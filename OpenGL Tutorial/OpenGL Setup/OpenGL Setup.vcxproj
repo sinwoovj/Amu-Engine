@@ -72,13 +72,17 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>$(SolutionDir)OpenGL Setup\Extern\json;$(SolutionDir)OpenGL Setup\Extern\include;$(includePath)</IncludePath>
-    <ExternalIncludePath>
-    </ExternalIncludePath>
+    <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>$(SolutionDir)OpenGL Setup\Extern\json;$(SolutionDir)OpenGL Setup\Extern\include;$(includePath)</IncludePath>
-    <ExternalIncludePath>
-    </ExternalIncludePath>
+    <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</ExternalIncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(SolutionDir)OpenGL Setup\Extern\json;$(SolutionDir)OpenGL Setup\Extern\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>$(SolutionDir)OpenGL Setup\Extern\json;$(SolutionDir)OpenGL Setup\Extern\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -155,8 +159,23 @@
   <ItemGroup>
     <ClInclude Include="Dependencies\GLFW\include\GLFW\glfw3.h" />
     <ClInclude Include="Dependencies\GLFW\include\GLFW\glfw3native.h" />
+    <ClInclude Include="Extern\include\AMAudio.h" />
+    <ClInclude Include="Extern\include\AMEngine.h" />
+    <ClInclude Include="Extern\include\AMExport.h" />
+    <ClInclude Include="Extern\include\AMFrameRateController.h" />
+    <ClInclude Include="Extern\include\AMGraphics.h" />
+    <ClInclude Include="Extern\include\AMInput.h" />
+    <ClInclude Include="Extern\include\AMLineSegment2.h" />
+    <ClInclude Include="Extern\include\AMMath.h" />
+    <ClInclude Include="Extern\include\AMMtx33.h" />
+    <ClInclude Include="Extern\include\AMSystem.h" />
+    <ClInclude Include="Extern\include\AMType.h" />
+    <ClInclude Include="Extern\include\AMUtil.h" />
+    <ClInclude Include="Extern\include\AMVec2.h" />
+    <ClInclude Include="Extern\include\AMVec3.h" />
     <ClInclude Include="Extern\json\json.hpp" />
     <ClInclude Include="Extern\json\json_fwd.hpp" />
+    <ClInclude Include="Sources\Camera\Camera.h" />
     <ClInclude Include="Sources\CollisionManager\CollisionManager.h" />
     <ClInclude Include="Sources\ComponentManager\BaseComponent.h" />
     <ClInclude Include="Sources\ComponentManager\ComponentManager.h" />
@@ -167,15 +186,15 @@
     <ClInclude Include="Sources\Components\AudioComp.h" />
     <ClInclude Include="Sources\Components\ColliderComp.h" />
     <ClInclude Include="Sources\Components\Components.h" />
-    <ClInclude Include="Sources\Components\RigidbodyComp.h" />
-    <ClInclude Include="Sources\Components\SpriteComp.h" />
-    <ClInclude Include="Sources\Components\TransformComp.h" />
-    <ClInclude Include="Sources\EventManager\EventManager.h" />
     <ClInclude Include="Sources\Event\Button.h" />
     <ClInclude Include="Sources\Event\ButtonClickEvent.h" />
     <ClInclude Include="Sources\Event\CollisionEvent.h" />
     <ClInclude Include="Sources\Event\Entity.h" />
     <ClInclude Include="Sources\Event\Event.h" />
+    <ClInclude Include="Sources\Components\RigidbodyComp.h" />
+    <ClInclude Include="Sources\Components\SpriteComp.h" />
+    <ClInclude Include="Sources\Components\TransformComp.h" />
+    <ClInclude Include="Sources\EventManager\EventManager.h" />
     <ClInclude Include="Sources\GameObjectManager\GameObjectManager.h" />
     <ClInclude Include="Sources\GameObject\GameObject.h" />
     <ClInclude Include="Sources\GSM\GameStateManager.h" />
@@ -194,15 +213,40 @@
     <ClInclude Include="Sources\Utils\Utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Extern\include\AMVec3.cpp" />
+    <ClCompile Include="Sources\Camera\Camera.cpp" />
+    <ClCompile Include="Sources\CollisionManager\CollisionManager.cpp" />
+    <ClCompile Include="Sources\ComponentManager\EngineComponent.cpp" />
+    <ClCompile Include="Sources\ComponentManager\GraphicComponent.cpp" />
+    <ClCompile Include="Sources\ComponentManager\InterfaceComponent.cpp" />
+    <ClCompile Include="Sources\ComponentManager\LogicComponent.cpp" />
+    <ClCompile Include="Sources\Components\AudioComp.cpp" />
+    <ClCompile Include="Sources\Components\ColliderComp.cpp" />
+    <ClCompile Include="Sources\Event\ButtonClickEvent.cpp" />
+    <ClCompile Include="Sources\Event\Event.cpp" />
+    <ClCompile Include="Sources\Components\RigidbodyComp.cpp" />
+    <ClCompile Include="Sources\Components\SpriteComp.cpp" />
+    <ClCompile Include="Sources\Components\TransformComp.cpp" />
+    <ClCompile Include="Sources\EventManager\EventManager.cpp" />
+    <ClCompile Include="Sources\GameObjectManager\GameObejectManager.cpp" />
+    <ClCompile Include="Sources\GameObject\GameObject.cpp" />
+    <ClCompile Include="Sources\GSM\GameStateManager.cpp" />
+    <ClCompile Include="Sources\Level\Menu.cpp" />
+    <ClCompile Include="Sources\main.cpp" />
+    <ClCompile Include="Sources\Prefab\Prefab.cpp" />
+    <ClCompile Include="Sources\ResourceManager\ResourceManager.cpp" />
+    <ClCompile Include="Sources\Resource\AudioResource.cpp" />
+    <ClCompile Include="Sources\Resource\Resource.cpp" />
+    <ClCompile Include="Sources\Resource\TextureResource.cpp" />
+    <ClCompile Include="Sources\RTTI\Registry.cpp" />
+    <ClCompile Include="Sources\Serializer\Serializer.cpp" />
+    <ClCompile Include="Sources\Utils\Utils.cpp" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="Sources\ComponentManager\ComponentManager.inl" />
     <None Include="Sources\EventManager\EventManager.inl" />
     <None Include="Sources\GameObject\GameObject.inl" />
     <None Include="Sources\ResourceManager\ResourceManager.inl" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Sources\GSM\GameStateManager.cpp" />
-    <ClCompile Include="Sources\Level\Menu.cpp" />
-    <ClCompile Include="Sources\main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
