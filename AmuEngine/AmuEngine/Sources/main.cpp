@@ -1,5 +1,6 @@
 #include "GSM/GameStateManager.h"
 #include "Level/Menu.h"
+#include "Example/Sprite.h"
 #include <cstdio>
 #include <clocale>
 #include <cstdlib>
@@ -87,7 +88,7 @@ int main(void)
 
     GSM::GameStateManager& gsm = GSM::GameStateManager::GetInstance();
 
-    gsm.ChangeLevel(new level::Menu);
+    gsm.ChangeLevel(new level::Sprite);
 
     /* Loop until the user closes the window */
     while (gsm.ShouldExit() == false && !glfwWindowShouldClose(mainWindow))
@@ -97,7 +98,7 @@ int main(void)
         /* Poll for and process events */
         glfwPollEvents();
 
-        glClearColor(0.4f, 0.6f, 0.2f, 1.0f);
+        glClearColor(0.f, 0.f, 0.f, 0.f);
 
         glClear(GL_COLOR_BUFFER_BIT);
 

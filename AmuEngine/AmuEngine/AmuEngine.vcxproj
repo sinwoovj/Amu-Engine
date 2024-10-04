@@ -91,7 +91,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;GLEW_STATIC;WIN32;GLEW_STATIC;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Dependencies\GLM\;$(ProjectDir)Dependencies\GLEW\include\;$(ProjectDir)Dependencies\GLFW\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Dependencies\GLM\;$(ProjectDir)Dependencies\GLEW\include\;$(ProjectDir)Dependencies\stb\;$(ProjectDir)Dependencies\GLFW\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -108,7 +108,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;GLEW_STATIC;WIN32;GLEW_STATIC;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Dependencies\GLM\;$(ProjectDir)Dependencies\GLEW\include\;$(ProjectDir)Dependencies\GLFW\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Dependencies\GLM\;$(ProjectDir)Dependencies\GLEW\include\;$(ProjectDir)Dependencies\stb\;$(ProjectDir)Dependencies\GLFW\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -125,7 +125,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;GLEW_STATIC;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Dependencies\GLM\;$(ProjectDir)Dependencies\GLEW\include\;$(ProjectDir)Dependencies\GLFW\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Dependencies\GLM\;$(ProjectDir)Dependencies\GLEW\include\;$(ProjectDir)Dependencies\stb\;$(ProjectDir)Dependencies\GLFW\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -142,7 +142,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;GLEW_STATIC;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Dependencies\GLM\;$(ProjectDir)Dependencies\GLEW\include\;$(ProjectDir)Dependencies\GLFW\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Dependencies\GLM\;$(ProjectDir)Dependencies\GLEW\include\;$(ProjectDir)Dependencies\stb\;$(ProjectDir)Dependencies\GLFW\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -446,14 +446,17 @@
     <ClInclude Include="Dependencies\GLM\glm\vec3.hpp" />
     <ClInclude Include="Dependencies\GLM\glm\vec4.hpp" />
     <ClInclude Include="Dependencies\GLM\glm\vector_relational.hpp" />
+    <ClInclude Include="Dependencies\stb\stb_image.h" />
     <ClInclude Include="Extern\json\json.hpp" />
     <ClInclude Include="Extern\json\json_fwd.hpp" />
+    <ClInclude Include="Sources\Example\Sprite.h" />
     <ClInclude Include="Sources\GSM\GameStateManager.h" />
     <ClInclude Include="Sources\Level\BaseLevel.h" />
     <ClInclude Include="Sources\Level\Menu.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Dependencies\GLM\glm\detail\glm.cpp" />
+    <ClCompile Include="Sources\Example\Sprite.cpp" />
     <ClCompile Include="Sources\GSM\GameStateManager.cpp" />
     <ClCompile Include="Sources\Level\Menu.cpp" />
     <ClCompile Include="Sources\main.cpp" />
