@@ -18,17 +18,8 @@
 #include "stb_image.h"
 
 //---------------------------------------------
-GLuint sprite_VAO, sprite_VBO, sprite_EBO, sprite_shader, sprite_uniformModel, texture;
+GLuint sprite_VAO, sprite_VBO, sprite_EBO, sprite_shader, sprite_texture;
 //---------------------------------------------
-
-// 방향값(왼쪽, 오른쪽)
-bool spritedirection = true;
-// 사각형의 차이값
-float spriteOffset = 0.0f;
-// 사각형의 최대 차이값
-float spriteMaxOffset = 1.0f;
-// 사각형의 변화값
-float spriteIncrement = 0.001f;
 
 // 정점 쉐이더 Vertex Shader
 const char* spriteVShader = R"(
@@ -40,17 +31,8 @@ layout (location = 2) in vec2 aTexCoord;
 out vec3 ourColor;
 out vec2 TexCoord;
 
-//---------------------------------------------
-// model로 수정
-uniform mat4 model;
-//---------------------------------------------
-
 void main()
-{ 
-    //---------------------------------------------
-    // model을 곱해준다.
-    gl_Position = model * vec4(aPos, 1.0);
-    //---------------------------------------------
+{
 	gl_Position = vec4(aPos, 1.0);
 	ourColor = aColor;
 	TexCoord = vec2(aTexCoord.x, aTexCoord.y);
@@ -74,19 +56,20 @@ void main()
 
 void SpriteCreateSprite()
 {
-    // 정점 좌표 & 사각형 색상 & 텍스처 좌표
+
+    // 정점 좌표 & 사각형 색상 & 텍스처 좌표 (좌표계가 stbi 라이브러리와 opengl라이브러리의 서로 달라서 y축만 -를 달아서 반전시킴)
     float vertices[] = {
-        // 위치              // 컬러             // 텍스처 좌표
-       -1.0f, -1.0f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // 우측 상단
-       -1.0f,  1.0f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // 우측 하단
-        1.0f, -1.0f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // 좌측 하단
-        1.0f,  1.0f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // 좌측 상단
+        // positions          // colors           // sprite_texture coords
+         0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, -1.0f, // top right
+         0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f,  0.0f, // bottom right
+        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f,  0.0f, // bottom left
+        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, -1.0f  // top left 
     };
-    
+
     // 정점 인덱스
     GLint vertexIndeces[] = {
-        0, 1, 2,
-        1, 2, 3
+        0, 1, 3, // first triangle
+        1, 2, 3  // second triangle
     };
 
     // OpenGL 정점 배열 생성기를 사용해서 VAO를 생성
@@ -122,8 +105,8 @@ void SpriteCreateSprite()
 
     // Texture //
 
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
+    glGenTextures(1, &sprite_texture);
+    glBindTexture(GL_TEXTURE_2D, sprite_texture);
     // 텍스처 wrapping/filtering 옵션 설정(현재 바인딩된 텍스처 객체에 대해)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -137,6 +120,8 @@ void SpriteCreateSprite()
     // 텍스처 로드 및 생성
     int width, height, nrChannels;
     unsigned char* data = stbi_load("Sources/Assets/Exam.png", &width, &height, &nrChannels, 0);
+    std::cout << "width : " << width << " height : " << height << " nrChannels : " << nrChannels << std::endl;
+    //glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     if (data)
     {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -222,13 +207,6 @@ void SpriteCompileShader()
         printf("Error Validating Program: '%s'\n", eLog);
         return;
     }
-
-
-    //---------------------------------------------
-    // unifomModel과 쉐이더의 model을 연결한다.
-    sprite_uniformModel = glGetUniformLocation(sprite_shader, "model");
-    //---------------------------------------------
-    
 }
 
 
@@ -240,40 +218,11 @@ void level::Sprite::Init()
 
 void level::Sprite::Update()
 {
-    // 방향이 오른쪽인지 왼쪽인지
-    if (spritedirection == true)
-    {
-        spriteOffset += spriteIncrement;
-    }
-    else
-    {
-        spriteOffset -= spriteIncrement;
-    }
-
-    // 최대 차이값을 넘기게 되면 방향 전환
-    if (abs(spriteOffset) >= spriteMaxOffset)
-    {
-        spritedirection = !spritedirection;
-    }
-
-
+    glBindTexture(GL_TEXTURE_2D, sprite_texture);
+ 
     // Shader 적용
     glUseProgram(sprite_shader);
-
-    //---------------------------------------------
-    // mat4 model 초기화
-    glm::mat4 model = glm::mat4(1.0f);
-    // 우리가 원하는 값만큼 행렬 연산
-    model = glm::translate(model, glm::vec3(spriteOffset, spriteOffset, 0.0f));
-
-    // Mat4를 uniformModel로 변환한다.
-    glUniformMatrix4fv(sprite_uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-    //---------------------------------------------
-    
-
-    glBindTexture(GL_TEXTURE_2D, texture);
-
-    
+        
     glBindVertexArray(sprite_VAO);
 
     // 데이터를 바탕으로 그리기
@@ -287,5 +236,7 @@ void level::Sprite::Update()
 
 void level::Sprite::Exit()
 {
-
+    glDeleteVertexArrays(1, &sprite_VAO);
+    glDeleteBuffers(1, &sprite_VBO);
+    glDeleteBuffers(1, &sprite_EBO);
 }

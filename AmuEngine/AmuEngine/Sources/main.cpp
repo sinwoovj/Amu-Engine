@@ -95,12 +95,14 @@ int main(void)
     /* Loop until the user closes the window */
     while (gsm.ShouldExit() == false && !glfwWindowShouldClose(mainWindow))
     {
+        processInput(mainWindow);
+
         //frame setting
 
         /* Poll for and process events */
         glfwPollEvents();
 
-        glClearColor(0.f, 0.f, 0.f, 0.f);
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
         glClear(GL_COLOR_BUFFER_BIT);
 
@@ -114,4 +116,10 @@ int main(void)
     gsm.Exit();
     glfwTerminate();
     return 0;
+}
+
+void processInput(GLFWwindow* window)
+{
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
 }
