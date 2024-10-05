@@ -14,11 +14,11 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 //---------------------------------------------
-GLuint VAO, VBO, shader, uniformModel;
+GLuint tri_VAO, tri_VBO, tri_shader, tri_uniformModel;
 //---------------------------------------------
 
 // 방향값(왼쪽, 오른쪽)
-bool direction = true;
+bool tridirection = true;
 // 삼각형의 차이값
 float triOffset = 0.0f;
 // 삼각형의 최대 차이값
@@ -27,7 +27,7 @@ float triMaxOffset = 1.0f;
 float triIncrement = 0.01f;
 
 // 정점 쉐이더
-static const char* vShader = R"(
+static const char* triVShader = R"(
 #version 330
 
 layout (location = 0) in vec3 pos;
@@ -47,7 +47,7 @@ void main()
 })";
 
 // 조각 쉐이더
-static const char* fShader = R"(
+static const char* triFShader = R"(
 #version 330
 
 out vec4 colour;
@@ -57,7 +57,7 @@ void main()
     colour = vec4(1.0, 1.0, 1.0, 1.0);
 })";
 
-void CreateTriangle()
+void TriCreateTriangle()
 {
     // 정점 좌표
     GLfloat vertices[] = {
@@ -67,30 +67,30 @@ void CreateTriangle()
     };
 
     // OpenGL 정점 배열 생성기를 사용해서 VAO를 생성
-    glGenVertexArrays(1, &VAO);
+    glGenVertexArrays(1, &tri_VAO);
     // 우리가 생성한 VAO를 현재 수정 가능하도록 연결한다.
-    glBindVertexArray(VAO);
+    glBindVertexArray(tri_VAO);
 
     // OpenGL 정점 배열 생성기를 사용해서 VBO를 생성
-    glGenBuffers(1, &VBO);
+    glGenBuffers(1, &tri_VBO);
     // 우리가 생성한 VBO를 현재 수정 가능하도록 연결한다.
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, tri_VBO);
 
     // 우리가 만든 삼각형 정점 좌표를 VBO에 저장한다.
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
     // VAO에 이 VAO를 어떻게 해석해야 할 지 알려줍니다.
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-    // VAO 사용 허용
+    // tri_VAO 사용 허용
     glEnableVertexAttribArray(0);
-    // VBO 수정 종료 및 연결 초기화
+    // tri_VBO 수정 종료 및 연결 초기화
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     // 수정이 완료 되면 연결을 끊기 위해 초기값으로 연결한다.
     glBindVertexArray(0);
 }
 
-void AddShader(GLuint theProgram, const char* shaderCode, GLenum shaderType)
+void TriAddShader(GLuint theProgram, const char* shaderCode, GLenum shaderType)
 {
     // 쉐이더 생성
     GLuint theShader = glCreateShader(shaderType);
@@ -126,59 +126,59 @@ void AddShader(GLuint theProgram, const char* shaderCode, GLenum shaderType)
     glAttachShader(theProgram, theShader);
 }
 
-void CompileShader()
+void TriCompileShader()
 {
-    shader = glCreateProgram();
+    tri_shader = glCreateProgram();
 
-    if (shader == NULL)
+    if (tri_shader == NULL)
     {
         printf("Error Creating Shader Program!\n");
         return;
     }
 
-    AddShader(shader, vShader, GL_VERTEX_SHADER);
-    AddShader(shader, fShader, GL_FRAGMENT_SHADER);
+    TriAddShader(tri_shader, triVShader, GL_VERTEX_SHADER);
+    TriAddShader(tri_shader, triFShader, GL_FRAGMENT_SHADER);
 
     GLint result = 0;
     GLchar eLog[1024] = { 0 };
 
     // 쉐이더 프로그램 연결
-    glLinkProgram(shader);
-    glGetProgramiv(shader, GL_LINK_STATUS, &result); // shader 추가함수와 연결함수의 차이 glGetShaderiv-> glGetProgramiv
+    glLinkProgram(tri_shader);
+    glGetProgramiv(tri_shader, GL_LINK_STATUS, &result); // tri_shader 추가함수와 연결함수의 차이 glGetShaderiv-> glGetProgramiv
     if (!result)
     {
-        glGetProgramInfoLog(shader, sizeof(eLog), NULL, eLog);
+        glGetProgramInfoLog(tri_shader, sizeof(eLog), NULL, eLog);
         printf("Error Linking Program: '%s'\n", eLog);
         return;
     }
 
     // 쉐이더 프로그램 검증
-    glValidateProgram(shader);
-    glGetProgramiv(shader, GL_VALIDATE_STATUS, &result);
+    glValidateProgram(tri_shader);
+    glGetProgramiv(tri_shader, GL_VALIDATE_STATUS, &result);
     if (!result)
     {
-        glGetProgramInfoLog(shader, sizeof(eLog), NULL, eLog);
+        glGetProgramInfoLog(tri_shader, sizeof(eLog), NULL, eLog);
         printf("Error Validating Program: '%s'\n", eLog);
         return;
     }
 
     //---------------------------------------------
     // unifomModel과 쉐이더의 model을 연결한다.
-    // uniformModel = glGetUniformLocation(shader, "model");
+    // tri_uniformModel = glGetUniformLocation(tri_shader, "model");
     //---------------------------------------------
 }
 
 
 void level::Triangle::Init() 
 {
-    CreateTriangle();
-    CompileShader();
+    TriCreateTriangle();
+    TriCompileShader();
 }
 
 void level::Triangle::Update()
 {
     // 방향이 오른쪽인지 왼쪽인지
-    if (direction == true)
+    if (tridirection == true)
     {
         triOffset += triIncrement;
     }
@@ -190,12 +190,12 @@ void level::Triangle::Update()
     // 최대 차이값을 넘기게 되면 방향 전환
     if (abs(triOffset) >= triMaxOffset)
     {
-        direction = !direction;
+        tridirection = !tridirection;
     }
 
 
     // Shader 적용
-    glUseProgram(shader);
+    glUseProgram(tri_shader);
 
     //---------------------------------------------
     // mat4 model 초기화
@@ -204,11 +204,11 @@ void level::Triangle::Update()
     model = glm::translate(model, glm::vec3(triOffset, triOffset, 0.0f));
 
     // Mat4를 uniformModel로 변환한다.
-    // glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+    // glUniformMatrix4fv(tri_uniformModel, 1, GL_FALSE, glm::value_ptr(model));
     //---------------------------------------------
 
     // VBO에 있는 데이터 바인딩
-    glBindVertexArray(VBO);
+    glBindVertexArray(tri_VBO);
     // 데이터를 바탕으로 그리기
     glDrawArrays(GL_TRIANGLES, 0, 3);
     // 데이터 바인딩 해제

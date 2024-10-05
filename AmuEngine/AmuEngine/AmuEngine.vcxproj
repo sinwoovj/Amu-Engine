@@ -154,6 +154,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <Library Include="Dependencies\GLEW\lib\Release\Win32\glew32.lib" />
+    <Library Include="Dependencies\GLEW\lib\Release\Win32\glew32s.lib" />
+    <Library Include="Dependencies\GLEW\lib\Release\x64\glew32.lib" />
+    <Library Include="Dependencies\GLEW\lib\Release\x64\glew32s.lib" />
     <Library Include="Dependencies\GLFW\lib-vc2022\glfw3.lib" />
     <Library Include="Dependencies\GLFW\lib-vc2022\glfw3_mt.lib" />
   </ItemGroup>
@@ -449,14 +453,18 @@
     <ClInclude Include="Dependencies\stb\stb_image.h" />
     <ClInclude Include="Extern\json\json.hpp" />
     <ClInclude Include="Extern\json\json_fwd.hpp" />
+    <ClInclude Include="Sources\Example\Rect.h" />
     <ClInclude Include="Sources\Example\Sprite.h" />
+    <ClInclude Include="Sources\Example\Triangle.h" />
     <ClInclude Include="Sources\GSM\GameStateManager.h" />
     <ClInclude Include="Sources\Level\BaseLevel.h" />
     <ClInclude Include="Sources\Level\Menu.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Dependencies\GLM\glm\detail\glm.cpp" />
+    <ClCompile Include="Sources\Example\Rect.cpp" />
     <ClCompile Include="Sources\Example\Sprite.cpp" />
+    <ClCompile Include="Sources\Example\Triangle.cpp" />
     <ClCompile Include="Sources\GSM\GameStateManager.cpp" />
     <ClCompile Include="Sources\Level\Menu.cpp" />
     <ClCompile Include="Sources\main.cpp" />
@@ -608,6 +616,9 @@
     <None Include="Dependencies\GLM\glm\gtx\vector_angle.inl" />
     <None Include="Dependencies\GLM\glm\gtx\vector_query.inl" />
     <None Include="Dependencies\GLM\glm\gtx\wrap.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Sources\Assets\Exam.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

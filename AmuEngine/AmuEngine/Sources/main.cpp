@@ -1,6 +1,8 @@
 #include "GSM/GameStateManager.h"
 #include "Level/Menu.h"
 #include "Example/Sprite.h"
+#include "Example/Rect.h"
+#include "Example/Triangle.h"
 #include <cstdio>
 #include <clocale>
 #include <cstdlib>
