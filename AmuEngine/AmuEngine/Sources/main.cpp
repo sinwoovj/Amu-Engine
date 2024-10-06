@@ -83,6 +83,12 @@ int AMSysInit(GLint width, GLint height, const char* title)
     return (0);
 };
 
+void processInput(GLFWwindow* window)
+{
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+}
+
 int main(void)
 {
     if ( AMSysInit(WIDTH, HEIGHT, "Amu Engine") )
@@ -116,10 +122,4 @@ int main(void)
     gsm.Exit();
     glfwTerminate();
     return 0;
-}
-
-void processInput(GLFWwindow* window)
-{
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
 }
