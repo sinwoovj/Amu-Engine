@@ -1,18 +1,7 @@
 #include "Sprite.h"
 #include <iostream>
 
-#include <cstdio>
-#include <clocale>
-#include <cstdlib>
-#include <cstring>
-
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-//---------------------------------------------
-// 필요 GLM 헤더 추가
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
+#include <opengl.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"

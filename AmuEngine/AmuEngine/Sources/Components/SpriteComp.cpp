@@ -36,7 +36,7 @@ void SpriteComp::Update()
 
 	//Set transform
 	//Get the transform from my owner transfrom comp
-	Mtx33 transf = owner->GetComponent<TransformComp>()->GetMatrix();
+	glm::mat3x3 transf = owner->GetComponent<TransformComp>()->GetMatrix();
 	GfxSetTransform(transf.m);
 
 	//Set texture
@@ -51,50 +51,15 @@ void SpriteComp::SetMesh()
 	//Create quad
 	GfxMeshStart();
 
-	if (owner->type == GameObject::LeftTri)
-	{
-		GfxTriAdd(
-			-0.5f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
-			0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
-			-0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
-	}
+	GfxTriAdd(
+		-0.5f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
+		0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
+		-0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
 
-	else if (owner->type == GameObject::RightTri)
-	{
-		GfxTriAdd(
-			0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
-			0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
-			-0.5f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f);
-	}
-
-	else if (owner->type == GameObject::LeftTri_R)
-	{
-		GfxTriAdd(
-			-0.5f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
-			0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
-			-0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
-	}
-
-	else if (owner->type == GameObject::RightTri_R)
-	{
-		GfxTriAdd(
-			0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
-			0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
-			-0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
-	}
-		
-	else
-	{
-		GfxTriAdd(
-			-0.5f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
-			0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
-			-0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
-
-		GfxTriAdd(
-			0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
-			0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
-			-0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
-	}
+	GfxTriAdd(
+		0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
+		0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
+		-0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
 
 	mesh = GfxMeshEnd();
 }

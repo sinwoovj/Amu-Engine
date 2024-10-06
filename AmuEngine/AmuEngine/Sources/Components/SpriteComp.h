@@ -1,6 +1,5 @@
 #pragma once
-#include <string>
-#include <AMGraphics.h>
+#include <string> 
 #include "../ComponentManager/GraphicComponent.h"
 
 class SpriteComp : public GraphicComponent

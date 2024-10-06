@@ -1,5 +1,6 @@
 #pragma once
-#include <AMMath.h>
+#include <glm/glm.hpp>
+#include <opengl.h>
 
 class Camera
 {
@@ -21,7 +22,7 @@ private:
 	float speed = 400;
 	float height = 2;
 
-	Mtx33 world_to_ndc_xform[2];
+	glm::mat3 world_to_ndc_xform[2];
 
 public:
 	bool fix = true;
@@ -40,8 +41,8 @@ public:
 
 	void Update();
 
-	Mtx33& GetMatrix() { return world_to_ndc_xform[0]; }
-	Mtx33& GetMatrix2() { return world_to_ndc_xform[1]; }
+	glm::mat3& GetMatrix() { return world_to_ndc_xform[0]; }
+	glm::mat3& GetMatrix2() { return world_to_ndc_xform[1]; }
 	void GetPos(float* px, float* py);
 
 	void SetHeight(float value);

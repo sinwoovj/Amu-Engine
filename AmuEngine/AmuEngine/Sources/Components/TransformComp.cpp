@@ -4,15 +4,15 @@
 void TransformComp::CalculateMatrix()
 {
 	//Create a translate matrix
-	Mtx33 translateMtx;
+	glm::mat3 translateMtx;
 	Mtx33Trans(&translateMtx, pos.x, pos.y);
 
 	//Create a rotation matrix
-	Mtx33 rotationMtx;
+	glm::mat3 rotationMtx;
 	Mtx33Rot(&rotationMtx, rot);
 
 	//Create a scale matrix
-	Mtx33 scaleMtx;
+	glm::mat3 scaleMtx;
 	if (affectedByZoom)
 	{
 		Mtx33Scale(&scaleMtx, scale.x, scale.y);
@@ -57,14 +57,14 @@ void TransformComp::Update()
 	CalculateMatrix();
 }
 
-void TransformComp::SetPos(const Vec2& otherPos)
+void TransformComp::SetPos(const glm::vec2& otherPos)
 {
 	this->pos = otherPos;
 
 	//CalculateMatrix();
 }
 
-void TransformComp::SetScale(const Vec2& otherScale)
+void TransformComp::SetScale(const glm::vec2& otherScale)
 {
 	this->scale = otherScale;
 
@@ -116,7 +116,7 @@ void TransformComp::PrintMatrix()
 		std::cout << "|";
 		for (int x = 0; x < 3; x++)
 		{
-			std::cout << " " << transformMatrix.m[i][x];
+			std::cout << " " << transformMatrix[i][x];
 		}
 
 		std::cout << " |";

@@ -16,17 +16,11 @@ public:
 	enum Type
 	{
 		None,
-		Square,
-		LeftTri,
-		RightTri,
 		Point,
 		Player,
 		Button,
 		Enemy,
-		Projectile,
 		Particle,
-		LeftTri_R,
-		RightTri_R,
 		Checker,
 	};
 
