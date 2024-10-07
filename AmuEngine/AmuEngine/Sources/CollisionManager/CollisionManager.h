@@ -4,7 +4,7 @@
 #include "../Components/TransformComp.h"
 #include "../EventManager/EventManager.h"
 #include "../Event/CollisionEvent.h"
-#include <AMType.h>
+#include <opengl.h>
 
 class CollisionManager
 {
@@ -29,22 +29,11 @@ private:
 	bool PointTriCheck(ColliderComp*, ColliderComp*);
 	bool PointSquareCheck(ColliderComp*, ColliderComp*);
 
-	bool PlayerTriCheck(ColliderComp*, ColliderComp*);
-	bool PlayerSquareCheck(ColliderComp*, ColliderComp*);
-
-	bool EnemyTriCheck(ColliderComp*, ColliderComp*);
-	bool EnemySquareCheck(ColliderComp*, ColliderComp*);
-
 	bool CheckerTriCheck(ColliderComp*, ColliderComp*);
 	bool CheckerSquareCheck(ColliderComp*, ColliderComp*);
 
-	bool ProjectileEnemyCheck(ColliderComp*, ColliderComp*);
-	bool ProjectilePlayerCheck(ColliderComp*, ColliderComp*);
-	bool ProjectileTriCheck(ColliderComp*, ColliderComp*);
-	bool ProjectileSquareCheck(ColliderComp*, ColliderComp*);
-
 public:
-	static bool isCollision(GameObject::Type, Vec2, Vec2, GameObject::Type, Vec2, Vec2);
+	static bool isCollision(GameObject::Type, glm::vec2, glm::vec2, GameObject::Type, glm::vec2, glm::vec2);
 
 	static CollisionManager& GetInstance()
 	{

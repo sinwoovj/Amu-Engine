@@ -5,9 +5,9 @@ Registry::Registry()
 {
     // Register ALL the functions
     rttiMap.insert({ TransformComp::TypeName, &TransformComp::CreateTransformComponent });
-    rttiMap.insert({ AudioComp::TypeName, &AudioComp::CreateAudioComponent });
+    //rttiMap.insert({ AudioComp::TypeName, &AudioComp::CreateAudioComponent });
     rttiMap.insert({ SpriteComp::TypeName, &SpriteComp::CreateSpriteComponent });
-    rttiMap.insert({ RigidbodyComp::TypeName, &RigidbodyComp::CreateRigidBodyComponent });
+    //rttiMap.insert({ RigidbodyComp::TypeName, &RigidbodyComp::CreateRigidBodyComponent });
     rttiMap.insert({ ColliderComp::TypeName, &ColliderComp::CreateColliderComponent });
 }
 

@@ -3,7 +3,7 @@
 #include <chrono>
 #include <thread>
 #include "../Camera/Camera.h"
-#include <AMInput.h>
+#include <opengl.h>
 
 void AESleep(long long t)
 {
@@ -14,16 +14,16 @@ void AESleep(long long t)
 
 float GetMouseCursorPositionX()
 {
-    int x, y;
-    InputGetCursorPosition(&x, &y);
+    double x, y;
+    glfwGetCursorPos(glfwGetCurrentContext(), &x, &y);
     x -= windowWidthHalf;
     return (float)x;
 }
 
 float GetMouseCursorPositionY()
 {
-    int x, y;
-    InputGetCursorPosition(&x, &y);
+    double x, y;
+    glfwGetCursorPos(glfwGetCurrentContext(), &x, &y);
     y -= windowHeightHalf;
     y = -y;
     return (float)y;

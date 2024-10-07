@@ -18,22 +18,22 @@ inline T* ResourceManager::GetResource(const std::string& filename)
 
 		switch (e)
 		{
-		case png:
-		case jpg:
-		{
-			if (typeName != "struct texture")
-				break;
-			res = new TextureResource;
-			break;
-		}
-		case mp3:
-		case wav:
-		{
-			if (typeName != "struct AEAudio")
-				break;
-			res = new AudioResource;
-			break;
-		}
+		//case png:
+		//case jpg:
+		//{
+		//	if (typeName != "struct texture")
+		//		break;
+		//	res = new TextureResource;
+		//	break;
+		//}
+		//case mp3:
+		//case wav:
+		//{
+		//	if (typeName != "struct AEAudio")
+		//		break;
+		//	res = new AudioResource;
+		//	break;
+		//}
 		default:
 			break;
 		}

@@ -1,5 +1,4 @@
 #include "TextureResource.h"
-#include <AMGraphics.h>
 
 TextureResource::~TextureResource()
 {

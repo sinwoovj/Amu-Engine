@@ -1,9 +1,9 @@
 #include "GSM/GameStateManager.h"
 #include "Level/Menu.h"
-#include "Example/Sprite.h"
 #include "Example/Rect.h"
 #include "Example/Triangle.h"
 #include <opengl.h>
+#include <Utils.h>
 
 const GLint WIDTH = 720, HEIGHT = 480;
 
@@ -83,7 +83,7 @@ int main(void)
 
     GSM::GameStateManager& gsm = GSM::GameStateManager::GetInstance();
 
-    gsm.ChangeLevel(new level::Sprite);
+    gsm.ChangeLevel(new level::Rect);
 
     /* Loop until the user closes the window */
     while (gsm.ShouldExit() == false && !glfwWindowShouldClose(mainWindow))

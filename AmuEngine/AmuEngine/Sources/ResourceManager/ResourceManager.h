@@ -2,8 +2,9 @@
 #include <iostream>
 #include <map>
 #include <string>
-#include "../Resource/TextureResource.h"
-#include "../Resource/AudioResource.h"
+//#include "../Resource/TextureResource.h"
+//#include "../Resource/AudioResource.h"
+#include "../Resource/Resource.h"
 
 class ResourceManager
 {
@@ -22,16 +23,16 @@ private:
 		unvalid,
 		png,
 		jpg,
-		wav,
-		mp3
+		//wav,
+		//mp3
 	};
 
 	std::map<std::string, fileExt> stringToEnum =
 	{
 		{"png", png},
 		{"jpg", jpg},
-		{"wav", wav},
-		{"mp3", mp3}
+		//{"wav", wav},
+		//{"mp3", mp3}
 	};
 
 public:

@@ -4,7 +4,6 @@
 #include "../CollisionManager/CollisionManager.h"
 #include "../EventManager/EventManager.h"
 
-#include <AMMath.h>
 
 ColliderComp::ColliderComp(GameObject* _owner) : EngineComponent(_owner), pos(), scale(), rot(0), vertices()
 {
@@ -27,7 +26,7 @@ void ColliderComp::Update()
 	vertices[2] = { 0.5f, -0.5f, 1.f };
 	vertices[3] = {	-0.5f, -0.5f, 1.f };
 
-	const Mtx33& mat = owner->GetComponent<TransformComp>()->GetMatrix();
+	const glm::mat3& mat = owner->GetComponent<TransformComp>()->GetMatrix();
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -56,12 +55,12 @@ void ColliderComp::OnEvent(Event* e)
 	}
 }
 
-void ColliderComp::SetPos(const Vec2& otherPos)
+void ColliderComp::SetPos(const glm::vec2& otherPos)
 {
 	this->pos = otherPos;
 }
 
-void ColliderComp::SetScale(const Vec2& otherScale)
+void ColliderComp::SetScale(const glm::vec2& otherScale)
 {
 	this->scale = otherScale;
 }

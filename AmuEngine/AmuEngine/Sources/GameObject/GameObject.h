@@ -16,6 +16,9 @@ public:
 	enum Type
 	{
 		None,
+		Square,
+		LeftTri,
+		RightTri,
 		Point,
 		Player,
 		Button,
