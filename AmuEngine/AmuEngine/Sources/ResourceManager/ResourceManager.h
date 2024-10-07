@@ -2,7 +2,7 @@
 #include <iostream>
 #include <map>
 #include <string>
-//#include "../Resource/TextureResource.h"
+#include "../Resource/TextureResource.h"
 //#include "../Resource/AudioResource.h"
 #include "../Resource/Resource.h"
 

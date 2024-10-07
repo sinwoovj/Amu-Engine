@@ -1,19 +1,11 @@
 #pragma once
 #include <string> 
 #include "../ComponentManager/GraphicComponent.h"
-
+#include "../Components/TransformComp.h"
 #include <opengl.h>
 
 class SpriteComp : public GraphicComponent
 {
-private:
-
-public:
-	// 정점 좌표 & 사각형 색상 & 텍스처 좌표 (좌표계가 stbi 라이브러리와 opengl라이브러리의 서로 달라서 y축만 -를 달아서 반전시킴)
-	float vertices[24];
-	// 정점 인덱스
-	GLint vertexIndeces[6];
-
 private:
 	//color
 	struct Color
@@ -21,8 +13,17 @@ private:
 		float r = 0.f;
 		float g = 0.f;
 		float b = 0.f;
-	} color;
+	};
+	Color color;
 	float Alpha;
+
+	//texture 
+	static int textureWidth;
+	static int textureHeight;
+	unsigned char* texture = nullptr;
+
+	//trans
+	TransformComp* trans;
 	
 	GLuint sprite_VAO;
 	GLuint sprite_VBO;
@@ -37,11 +38,13 @@ public:
 	~SpriteComp();
 
 	//Setting
+	void SetTexture(std::string s);
+	void SpriteSetSprite();
 	void SpriteCreateSprite();
 	void SpriteAddShader(GLuint theProgram, const char* shaderCode, GLenum shaderType);
 	void SpriteCompileShader();
 	void SpriteDrawSprite();
-	void SpriteApplyTexture(std::string path);
+	void SpriteApplyTransform();
 
 	//Draw
 	void Update() override;
@@ -50,8 +53,12 @@ public:
 
 	Color& GetColor() { return color; }
 	void SetColor(Color Color) { color = Color; }
-
-	void SetTexture(std::string s);
+	static int GetTextureWidth() { return textureWidth; }
+	static void SetTextureWidth(int width) { textureWidth = width; }
+	static int GetTextureHeight() { return textureHeight; }
+	static void SetTextureHeight(int height) { textureHeight = height; }
+	
+	unsigned char& GetTexture() { return *texture; }
 	float GetAlpha() { return Alpha; }
 	void SetAlpha(float alpha) { Alpha = alpha; }
 	void SetTransparency(float alpha);

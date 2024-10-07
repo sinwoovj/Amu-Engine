@@ -1,13 +1,15 @@
+
 #include "Sprite.h"
 #include <iostream>
-
 #include <opengl.h>
 
-#define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
-
+#include "../ResourceManager/ResourceManager.h"
 //---------------------------------------------
-GLuint sprite_VAO, sprite_VBO, sprite_EBO, sprite_shader, sprite_texture;
+namespace SpriteNspc
+{
+    GLuint sprite_VAO, sprite_VBO, sprite_EBO, sprite_shader, sprite_texture;
+};
 //---------------------------------------------
 
 // 정점 쉐이더 Vertex Shader
@@ -40,19 +42,33 @@ uniform sampler2D texture1;
 
 void main()
 {
-	FragColor = texture(texture1, TexCoord);
+	FragColor = texture(texture1, TexCoord) * vec4(ourColor,1);
 })";
 
-void SpriteCreateSprite()
+
+
+void level::Sprite::SetTexture(std::string path)
+{
+    if (texturePath != path)
+        ResourceManager::GetInstance().UnloadResource(texturePath);
+
+    texturePath = path;
+
+    texture = ResourceManager::GetInstance().GetResource<unsigned char>(path);
+    W = 1000;
+    H = 563;
+}
+
+void level::Sprite::SpriteCreateSprite1()
 {
 
     // 정점 좌표 & 사각형 색상 & 텍스처 좌표 (좌표계가 stbi 라이브러리와 opengl라이브러리의 서로 달라서 y축만 -를 달아서 반전시킴)
     float vertices[] = {
         // positions          // colors           // sprite_texture coords
-         0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, -1.0f, // top right
-         0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f,  0.0f, // bottom right
-        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f,  0.0f, // bottom left
-        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, -1.0f  // top left 
+         0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 1.0f,   1.0f, -1.0f, // top right
+         0.5f, -0.5f, 0.0f,   1.0f, 0.0f, 1.0f,   1.0f,  0.0f, // bottom right
+        -0.5f, -0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   0.0f,  0.0f, // bottom left
+        -0.5f,  0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, -1.0f  // top left 
     };
 
     // 정점 인덱스
@@ -62,19 +78,19 @@ void SpriteCreateSprite()
     };
 
     // OpenGL 정점 배열 생성기를 사용해서 VAO를 생성
-    glGenVertexArrays(1, &sprite_VAO);
+    glGenVertexArrays(1, &SpriteNspc::sprite_VAO);
     // OpenGL 정점 배열 생성기를 사용해서 VBO를 생성
-    glGenBuffers(1, &sprite_VBO);
+    glGenBuffers(1, &SpriteNspc::sprite_VBO);
     // OpenGL 정점 배열 생성기를 사용해서 EBO를 생성
-    glGenBuffers(1, &sprite_EBO);
+    glGenBuffers(1, &SpriteNspc::sprite_EBO);
 
     
-    glBindVertexArray(sprite_VAO);// 우리가 생성한 VAO를 현재 수정 가능하도록 연결한다.
+    glBindVertexArray(SpriteNspc::sprite_VAO);// 우리가 생성한 VAO를 현재 수정 가능하도록 연결한다.
     
-    glBindBuffer(GL_ARRAY_BUFFER, sprite_VBO);// 우리가 생성한 VBO를 현재 수정 가능하도록 연결한다.
+    glBindBuffer(GL_ARRAY_BUFFER, SpriteNspc::sprite_VBO);// 우리가 생성한 VBO를 현재 수정 가능하도록 연결한다.
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);// 우리가 만든 삼각형 정점 좌표를 VBO에 저장한다.
     
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, sprite_EBO);// 우리가 생성한 VBO를 현재 수정 가능하도록 연결한다.
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, SpriteNspc::sprite_EBO);// 우리가 생성한 VBO를 현재 수정 가능하도록 연결한다.
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(vertexIndeces), vertexIndeces, GL_STATIC_DRAW);// 우리가 만든 삼각형 정점 좌표를 VBO에 저장한다.
 
     // VAO에 이 VAO를 어떻게 해석해야 할 지 알려줍니다. 
@@ -94,8 +110,8 @@ void SpriteCreateSprite()
 
     // Texture //
 
-    glGenTextures(1, &sprite_texture);
-    glBindTexture(GL_TEXTURE_2D, sprite_texture);
+    glGenTextures(1, &SpriteNspc::sprite_texture);
+    glBindTexture(GL_TEXTURE_2D, SpriteNspc::sprite_texture);
     // 텍스처 wrapping/filtering 옵션 설정(현재 바인딩된 텍스처 객체에 대해)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -107,25 +123,22 @@ void SpriteCreateSprite()
     glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
     */
     // 텍스처 로드 및 생성
-    int width, height, nrChannels;
-    unsigned char* data = stbi_load("Sources/Assets/Exam.png", &width, &height, &nrChannels, 0);
-    std::cout << "width : " << width << " height : " << height << " nrChannels : " << nrChannels << std::endl;
-    //glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    if (data)
+    SetTexture("Sources/Assets/Exam.png");
+
+    if (texture)
     {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, W, H, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture);
         glGenerateMipmap(GL_TEXTURE_2D);
     }
     else
     {
         std::cout << "Failed to load texture" << std::endl;
     }
-    stbi_image_free(data);
-
     // End Texture //
+
 }
 
-void SpriteAddShader(GLuint theProgram, const char* shaderCode, GLenum shaderType)
+void level::Sprite::SpriteAddShader1(GLuint theProgram, const char* shaderCode, GLenum shaderType)
 {
     // 쉐이더 생성
     GLuint theShader = glCreateShader(shaderType);
@@ -161,58 +174,63 @@ void SpriteAddShader(GLuint theProgram, const char* shaderCode, GLenum shaderTyp
     glAttachShader(theProgram, theShader);
 }
 
-void SpriteCompileShader()
+void level::Sprite::SpriteCompileShader1()
 {
-    sprite_shader = glCreateProgram();
+    SpriteNspc::sprite_shader = glCreateProgram();
 
-    if (sprite_shader == NULL)
+    if (SpriteNspc::sprite_shader == NULL)
     {
         printf("Error Creating Shader Program!\n");
         return;
     }
 
-    SpriteAddShader(sprite_shader, spriteVShader1, GL_VERTEX_SHADER);
-    SpriteAddShader(sprite_shader, spriteFShader1, GL_FRAGMENT_SHADER);
+    SpriteAddShader1(SpriteNspc::sprite_shader, spriteVShader1, GL_VERTEX_SHADER);
+    SpriteAddShader1(SpriteNspc::sprite_shader, spriteFShader1, GL_FRAGMENT_SHADER);
 
     GLint result = 0;
     GLchar eLog[1024] = { 0 };
 
     // 쉐이더 프로그램 연결
-    glLinkProgram(sprite_shader);
-    glGetProgramiv(sprite_shader, GL_LINK_STATUS, &result); // sprite_shader 추가함수와 연결함수의 차이 glGetShaderiv-> glGetProgramiv
+    glLinkProgram(SpriteNspc::sprite_shader);
+    glGetProgramiv(SpriteNspc::sprite_shader, GL_LINK_STATUS, &result); // sprite_shader 추가함수와 연결함수의 차이 glGetShaderiv-> glGetProgramiv
     if (!result)
     {
-        glGetProgramInfoLog(sprite_shader, sizeof(eLog), NULL, eLog);
+        glGetProgramInfoLog(SpriteNspc::sprite_shader, sizeof(eLog), NULL, eLog);
         printf("Error Linking Program: '%s'\n", eLog);
         return;
     }
 
     // 쉐이더 프로그램 검증
-    glValidateProgram(sprite_shader);
-    glGetProgramiv(sprite_shader, GL_VALIDATE_STATUS, &result);
+    glValidateProgram(SpriteNspc::sprite_shader);
+    glGetProgramiv(SpriteNspc::sprite_shader, GL_VALIDATE_STATUS, &result);
     if (!result)
     {
-        glGetProgramInfoLog(sprite_shader, sizeof(eLog), NULL, eLog);
+        glGetProgramInfoLog(SpriteNspc::sprite_shader, sizeof(eLog), NULL, eLog);
         printf("Error Validating Program: '%s'\n", eLog);
         return;
     }
 }
 
+level::Sprite::~Sprite()
+{
+    ResourceManager::GetInstance().UnloadResource(texturePath);
+}
+
 
 void level::Sprite::Init() 
 {
-    SpriteCreateSprite();
-    SpriteCompileShader();
+    SpriteCreateSprite1();
+    SpriteCompileShader1();
 }
 
 void level::Sprite::Update()
 {
-    glBindTexture(GL_TEXTURE_2D, sprite_texture);
+    glBindTexture(GL_TEXTURE_2D, SpriteNspc::sprite_texture);
  
     // Shader 적용
-    glUseProgram(sprite_shader);
+    glUseProgram(SpriteNspc::sprite_shader);
         
-    glBindVertexArray(sprite_VAO);
+    glBindVertexArray(SpriteNspc::sprite_VAO);
 
     // 데이터를 바탕으로 그리기
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
@@ -225,7 +243,7 @@ void level::Sprite::Update()
 
 void level::Sprite::Exit()
 {
-    glDeleteVertexArrays(1, &sprite_VAO);
-    glDeleteBuffers(1, &sprite_VBO);
-    glDeleteBuffers(1, &sprite_EBO);
+    glDeleteVertexArrays(1, &SpriteNspc::sprite_VAO);
+    glDeleteBuffers(1, &SpriteNspc::sprite_VBO);
+    glDeleteBuffers(1, &SpriteNspc::sprite_EBO);
 }

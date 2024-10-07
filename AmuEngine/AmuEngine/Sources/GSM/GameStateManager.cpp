@@ -1,5 +1,15 @@
 #include "GameStateManager.h"
 #include "../Level/BaseLevel.h"
+#include "../ComponentManager/GraphicComponent.h"
+#include "../ComponentManager/LogicComponent.h"
+#include "../ComponentManager/ComponentManager.h"
+#include "../EventManager/EventManager.h"
+#include "../CollisionManager/CollisionManager.h"
+#include "../GameObjectManager/GameObjectManager.h"
+#include "../ResourceManager/ResourceManager.h"
+#include "../Serializer/Serializer.h"
+#include "../RTTI/Registry.h"
+#include "../Camera/Camera.h"
 
 GSM::GameStateManager::GameStateManager() : previousLevel(nullptr), currentLevel(nullptr) {}
 
@@ -24,7 +34,19 @@ void GSM::GameStateManager::Update()
 {
     if (currentLevel)
     {
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+
+        Camera::GetInstance().Update();
+
+        ComponentManager<LogicComponent>::GetInstance().Update();
+        ComponentManager<EngineComponent>::GetInstance().Update();
+
+        CollisionManager::GetInstance().Update();
+        EventManager::GetInstance().DispatchAllEvents();
+
         currentLevel->Update();
+
+        ComponentManager<GraphicComponent>::GetInstance().Update();
     }
 }
 
@@ -34,6 +56,9 @@ void GSM::GameStateManager::Exit()
     {
         currentLevel->Exit();
     }
+    EventManager::GetInstance().DeleteUndispahchEvent();
+    GameObjectManager::GetInstance().RemoveAllObject();
+    ResourceManager::GetInstance().UnloadAllResource();
 }
 
 void GSM::GameStateManager::ChangeLevel(BaseLevel* newLvl)

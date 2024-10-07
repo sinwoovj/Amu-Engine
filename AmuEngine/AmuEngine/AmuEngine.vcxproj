@@ -470,6 +470,7 @@
     <ClInclude Include="Sources\Event\Entity.h" />
     <ClInclude Include="Sources\Event\Event.h" />
     <ClInclude Include="Sources\Example\Rect.h" />
+    <ClInclude Include="Sources\Example\Sprite.h" />
     <ClInclude Include="Sources\Example\Triangle.h" />
     <ClInclude Include="Sources\GameObjectManager\GameObjectManager.h" />
     <ClInclude Include="Sources\GameObject\GameObject.h" />
@@ -479,6 +480,7 @@
     <ClInclude Include="Sources\Prefab\Prefab.h" />
     <ClInclude Include="Sources\ResourceManager\ResourceManager.h" />
     <ClInclude Include="Sources\Resource\Resource.h" />
+    <ClInclude Include="Sources\Resource\TextureResource.h" />
     <ClInclude Include="Sources\RTTI\BaseRTTI.h" />
     <ClInclude Include="Sources\RTTI\Registry.h" />
     <ClInclude Include="Sources\Serializer\Serializer.h" />
@@ -501,6 +503,7 @@
     <ClCompile Include="Sources\EventManager\EventManager.cpp" />
     <ClCompile Include="Sources\Event\Event.cpp" />
     <ClCompile Include="Sources\Example\Rect.cpp" />
+    <ClCompile Include="Sources\Example\Sprite.cpp" />
     <ClCompile Include="Sources\Example\Triangle.cpp" />
     <ClCompile Include="Sources\GameObjectManager\GameObejectManager.cpp" />
     <ClCompile Include="Sources\GameObject\GameObject.cpp" />
@@ -510,6 +513,7 @@
     <ClCompile Include="Sources\Prefab\Prefab.cpp" />
     <ClCompile Include="Sources\ResourceManager\ResourceManager.cpp" />
     <ClCompile Include="Sources\Resource\Resource.cpp" />
+    <ClCompile Include="Sources\Resource\TextureResource.cpp" />
     <ClCompile Include="Sources\RTTI\Registry.cpp" />
     <ClCompile Include="Sources\Serializer\Serializer.cpp" />
     <ClCompile Include="Sources\Utils\EasyOpengl.cpp" />

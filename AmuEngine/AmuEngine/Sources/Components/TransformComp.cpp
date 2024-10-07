@@ -4,15 +4,15 @@
 void TransformComp::CalculateMatrix()
 {
 	//Create a translate matrix
-	glm::mat3 translateMtx;
+	glm::mat3 translateMtx = glm::identity<glm::mat3x3>();
 	Mtx33Trans(&translateMtx, pos.x, pos.y);
 
 	//Create a rotation matrix
-	glm::mat3 rotationMtx;
+	glm::mat3 rotationMtx = glm::identity<glm::mat3x3>();
 	Mtx33Rot(&rotationMtx, rot);
 
 	//Create a scale matrix
-	glm::mat3 scaleMtx;
+	glm::mat3 scaleMtx = glm::identity<glm::mat3x3>();
 	if (affectedByZoom)
 	{
 		Mtx33Scale(&scaleMtx, scale.x, scale.y);
@@ -23,17 +23,18 @@ void TransformComp::CalculateMatrix()
 	}
 
 	//Concatenate them
-	Mtx33Concat(&transformMatrix, &rotationMtx, &scaleMtx);
+	Mtx33Concat(& rotationMtx, & scaleMtx, &transformMatrix);
 	Mtx33Concat(&transformMatrix, &translateMtx, &transformMatrix);
 
-	if (affectedByZoom)
-	{
-		Mtx33Concat(&transformMatrix, &Camera::GetInstance().GetMatrix(), &transformMatrix);
-	}
-	else
-	{
-		Mtx33Concat(&transformMatrix, &Camera::GetInstance().GetMatrix2(), &transformMatrix);
-	}
+	//FIX CAMERA FIRST
+	//if (affectedByZoom)
+	//{
+	//	Mtx33Concat(&transformMatrix, &Camera::GetInstance().GetMatrix(), &transformMatrix);
+	//}
+	//else
+	//{
+	//	Mtx33Concat(&transformMatrix, &Camera::GetInstance().GetMatrix2(), &transformMatrix);
+	//}
 }
 
 TransformComp::TransformComp(GameObject* _owner) : EngineComponent(_owner), pos(), scale(), rot(0), transformMatrix()

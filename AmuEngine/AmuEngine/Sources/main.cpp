@@ -1,6 +1,7 @@
 #include "GSM/GameStateManager.h"
 #include "Level/Menu.h"
 #include "Example/Rect.h"
+#include "Example/Sprite.h"
 #include "Example/Triangle.h"
 #include <opengl.h>
 #include <Utils.h>
@@ -78,12 +79,12 @@ void processInput(GLFWwindow* window)
 
 int main(void)
 {
-    if ( AMSysInit(WIDTH, HEIGHT, "Amu Engine") )
+    if (AMSysInit(WIDTH, HEIGHT, "Amu Engine") )
         return 1;
 
     GSM::GameStateManager& gsm = GSM::GameStateManager::GetInstance();
 
-    gsm.ChangeLevel(new level::Rect);
+    gsm.ChangeLevel(new level::Menu);
 
     /* Loop until the user closes the window */
     while (gsm.ShouldExit() == false && !glfwWindowShouldClose(mainWindow))
@@ -94,8 +95,6 @@ int main(void)
 
         /* Poll for and process events */
         glfwPollEvents();
-
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
         glClear(GL_COLOR_BUFFER_BIT);
 
