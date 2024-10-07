@@ -3,20 +3,7 @@
 #include "Example/Sprite.h"
 #include "Example/Rect.h"
 #include "Example/Triangle.h"
-#include <cstdio>
-#include <clocale>
-#include <cstdlib>
-#include <cstring>
-
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-//---------------------------------------------
-// 필요 GLM 헤더 추가
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
-//---------------------------------------------
+#include <opengl.h>
 
 const GLint WIDTH = 720, HEIGHT = 480;
 

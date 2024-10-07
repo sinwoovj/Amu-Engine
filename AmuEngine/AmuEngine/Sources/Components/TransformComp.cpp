@@ -60,22 +60,16 @@ void TransformComp::Update()
 void TransformComp::SetPos(const glm::vec2& otherPos)
 {
 	this->pos = otherPos;
-
-	//CalculateMatrix();
 }
 
 void TransformComp::SetScale(const glm::vec2& otherScale)
 {
 	this->scale = otherScale;
-
-	//CalculateMatrix();
 }
 
 void TransformComp::SetRot(const float& otherRot)
 {
 	this->rot = otherRot;
-
-	//CalculateMatrix();
 }
 
 void TransformComp::ReverseX(int val)

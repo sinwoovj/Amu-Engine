@@ -11,7 +11,7 @@ GLuint sprite_VAO, sprite_VBO, sprite_EBO, sprite_shader, sprite_texture;
 //---------------------------------------------
 
 // ¡§¡° Ω¶¿Ã¥ı Vertex Shader
-const char* spriteVShader = R"(
+const char* spriteVShader1 = R"(
 #version 330 core
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec3 aColor;
@@ -28,7 +28,7 @@ void main()
 })";
 
 // ¡∂∞¢ Ω¶¿Ã¥ı Fragment Shader
-const char* spriteFShader = R"(
+const char* spriteFShader1 = R"(
 #version 330 core
 out vec4 FragColor;
 
@@ -171,8 +171,8 @@ void SpriteCompileShader()
         return;
     }
 
-    SpriteAddShader(sprite_shader, spriteVShader, GL_VERTEX_SHADER);
-    SpriteAddShader(sprite_shader, spriteFShader, GL_FRAGMENT_SHADER);
+    SpriteAddShader(sprite_shader, spriteVShader1, GL_VERTEX_SHADER);
+    SpriteAddShader(sprite_shader, spriteFShader1, GL_FRAGMENT_SHADER);
 
     GLint result = 0;
     GLchar eLog[1024] = { 0 };

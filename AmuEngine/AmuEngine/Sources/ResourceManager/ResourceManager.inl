@@ -21,7 +21,7 @@ inline T* ResourceManager::GetResource(const std::string& filename)
 		case png:
 		case jpg:
 		{
-			if (typeName != "struct AEGfxTexture")
+			if (typeName != "struct texture")
 				break;
 			res = new TextureResource;
 			break;
