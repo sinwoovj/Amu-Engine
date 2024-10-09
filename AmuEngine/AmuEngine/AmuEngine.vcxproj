@@ -458,6 +458,8 @@
     <ClInclude Include="Dependencies\stb\stb_image.h" />
     <ClInclude Include="Extern\json\json.hpp" />
     <ClInclude Include="Extern\json\json_fwd.hpp" />
+    <ClInclude Include="Sources\Level\NormalLevel.h" />
+    <ClInclude Include="Sources\Background\Background.h" />
     <ClInclude Include="Sources\Camera\Camera.h" />
     <ClInclude Include="Sources\CollisionManager\CollisionManager.h" />
     <ClInclude Include="Sources\ComponentManager\BaseComponent.h" />
@@ -473,6 +475,9 @@
     <ClInclude Include="Sources\Components\TransformComp.h" />
     <ClInclude Include="Sources\errorCheck.h" />
     <ClInclude Include="Sources\EventManager\EventManager.h" />
+    <ClInclude Include="Sources\Event\Button.h" />
+    <ClInclude Include="Sources\Event\ButtonClickEvent.h" />
+    <ClInclude Include="Sources\Event\CollisionEvent.h" />
     <ClInclude Include="Sources\Event\Entity.h" />
     <ClInclude Include="Sources\Event\Event.h" />
     <ClInclude Include="Sources\Example\Rect.h" />
@@ -490,12 +495,15 @@
     <ClInclude Include="Sources\RTTI\BaseRTTI.h" />
     <ClInclude Include="Sources\RTTI\Registry.h" />
     <ClInclude Include="Sources\Serializer\Serializer.h" />
+    <ClInclude Include="Sources\Utils\Direction.h" />
     <ClInclude Include="Sources\Utils\EasyOpengl.h" />
     <ClInclude Include="Sources\Utils\opengl.h" />
+    <ClInclude Include="Sources\Utils\Size.h" />
     <ClInclude Include="Sources\Utils\Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Dependencies\GLM\glm\detail\glm.cpp" />
+    <ClCompile Include="Sources\Background\Background.cpp" />
     <ClCompile Include="Sources\Camera\Camera.cpp" />
     <ClCompile Include="Sources\CollisionManager\CollisionManager.cpp" />
     <ClCompile Include="Sources\ComponentManager\EngineComponent.cpp" />
@@ -507,6 +515,7 @@
     <ClCompile Include="Sources\Components\SpriteComp.cpp" />
     <ClCompile Include="Sources\Components\TransformComp.cpp" />
     <ClCompile Include="Sources\EventManager\EventManager.cpp" />
+    <ClCompile Include="Sources\Event\ButtonClickEvent.cpp" />
     <ClCompile Include="Sources\Event\Event.cpp" />
     <ClCompile Include="Sources\Example\Rect.cpp" />
     <ClCompile Include="Sources\Example\Sprite.cpp" />
@@ -515,6 +524,7 @@
     <ClCompile Include="Sources\GameObject\GameObject.cpp" />
     <ClCompile Include="Sources\GSM\GameStateManager.cpp" />
     <ClCompile Include="Sources\Level\Menu.cpp" />
+    <ClCompile Include="Sources\Level\NormalLevel.cpp" />
     <ClCompile Include="Sources\main.cpp" />
     <ClCompile Include="Sources\Prefab\Prefab.cpp" />
     <ClCompile Include="Sources\ResourceManager\ResourceManager.cpp" />
@@ -672,17 +682,18 @@
     <None Include="Dependencies\GLM\glm\gtx\vector_angle.inl" />
     <None Include="Dependencies\GLM\glm\gtx\vector_query.inl" />
     <None Include="Dependencies\GLM\glm\gtx\wrap.inl" />
+    <None Include="Sources\Assets\Level\test0.lvl" />
+    <None Include="Sources\Assets\Prefab\Background.prefab" />
+    <None Include="Sources\Assets\Prefab\Player.prefab" />
+    <None Include="Sources\Assets\Prefab\Square.prefab" />
     <None Include="Sources\ComponentManager\ComponentManager.inl" />
     <None Include="Sources\EventManager\EventManager.inl" />
     <None Include="Sources\GameObject\GameObject.inl" />
     <None Include="Sources\ResourceManager\ResourceManager.inl" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Sources\Assets\A.png" />
-    <Image Include="Sources\Assets\default.png" />
-    <Image Include="Sources\Assets\Exam.png" />
-    <Image Include="Sources\Assets\Exam2.png" />
-    <Image Include="Sources\Assets\Exam3.png" />
+    <Image Include="Sources\Assets\Sprite\Background\Exam.png" />
+    <Image Include="Sources\Assets\Sprite\default.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

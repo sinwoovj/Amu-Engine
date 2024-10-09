@@ -1,0 +1,66 @@
+{
+  "objects": [
+    {
+      "object": "Background",
+      "components": [
+        {
+          "type": "TransformComp",
+          "compData": {
+            "position": [
+              0.0,
+              0.0
+            ],
+            "scale": [
+              1.5,
+              1.5
+            ],
+            "rotation": 0.0
+          }
+        },
+        {
+          "type": "SpriteComp",
+          "compData": {
+            "color": [
+              255,
+              255,
+              255
+            ],
+            "texturePath": "./Sources/Assets/Sprite/Background/Exam.png",
+            "alpha": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "object": "Player",
+      "components": [
+        {
+          "type": "TransformComp",
+          "compData": {
+            "position": [
+              0.0,
+              0.0
+            ],
+            "scale": [
+              1.0,
+              1.0
+            ],
+            "rotation": 0.0
+          }
+        },
+        {
+          "type": "SpriteComp",
+          "compData": {
+            "color": [
+              255,
+              255,
+              255
+            ],
+            "texturePath": "Sources/Assets/Sprite/default.png",
+            "alpha": 1.0
+          }
+        }
+      ]
+    }
+  ]
+}

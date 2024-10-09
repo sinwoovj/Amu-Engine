@@ -1,0 +1,31 @@
+{
+  "entityType": 0,
+  "components": [
+    {
+      "type": "SpriteComp",
+      "compData": {
+        "color": [
+          255,
+          255,
+          255
+        ],
+        "alpha": 1.0,
+        "texturePath": "Sources/Assets/Sprite/Background/Exam.png"
+      }
+    },
+    {
+      "type": "TransformComp",
+      "compData": {
+        "position": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "rotation": 0.0
+      }
+    }
+  ]
+}

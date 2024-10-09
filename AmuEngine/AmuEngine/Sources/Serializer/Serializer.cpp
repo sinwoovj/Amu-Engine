@@ -23,36 +23,6 @@ void Serializer::LoadLevel(const std::string& filename)
 	json allData;
 	file >> allData;	// the json has all the file data
 
-	//json background;
-	//background = allData.find("background").value();
-	//auto& item = background;
-	//{
-	//	auto objIt = background.find("object");
-	//	Prefab p(objIt.value());
-	//	GameObject* go = p.NewGameObject("background");
-
-	//	if (objIt != item.end())
-	//	{
-	//		auto compIt = item.find("components");
-
-	//		// iterate on the json on cmp for each component, add it
-	//		for (auto& comp : *compIt)
-	//		{
-	//			auto dataIt = comp.find("type");
-	//			if (dataIt == comp.end())	// not found
-	//				continue;
-
-	//			std::string typeName = dataIt.value().dump();	// convert to string
-	//			typeName = typeName.substr(1, typeName.size() - 2);
-
-	//			go->GetBase(typeName)->LoadFromJson(comp);
-	//		}
-	//	}
-
-	//	if (go->GetComponent<ColliderComp>() != nullptr)
-	//		go->GetComponent<ColliderComp>()->SetCollider();
-	//}
-
 	json objects;
 	objects = allData.find("objects").value();
 
@@ -60,7 +30,7 @@ void Serializer::LoadLevel(const std::string& filename)
 	{
 		auto objIt = item.find("object");
 		Prefab p(objIt.value());
-		GameObject* go = p.NewGameObject();
+		GameObject* go = p.NewGameObject(objIt.value());
 
 		if (objIt != item.end())
 		{
@@ -85,11 +55,9 @@ void Serializer::LoadLevel(const std::string& filename)
 		if (go->GetComponent<ColliderComp>() != nullptr)
 			go->GetComponent<ColliderComp>()->SetCollider();
 	}
-
-	//GameObjectManager::GetInstance().GetObj("background")->GetComponent<SpriteComp>()->SetTexture(allData.find("backgroundFileName").value());
 }
 
-void Serializer::SaveLevel(const std::string& filename, const std::string& backgroundFileName)
+void Serializer::SaveLevel(const std::string& filename)
 {
 	json allData;
 
@@ -123,8 +91,6 @@ void Serializer::SaveLevel(const std::string& filename, const std::string& backg
 		else
 			allData["objects"].push_back(obj);
 	}
-
-	//allData["backgroundFileName"] = backgroundFileName;
 
 	// Open file
 	std::fstream file;

@@ -21,5 +21,5 @@ public:
 	}
 
 	void LoadLevel(const std::string& filename);
-	void SaveLevel(const std::string& filename, const std::string& backgroundFileName);
+	void SaveLevel(const std::string& filename);
 };

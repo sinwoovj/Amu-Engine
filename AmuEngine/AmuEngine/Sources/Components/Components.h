@@ -6,5 +6,5 @@
 #include "../Components/TransformComp.h"
 //#include "../Components/AudioComp.h"
 #include "../Components/SpriteComp.h"
-//#include "../Components/RigidBodyComp.h"
+#include "../Components/RigidBodyComp.h"
 #include "../Components/ColliderComp.h"

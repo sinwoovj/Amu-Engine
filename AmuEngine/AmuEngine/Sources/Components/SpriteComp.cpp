@@ -43,7 +43,7 @@ int SpriteComp::textureHeight = 0;
 
 SpriteComp::SpriteComp(GameObject* _owner) : GraphicComponent(_owner)
 {
-	texturePath = "Sources/Assets/defualt.png";
+	texturePath = "Sources/Assets/Sprite/default.png";
 	color = { 255.f,255.f,255.f };
 	alpha = 1;
 	sprite_EBO = 0;
@@ -253,6 +253,8 @@ void SpriteComp::SetTexture(std::string path)
 
 	texture = ResourceManager::GetInstance().GetResource<unsigned char>(path);
 
+	glUseProgram(sprite_shader);
+
 	if (texture)
 	{
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textureWidth, textureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture);
@@ -262,6 +264,8 @@ void SpriteComp::SetTexture(std::string path)
 	{
 		std::cout << "Failed to load texture : " << texturePath << std::endl;
 	}
+
+	glUseProgram(0);
 }
 
 void SpriteComp::SetTransparency()
@@ -275,12 +279,10 @@ void SpriteComp::SetTransparency()
 	//glEnable(GL_BLEND);// you enable blending function
 	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//GfxSetBlendMode(GFX_BM_BLEND);
-
+	
 	//Set transparency
 	// 알파 값 조절 (1.0은 불투명, 0.0은 완전 투명);
-	unsigned char loc = glGetUniformLocation(sprite_shader, "texture1");
-
-	loc = glGetUniformLocation(sprite_shader, "ucolor");
+	unsigned char loc = glGetUniformLocation(sprite_shader, "ucolor");
 	
 	glUniform4f(loc, color.r / 255.f, color.g / 255.f, color.b / 255.f, alpha);
 
@@ -314,9 +316,12 @@ void SpriteComp::LoadFromJson(const json& data)
 	if (compData != data.end())
 	{
 		auto it = compData->find("texturePath");
+		SetTexture(it.value());
 		texturePath = it.value();
-		SetTexture(texturePath);
-
+		it = compData->find("color");
+		color.r = it->begin().value();
+		color.g = (it->begin() + 1).value();
+		color.b = (it->begin() + 2).value();
 		it = compData->find("alpha");
 		alpha = it.value();
 	}
@@ -329,6 +334,7 @@ json SpriteComp::SaveToJson()
 
 	json compData;
 	compData["texturePath"] = texturePath;
+	compData["color"] = { color.r,color.g,color.b };
 	compData["alpha"] = alpha;
 	data["compData"] = compData;
 

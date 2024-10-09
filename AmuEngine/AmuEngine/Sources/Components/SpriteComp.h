@@ -52,6 +52,7 @@ public:
 	static int GetTextureHeight() { return textureHeight; }
 	static void SetTextureHeight(int height) { textureHeight = height; }
 	
+	std::string GetTexturePath() { return texturePath; }
 	unsigned char& GetTexture() { return *texture; }
 	float GetAlpha() { return alpha; }
 	void SetAlpha(float Alpha) { alpha = Alpha; }

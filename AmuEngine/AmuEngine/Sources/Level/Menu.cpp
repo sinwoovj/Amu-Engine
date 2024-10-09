@@ -2,33 +2,18 @@
 #include <iostream> 
 #include "../Components/SpriteComp.h"
 #include "../Components/TransformComp.h"
-#include "../Camera/Camera.h"
-
+#include "../GSM/GameStateManager.h"
+#include "../Level/NormalLevel.h"
 
 void level::Menu::Init() 
 {
-	Camera::GetInstance().SetPos(0, 0);
-
-	// 배경 초기화
-	backGround = new GameObject("backGround");
-
-	backGround->AddComponent<SpriteComp>();
-	backGround->AddComponent<TransformComp>();
 	
-	SpriteComp* backGroundsp = backGround->GetComponent<SpriteComp>();
-	TransformComp* backGroundtf = backGround->GetComponent<TransformComp>();
-
-	
-	backGroundsp->SetTexture("Sources/Assets/Exam.png");
 }
 
-void level::Menu::Update() 
+void level::Menu::Update()
 {
-	TransformComp* backGroundtf = backGround->GetComponent<TransformComp>();
-	backGroundtf->SetRot(glm::radians(1.0f) * c);
-
-	backGroundtf->SetPos({ 0.01 * c , 0.01 * c });
-	c++;
+	if (glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_0) == GLFW_PRESS)
+		GSM::GameStateManager::GetInstance().ChangeLevel(new level::NormalLevel(0));
 }
 
 void level::Menu::Exit() 
