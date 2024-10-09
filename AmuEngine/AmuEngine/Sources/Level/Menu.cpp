@@ -18,19 +18,16 @@ void level::Menu::Init()
 	SpriteComp* backGroundsp = backGround->GetComponent<SpriteComp>();
 	TransformComp* backGroundtf = backGround->GetComponent<TransformComp>();
 
-	backGroundtf->SetScale({ 300, 300 });
-	backGroundtf->SetRot(glm::radians(45.0f));
+	
 	backGroundsp->SetTexture("Sources/Assets/Exam.png");
-	//backGroundsp->SetAlpha(1);
 }
 
 void level::Menu::Update() 
-{ 
-	if(c % 1000 == 500)
-		backGround->GetComponent<SpriteComp>()->SetTexture("Sources/Assets/A.png");
-	else if(c % 1000 == 0)
-		backGround->GetComponent<SpriteComp>()->SetTexture("Sources/Assets/Exam.png");
+{
+	TransformComp* backGroundtf = backGround->GetComponent<TransformComp>();
+	backGroundtf->SetRot(glm::radians(1.0f) * c);
 
+	backGroundtf->SetPos({ 0.01 * c , 0.01 * c });
 	c++;
 }
 

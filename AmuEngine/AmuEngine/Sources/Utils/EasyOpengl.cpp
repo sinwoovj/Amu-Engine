@@ -37,8 +37,8 @@ void Mtx33Scale(glm::mat3* scaleMtx, float x, float y)
 	*scaleMtx = (*scaleMtx) * scaleMatrix;
 };
 
-void Mtx33Concat(glm::mat3* mat1, glm::mat3* mat2, glm::mat3* mat3)
+void Mtx33Concat(glm::mat3* res, glm::mat3* a, glm::mat3* b)
 {
-	// mat1과 mat2의 행렬을 곱해서 mat3에 저장
-	*mat3 = (*mat1) * (*mat2);
+	// a과 b의 행렬을 곱해서 res에 저장
+	*res = (*a) * (*b);
 };

@@ -678,7 +678,11 @@
     <None Include="Sources\ResourceManager\ResourceManager.inl" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Sources\Assets\A.png" />
+    <Image Include="Sources\Assets\default.png" />
     <Image Include="Sources\Assets\Exam.png" />
+    <Image Include="Sources\Assets\Exam2.png" />
+    <Image Include="Sources\Assets\Exam3.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

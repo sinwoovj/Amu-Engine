@@ -13,37 +13,22 @@ void TransformComp::CalculateMatrix()
 
 	//Create a scale matrix
 	glm::mat3 scaleMtx = glm::identity<glm::mat3x3>();
-	if (affectedByZoom)
-	{
-		Mtx33Scale(&scaleMtx, scale.x, scale.y);
-	}
-	else
-	{
-		Mtx33Scale(&scaleMtx, scale.x * 40, scale.y * 40);
-	}
+	Mtx33Scale(&scaleMtx, scale.x, scale.y);
 
 	//Concatenate them
-	Mtx33Concat(& rotationMtx, & scaleMtx, &transformMatrix);
-	Mtx33Concat(&transformMatrix, &translateMtx, &transformMatrix);
-
-	//FIX CAMERA FIRST
-	//if (affectedByZoom)
-	//{
-	//	Mtx33Concat(&transformMatrix, &Camera::GetInstance().GetMatrix(), &transformMatrix);
-	//}
-	//else
-	//{
-	//	Mtx33Concat(&transformMatrix, &Camera::GetInstance().GetMatrix2(), &transformMatrix);
-	//}
+	Mtx33Concat(&transformMatrix , &scaleMtx, &rotationMtx);
+	Mtx33Concat(&transformMatrix , &translateMtx, &transformMatrix);
 }
 
-TransformComp::TransformComp(GameObject* _owner) : EngineComponent(_owner), pos(), scale(), rot(0), transformMatrix()
+TransformComp::TransformComp(GameObject* _owner) : EngineComponent(_owner), pos({ 0,0 }), scale({ 1,1 }), rot(0), transformMatrix(glm::identity<glm::mat3>())
 {
 	pos.x = 0;
 	pos.y = 0;
 
 	scale.x = 1;
 	scale.y = 1;
+
+	rot = 0;
 
 	CalculateMatrix();
 }

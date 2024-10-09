@@ -12,11 +12,11 @@ layout (location = 2) in vec2 aTexCoord;
 out vec3 ourColor;
 out vec2 TexCoord;
 
-uniform mat4 transform;
+uniform mat3 transform;
 
 void main()
 {
-	gl_Position = vec4(aPos, 1.0f);	// transform * vec problem
+	gl_Position = vec4(vec3(transform * aPos), 1.0f);
 	ourColor = aColor;
 	TexCoord = vec2(aTexCoord.x, aTexCoord.y);
 })";
@@ -29,12 +29,13 @@ out vec4 FragColor;
 in vec3 ourColor;
 in vec2 TexCoord;
 
+uniform vec4 ucolor;
 // texture sampler
 uniform sampler2D texture1;
 
 void main()
 {
-	FragColor = texture(texture1, TexCoord) * vec4(ourColor, 1); //texture is white
+	FragColor = texture(texture1, TexCoord) * ucolor;
 })";
 
 int SpriteComp::textureWidth = 0;
@@ -42,9 +43,9 @@ int SpriteComp::textureHeight = 0;
 
 SpriteComp::SpriteComp(GameObject* _owner) : GraphicComponent(_owner)
 {
-	texturePath = "";
-	color = { 1.f,1.f,1.f };
-	Alpha = 1;
+	texturePath = "Sources/Assets/defualt.png";
+	color = { 255.f,255.f,255.f };
+	alpha = 1;
 	sprite_EBO = 0;
 	sprite_VAO = 0;
 	sprite_VBO = 0;
@@ -70,11 +71,12 @@ void SpriteComp::SpriteCreateSprite()
 	// 정점 좌표 & 사각형 색상 & 텍스처 좌표 (좌표계가 stbi 라이브러리와 opengl라이브러리의 서로 달라서 y축만 -를 달아서 반전시킴)
 	float vertices[] = {
 		// positions   // colors           // sprite_texture coords
-		 0.5f,  0.5f, 0.0f,  1.0f, 1.0f, 1.0f,   1.0f, -1.0f, // top right
-		 0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 1.0f,   1.0f,  0.0f, // bottom right
-		-0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,   0.0f,  0.0f, // bottom left
-		-0.5f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f,   0.0f, -1.0f  // top left 
+		 0.5f,  0.5f, 1.0f,  1.0f, 1.0f, 1.0f,   1.0f, -1.0f, // top right
+		 0.5f, -0.5f, 1.0f,  1.0f, 1.0f, 1.0f,   1.0f,  0.0f, // bottom right
+		-0.5f, -0.5f, 1.0f,  1.0f, 1.0f, 1.0f,   0.0f,  0.0f, // bottom left
+		-0.5f,  0.5f, 1.0f,  0.0f, 1.0f, 1.0f,   0.0f, -1.0f  // top left 
 	};
+	// 2D를 표현할 때 정점좌표의 z값은 1이여야 transform할 때 mat랑 연산 할 때 정상적인 값이 도출된다.
 
 	// 정점 인덱스
 	GLint vertexIndeces[] = {
@@ -229,19 +231,14 @@ void SpriteComp::SpriteApplyTransform()
 	if(!trans)
 		trans = owner->GetComponent<TransformComp>();
 
-	glm::mat4 model = glm::mat4(1.0f);
-	model = glm::translate(model, glm::vec3(trans->GetScale(), 0.0f));
-	model = glm::rotate(model, trans->GetRot(), glm::vec3(0, 0, 1));
-	model = glm::scale(model, glm::vec3(trans->GetScale(),1.0f));
-
+	// Shader 적용
+	glUseProgram(sprite_shader);
 
 	unsigned int transformLoc = glGetUniformLocation(sprite_shader, "transform");
 
+	glUniformMatrix3fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans->GetMatrix()));
 
-
-
-
-	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(model));
+	glUseProgram(0);
 }
 
 void SpriteComp::SetTexture(std::string path)
@@ -267,16 +264,27 @@ void SpriteComp::SetTexture(std::string path)
 	}
 }
 
-void SpriteComp::SetTransparency(float alpha)
+void SpriteComp::SetTransparency()
 {
+	/*
+	쉐이더 관련 수정 (example. uniform)
+	은 전부 무조건 제발 shader 프로그램을 켜고 수정을 하도록 하자!!!!!
+	*/
+	glUseProgram(sprite_shader);
 	//Set blend Mode
-	glEnable(GL_BLEND);// you enable blending function
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//glEnable(GL_BLEND);// you enable blending function
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//GfxSetBlendMode(GFX_BM_BLEND);
 
 	//Set transparency
-	// 알파 값 조절 (1.0은 불투명, 0.0은 완전 투명)
-	glColor4f(color.r, color.g, color.b, alpha);
+	// 알파 값 조절 (1.0은 불투명, 0.0은 완전 투명);
+	unsigned char loc = glGetUniformLocation(sprite_shader, "texture1");
+
+	loc = glGetUniformLocation(sprite_shader, "ucolor");
+	
+	glUniform4f(loc, color.r / 255.f, color.g / 255.f, color.b / 255.f, alpha);
+
+	glUseProgram(0);
 }
 
 void SpriteComp::Update()
@@ -284,16 +292,19 @@ void SpriteComp::Update()
 	//Set render mode
 	//glRenderMode(GL_RENDER);
 
-	//Set color 
-	SetColor({ color.r, color.g, color.b });
-	SetTransparency(Alpha);
-
-
 	//Set transform
 	//Get the transform from my owner transfrom comp
 	SpriteApplyTransform();
 
+	//Set color 
+	SetTransparency();
+
 	SpriteDrawSprite();
+}
+
+void SpriteComp::SetColor(glm::vec3 Color)
+{
+	color = Color;
 }
 
 void SpriteComp::LoadFromJson(const json& data)
@@ -307,7 +318,7 @@ void SpriteComp::LoadFromJson(const json& data)
 		SetTexture(texturePath);
 
 		it = compData->find("alpha");
-		Alpha = it.value();
+		alpha = it.value();
 	}
 }
 
@@ -318,7 +329,7 @@ json SpriteComp::SaveToJson()
 
 	json compData;
 	compData["texturePath"] = texturePath;
-	compData["alpha"] = Alpha;
+	compData["alpha"] = alpha;
 	data["compData"] = compData;
 
 	return data;

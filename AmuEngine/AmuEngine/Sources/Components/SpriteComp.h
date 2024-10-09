@@ -8,14 +8,8 @@ class SpriteComp : public GraphicComponent
 {
 private:
 	//color
-	struct Color
-	{
-		float r = 0.f;
-		float g = 0.f;
-		float b = 0.f;
-	};
-	Color color;
-	float Alpha;
+	glm::vec3 color;
+	float alpha;
 
 	//texture 
 	static int textureWidth;
@@ -51,17 +45,17 @@ public:
 
 	//Gettors/Settors
 
-	Color& GetColor() { return color; }
-	void SetColor(Color Color) { color = Color; }
+	glm::vec3& GetColor() { return color; }
+	void SetColor(glm::vec3 Color);
 	static int GetTextureWidth() { return textureWidth; }
 	static void SetTextureWidth(int width) { textureWidth = width; }
 	static int GetTextureHeight() { return textureHeight; }
 	static void SetTextureHeight(int height) { textureHeight = height; }
 	
 	unsigned char& GetTexture() { return *texture; }
-	float GetAlpha() { return Alpha; }
-	void SetAlpha(float alpha) { Alpha = alpha; }
-	void SetTransparency(float alpha);
+	float GetAlpha() { return alpha; }
+	void SetAlpha(float Alpha) { alpha = Alpha; }
+	void SetTransparency();
 	void LoadFromJson(const json&) override;
 	json SaveToJson() override;
 
