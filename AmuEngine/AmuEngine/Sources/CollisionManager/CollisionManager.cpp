@@ -379,9 +379,9 @@ void CollisionManager::Update()
 
 	EventManager& em = EventManager::GetInstance();
 
-	for (int i = 0; i < colliderList.size() - 1; i++)
+	for (unsigned int i = 0; i < colliderList.size() - 1; i++)
 	{
-		for (int j = i + 1; j < colliderList.size(); j++)
+		for (unsigned int j = i + 1; j < colliderList.size(); j++)
 		{
 			ColliderComp* a = colliderList[i];
 			ColliderComp* b = colliderList[j];

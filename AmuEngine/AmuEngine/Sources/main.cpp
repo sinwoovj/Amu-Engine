@@ -6,6 +6,7 @@
 #include <opengl.h>
 #include <Utils.h>
 
+
 const GLint WIDTH = 720, HEIGHT = 480;
 
 //---------------------------------------------
