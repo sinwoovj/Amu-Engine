@@ -6,6 +6,11 @@
 #include <opengl.h>
 #include <Utils.h>
 
+#include "../imgui/imgui.h"
+#include "../imgui/imgui_impl_glfw.h"
+#include "../imgui/imgui_impl_opengl3.h"
+
+#include "../Editor/MainEditor.h"
 
 const GLint WIDTH = 720, HEIGHT = 480;
 
@@ -55,6 +60,17 @@ int AMSysInit(GLint width, GLint height, const char* title)
     // + OpenGL Context 설정
     glfwMakeContextCurrent(mainWindow);
 
+    // Setup Dear ImGui context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO();
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+
+    // Setup Platform/Renderer backends
+    ImGui_ImplGlfw_InitForOpenGL(mainWindow, true);          // Second param install_callback=true will install GLFW callbacks and chain to existing ones.
+    ImGui_ImplOpenGL3_Init();
+
     // + GLEW 초기화
     // GLEW의 모든 기능 활성화
     glewExperimental = GL_TRUE;
@@ -83,6 +99,10 @@ int main(void)
     if (AMSysInit(WIDTH, HEIGHT, "Amu Engine") )
         return 1;
 
+    // Editor Init
+    editor::MainEditor* mainEditor = new editor::MainEditor();
+    mainEditor->MainEditorInit(mainWindow);
+
     GSM::GameStateManager& gsm = GSM::GameStateManager::GetInstance();
 
     gsm.ChangeLevel(new level::Menu);
@@ -97,9 +117,23 @@ int main(void)
         /* Poll for and process events */
         glfwPollEvents();
 
+        // Start the Dear ImGui frame
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+        ImGui::ShowDemoWindow(); // Show demo window! :)
+
         glClear(GL_COLOR_BUFFER_BIT);
 
         gsm.Update();
+
+        // Rendering
+        // Editor Update
+        mainEditor->MainEditorUpdate();
+
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        // (Your code calls glfwSwapBuffers() etc.)
 
         /* Swap front and back buffers */
         glfwSwapBuffers(mainWindow);
@@ -107,6 +141,14 @@ int main(void)
     }
 
     gsm.Exit();
+
+    // Editor Exit
+    mainEditor->MainEditorExit();
+
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+
     glfwTerminate();
     return 0;
 }
