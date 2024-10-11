@@ -12,7 +12,9 @@
 
 #include "../Editor/MainEditor.h"
 
+GLboolean fullScreen = GL_FALSE;
 const GLint WIDTH = 720, HEIGHT = 480;
+const GLint FULLSCREENWIDTH = 2560, FULLSCREENHEIGHT = 1080;
 
 //---------------------------------------------
 GLFWwindow* mainWindow;
@@ -88,10 +90,33 @@ int AMSysInit(GLint width, GLint height, const char* title)
     return (0);
 };
 
-void processInput(GLFWwindow* window)
+void processInput()
 {
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
+    if (glfwGetKey(mainWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    {
+        glfwSetWindowShouldClose(mainWindow, true);
+    }
+}
+
+void fullscreenInput(int& LastFrameFullscreenKey)
+{
+    int currentFullscreenKey = glfwGetKey(mainWindow, GLFW_KEY_F11);
+
+    if (currentFullscreenKey == GLFW_PRESS && currentFullscreenKey != LastFrameFullscreenKey)
+    {
+        if (fullScreen)
+        {
+            glfwSetWindowSize(mainWindow, WIDTH, HEIGHT);
+            fullScreen = GL_FALSE;
+        }
+        else
+        {
+            glfwSetWindowSize(mainWindow, FULLSCREENWIDTH, FULLSCREENHEIGHT);
+            fullScreen = GL_TRUE;
+        }
+    }
+
+    LastFrameFullscreenKey = currentFullscreenKey;
 }
 
 int main(void)
@@ -107,10 +132,11 @@ int main(void)
 
     gsm.ChangeLevel(new level::Menu);
 
+    int LastFrameFullscreenKey = GLFW_RELEASE;
+
     /* Loop until the user closes the window */
     while (gsm.ShouldExit() == false && !glfwWindowShouldClose(mainWindow))
     {
-        processInput(mainWindow);
 
         //frame setting
 
@@ -130,14 +156,15 @@ int main(void)
         // Rendering
         // Editor Update
         mainEditor->MainEditorUpdate();
-
+        static bool show_window = true;
+        
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-        // (Your code calls glfwSwapBuffers() etc.)
 
-        /* Swap front and back buffers */
+        processInput();
+        fullscreenInput(LastFrameFullscreenKey);
+
         glfwSwapBuffers(mainWindow);
-
     }
 
     gsm.Exit();
