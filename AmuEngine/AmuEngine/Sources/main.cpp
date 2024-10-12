@@ -161,7 +161,7 @@ int main(void)
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-        processInput();
+        //processInput(); // if press exit 
         fullscreenInput(LastFrameFullscreenKey);
 
         glfwSwapBuffers(mainWindow);

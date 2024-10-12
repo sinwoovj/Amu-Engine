@@ -1,5 +1,4 @@
 #include "MainEditor.h"
-#include "../imgui/imgui.h"
 #include "../imgui/imgui_impl_glfw.h"
 #include "../imgui/imgui_impl_opengl3.h"
 #include "../Components/Components.h"
@@ -15,21 +14,22 @@ void editor::MainEditor::TopBar()
     {
         if (ImGui::BeginMenu("File"))
         {
-            if (ImGui::MenuItem("Open..", "Ctrl+O")) { /* Do stuff */ }
-            if (ImGui::MenuItem("File Save", "Ctrl+S")) { /* Do stuff */ }
-            if (ImGui::MenuItem("File Load", "Ctrl+L")) {}
+            if (ImGui::MenuItem("Open File", "Ctrl+O")) { /* Do stuff */ }
+            if (ImGui::MenuItem("Save File", "Ctrl+S")) { /* Do stuff */ }
+            if (ImGui::MenuItem("Load File", "Ctrl+L")) {}
 
             ImGui::Separator();
             if (ImGui::MenuItem("Close", "Ctrl+W")) { ImGui::CloseCurrentPopup(); }
+            if (ImGui::MenuItem("Quit", "Ctrl+Q")) { glfwSetWindowShouldClose(glfwGetCurrentContext(), true); }
 
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Level"))
         {
-            if (ImGui::MenuItem("New", "Ctrl+N")) { /* Do stuff */ }
-            if (ImGui::MenuItem("Delete", "Ctrl+D")) { /* Do stuff */ }
-            if (ImGui::MenuItem("Level Save", "Ctrl+S")) { /* Do stuff */ }
-            if (ImGui::MenuItem("Level Load", "Ctrl+L")) {}
+            if (ImGui::MenuItem("New Level", "Ctrl+N")) { /* Do stuff */ }
+            if (ImGui::MenuItem("Delete Level", "Ctrl+D")) { /* Do stuff */ }
+            if (ImGui::MenuItem("Save Level", "Ctrl+S")) { /* Do stuff */ }
+            if (ImGui::MenuItem("Load Level", "Ctrl+L")) {}
 
             ImGui::Separator();
             if (ImGui::MenuItem("Close", "Ctrl+W")) { ImGui::CloseCurrentPopup(); }
@@ -37,8 +37,8 @@ void editor::MainEditor::TopBar()
         }
         if (ImGui::BeginMenu("Object"))
         {
-            if (ImGui::MenuItem("New", "Ctrl+N")) { /* Do stuff */ }
-            if (ImGui::MenuItem("Delete", "Ctrl+D")) { /* Do stuff */ }
+            if (ImGui::MenuItem("New Object", "Ctrl+N")) { /* Do stuff */ }
+            if (ImGui::MenuItem("Delete Object", "Ctrl+D")) { /* Do stuff */ }
 
             ImGui::Separator();
             if (ImGui::MenuItem("Close", "Ctrl+W")) { ImGui::CloseCurrentPopup(); }
@@ -46,12 +46,12 @@ void editor::MainEditor::TopBar()
         }
         if (ImGui::BeginMenu("Window"))
         {
-            if (ImGui::MenuItem("Levels", "Ctrl+N", editor_data.ShowAllLevels))
+            if (ImGui::MenuItem("Show Levels", "Ctrl+L", &editor_data.ShowAllLevels))
             {
 
             }
             
-            if (ImGui::MenuItem("Objects", "Ctrl+D", editor_data.ShowAllObects)) {
+            if (ImGui::MenuItem("Show Objects", "Ctrl+O", &editor_data.ShowAllObects)) {
 
             }
 
@@ -78,28 +78,30 @@ void editor::MainEditor::TopBar()
     }*/
 }
 
-void editor::MainEditor::ShowAllObject()
+void editor::MainEditor::ShowAllObject(bool* p_open)
 {
-    ImGui::Begin("Objects");
-
-    ImGui::Text("Object");
-    
-
-
-    ImGui::SameLine();
-
-    ImGui::End();
+    if (!ImGui::Begin("Objects", p_open))
+    {
+        ImGui::End();
+    }
+    else
+    {
+        ImGui::Text("Objects");
+        ImGui::End();
+    }
 }
 
-void editor::MainEditor::ShowAllLevel()
+void editor::MainEditor::ShowAllLevel(bool* p_open)
 {
-    ImGui::Begin("Levels");
-
-    ImGui::Text("Level");
-
-    ImGui::SameLine();
-
-    ImGui::End();
+    if (!ImGui::Begin("Levels", p_open))
+    {
+        ImGui::End();
+    }
+    else
+    {
+        ImGui::Text("Levels");
+        ImGui::End();
+    }
 }
 
 void editor::MainEditor::SelectedObjectWindow()
@@ -121,8 +123,10 @@ void editor::MainEditor::MainEditorUpdate()
 {
     //Top Bar
     TopBar();
-    ShowAllObject();
-    ShowAllLevel();
+    // https://stackoverflow.com/questions/66955023/closing-an-imgui-window-this-seems-like-it-should-be-easy-how-does-one-do-it
+    if (editor_data.ShowAllLevels) { ShowAllLevel(&editor_data.ShowAllLevels); }
+    if (editor_data.ShowAllObects) { ShowAllObject(&editor_data.ShowAllObects); }
+    
 }
 
 void editor::MainEditor::MainEditorExit()
