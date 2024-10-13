@@ -86,7 +86,43 @@ void editor::MainEditor::ShowAllObject(bool* p_open)
     }
     else
     {
-        ImGui::Text("Objects");
+        if (ImGui::TreeNode("Objects"))
+        {
+            ImGui::Columns(2, "Object", true);
+            for (int x = 0; x < 3; x++)
+            {
+                bool open1 = ImGui::TreeNode((void*)(intptr_t)x, "Node%d", x);
+                ImGui::NextColumn();
+                ImGui::Text("Object Contents");
+                ImGui::NextColumn();
+                if (open1)
+                {
+                    for (int y = 0; y < 3; y++)
+                    {
+                        bool open2 = ImGui::TreeNode((void*)(intptr_t)y, "Node%d.%d", x, y);
+                        ImGui::NextColumn();
+                        ImGui::Text("Object Child Contents");
+                        if (open2)
+                        {
+                            ImGui::Text("Even more contents");
+                            if (ImGui::TreeNode("Tree in column"))
+                            {
+                                ImGui::Text("Hellow World");
+                                ImGui::TreePop();
+                            }
+                        }
+                        ImGui::NextColumn();
+                        if (open2)
+                        {
+                            ImGui::TreePop();
+                        }
+                    }
+                    ImGui::TreePop();
+                }
+            }
+            ImGui::Columns(1);
+            ImGui::TreePop();
+        }
         ImGui::End();
     }
 }
@@ -99,7 +135,41 @@ void editor::MainEditor::ShowAllLevel(bool* p_open)
     }
     else
     {
-        ImGui::Text("Levels");
+        if (ImGui::TreeNode("Tree"))
+        {
+            ImGui::Columns(2, "tree", true);
+            for (int x = 0; x < 3; x++)
+            {
+                bool open3 = ImGui::TreeNode((void*)(intptr_t)x, "Node%d", x);
+                ImGui::NextColumn();
+                ImGui::Text("Node contents");
+                ImGui::NextColumn();
+                if (open3)
+                {
+                    for (int y = 0; y < 3; y++)
+                    {
+                        bool open4 = ImGui::TreeNode((void*)(intptr_t)y, "Node%d.%d", x, y);
+                        ImGui::NextColumn();
+                        ImGui::Text("Node contents");
+                        if (open4)
+                        {
+                            ImGui::Text("Even more contents");
+                            if (ImGui::TreeNode("Tree in column"))
+                            {
+                                ImGui::Text("The quick brown fox jumps over the lazy dog");
+                                ImGui::TreePop();
+                            }
+                        }
+                        ImGui::NextColumn();
+                        if (open4)
+                            ImGui::TreePop();
+                    }
+                    ImGui::TreePop();
+                }
+            }
+            ImGui::Columns(1);
+            ImGui::TreePop();
+        }
         ImGui::End();
     }
 }

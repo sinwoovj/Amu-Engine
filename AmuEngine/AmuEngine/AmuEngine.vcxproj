@@ -537,7 +537,6 @@
     <ClCompile Include="Sources\GameObject\GameObject.cpp" />
     <ClCompile Include="Sources\GSM\GameStateManager.cpp" />
     <ClCompile Include="Sources\imgui\imgui.cpp" />
-    <ClCompile Include="Sources\imgui\ImguiApp.cpp" />
     <ClCompile Include="Sources\imgui\imgui_demo.cpp" />
     <ClCompile Include="Sources\imgui\imgui_draw.cpp" />
     <ClCompile Include="Sources\imgui\imgui_impl_glfw.cpp" />
