@@ -1,7 +1,8 @@
 #include "SpriteComp.h"
 #include "TransformComp.h"
 #include "../ResourceManager/ResourceManager.h"
-
+#include <EasyImgui.h>
+#include <EasyOpengl.h>
 // 정점 쉐이더 Vertex Shader
 const char* spriteVShader = R"(
 #version 330 core
@@ -12,11 +13,12 @@ layout (location = 2) in vec2 aTexCoord;
 out vec3 ourColor;
 out vec2 TexCoord;
 
+uniform mat4 ortho;
 uniform mat3 transform;
 
 void main()
 {
-	gl_Position = vec4(vec3(transform * aPos), 1.0f);
+	gl_Position = vec4(vec3(transform * aPos), 1.0f) * ortho;
 	ourColor = aColor;
 	TexCoord = vec2(aTexCoord.x, aTexCoord.y);
 })";
@@ -35,22 +37,22 @@ uniform sampler2D texture1;
 
 void main()
 {
-	FragColor = texture(texture1, TexCoord) * ucolor;
+	FragColor = texture2D(texture1, TexCoord) * ucolor;
 })";
 
-int SpriteComp::textureWidth = 0;
-int SpriteComp::textureHeight = 0;
+std::map<std::string, glm::vec2> SpriteComp::nativeSize;
 
 SpriteComp::SpriteComp(GameObject* _owner) : GraphicComponent(_owner)
 {
-	texturePath = "Sources/Assets/Sprite/default.png";
-	color = { 255.f,255.f,255.f };
+	color = { 1.f,1.f,1.f };
 	alpha = 1;
 	sprite_EBO = 0;
 	sprite_VAO = 0;
 	sprite_VBO = 0;
 	sprite_shader = 0;
 	sprite_texture = 0;
+	texturePath = "";
+	textureSize = { 400, 400 };
 	trans = nullptr;
 	SpriteSetSprite();
 }
@@ -71,17 +73,17 @@ void SpriteComp::SpriteCreateSprite()
 	// 정점 좌표 & 사각형 색상 & 텍스처 좌표 (좌표계가 stbi 라이브러리와 opengl라이브러리의 서로 달라서 y축만 -를 달아서 반전시킴)
 	float vertices[] = {
 		// positions   // colors           // sprite_texture coords
-		 0.5f,  0.5f, 1.0f,  1.0f, 1.0f, 1.0f,   1.0f, -1.0f, // top right
-		 0.5f, -0.5f, 1.0f,  1.0f, 1.0f, 1.0f,   1.0f,  0.0f, // bottom right
-		-0.5f, -0.5f, 1.0f,  1.0f, 1.0f, 1.0f,   0.0f,  0.0f, // bottom left
-		-0.5f,  0.5f, 1.0f,  0.0f, 1.0f, 1.0f,   0.0f, -1.0f  // top left 
+		 -0.5f,  -0.5f, 1.0f,  1.0f, 1.0f, 1.0f,   0.0f,  0.0f, // top right
+		 0.5f, -0.5f, 1.0f,  1.0f, 1.0f, 1.0f,   -1.0f,  0.0f, // bottom right
+		 0.5f,  0.5f, 1.0f,  1.0f, 1.0f, 1.0f,   -1.0f,  -1.0f, // bottom left
+		-0.5f,  0.5f, 1.0f,  0.0f, 1.0f, 1.0f,   0.0f,  -1.0f  // top left 
 	};
 	// 2D를 표현할 때 정점좌표의 z값은 1이여야 transform할 때 mat랑 연산 할 때 정상적인 값이 도출된다.
 
 	// 정점 인덱스
 	GLint vertexIndeces[] = {
-		0, 1, 3, // first triangle
-		1, 2, 3  // second triangle
+		0, 1, 2, // first triangle
+		2, 3, 0  // second triangle
 	};
 
 	// OpenGL 정점 배열 생성기를 사용해서 VAO를 생성
@@ -236,36 +238,49 @@ void SpriteComp::SpriteApplyTransform()
 
 	unsigned int transformLoc = glGetUniformLocation(sprite_shader, "transform");
 
-	glUniformMatrix3fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans->GetMatrix()));
+	glm::mat3 transform = trans->GetMatrix();
+
+	Mtx33Scale(&transform, textureSize.x, textureSize.y);
+
+	glUniformMatrix3fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
 
 	glUseProgram(0);
 }
 
 void SpriteComp::SetTexture(std::string path)
 {
-	if (path == texturePath || path == "")
+	if (path == "")
+		path = "./Sources/Assets/Sprite/default.png";
+
+	if (path == texturePath)
 		return;
 
-	if (texturePath != path)
-		ResourceManager::GetInstance().UnloadResource(texturePath);
+	ResourceManager::GetInstance().UnloadResource(texturePath);
 	
 	texturePath = path;
 
 	texture = ResourceManager::GetInstance().GetResource<unsigned char>(path);
 
-	glUseProgram(sprite_shader);
+	textureSize = nativeSize.find(path)->second;
 
 	if (texture)
 	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textureWidth, textureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture);
+		glUseProgram(sprite_shader);
+
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textureSize.x, textureSize.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture);
 		glGenerateMipmap(GL_TEXTURE_2D);
+
+		unsigned char loc = glGetUniformLocation(sprite_shader, "ortho");
+
+		glm::mat4 ortho = glm::ortho((float)windowWidthHalf, (float)-windowWidthHalf, (float)windowHeightHalf, (float)-windowHeightHalf);
+		glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(ortho));
+
+		glUseProgram(0);
 	}
 	else
 	{
 		std::cout << "Failed to load texture : " << texturePath << std::endl;
 	}
-
-	glUseProgram(0);
 }
 
 void SpriteComp::SetTransparency()
@@ -275,16 +290,16 @@ void SpriteComp::SetTransparency()
 	은 전부 무조건 제발 shader 프로그램을 켜고 수정을 하도록 하자!!!!!
 	*/
 	glUseProgram(sprite_shader);
-	//Set blend Mode
-	//glEnable(GL_BLEND);// you enable blending function
-	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	//GfxSetBlendMode(GFX_BM_BLEND);
+
+	// Enable blending
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);;
 	
 	//Set transparency
 	// 알파 값 조절 (1.0은 불투명, 0.0은 완전 투명);
 	unsigned char loc = glGetUniformLocation(sprite_shader, "ucolor");
 	
-	glUniform4f(loc, color.r / 255.f, color.g / 255.f, color.b / 255.f, alpha);
+	glUniform4f(loc, color.r, color.g, color.b, alpha);
 
 	glUseProgram(0);
 }
@@ -297,7 +312,8 @@ void SpriteComp::Update()
 	//Set transform
 	//Get the transform from my owner transfrom comp
 	SpriteApplyTransform();
-
+	//Set Scale to Texture
+	//SetScale();
 	//Set color 
 	SetTransparency();
 
@@ -307,6 +323,30 @@ void SpriteComp::Update()
 void SpriteComp::SetColor(glm::vec3 Color)
 {
 	color = Color;
+}
+
+glm::vec2 SpriteComp::GetNativeSize(std::string str)
+{
+	if (nativeSize.find(str) != nativeSize.end())
+	{
+		return nativeSize.find(str)->second;
+	}
+	std::cout << "Invaild fileName" << std::endl;
+	return { -1, -1 };
+}
+
+void SpriteComp::SetNativeSize(std::string str, glm::vec2 size)
+{
+	if (nativeSize.find(str) == nativeSize.end())
+	{
+		nativeSize.insert({ str, size });
+	}
+}
+
+void SpriteComp::SetScale()
+{
+	if (textureSize != owner->GetComponent<TransformComp>()->GetScale())
+		textureSize = owner->GetComponent<TransformComp>()->GetScale();
 }
 
 void SpriteComp::LoadFromJson(const json& data)
@@ -339,6 +379,39 @@ json SpriteComp::SaveToJson()
 	data["compData"] = compData;
 
 	return data;
+}
+
+void SpriteComp::Edit()
+{
+	ImGui::LabelText("label", "Value");
+
+	//Color
+	ImGui::SeparatorText("Color");
+	{
+		float* clr[4] = {&color.r, &color.g, &color.b, &alpha};
+		ImGui::ColorEdit4("Color", *clr);
+	}
+
+	//Texture Size
+	ImGui::SeparatorText("Scale");
+	{
+		ImGui::DragFloat("Width", &textureSize.x, 1, 0.0000001f);
+		ImGui::DragFloat("Height", &textureSize.y, 1, 0.0000001f);
+		if (ImGui::Button("Native Size"))
+		{
+			textureSize = owner->GetComponent<SpriteComp>()->GetNativeSize(owner->GetComponent<SpriteComp>()->GetTexturePath());
+		}
+	}
+
+	//Texture Path
+	ImGui::SeparatorText("Texture Path");
+	{
+		std::string strTexturePath = texturePath;
+		ImGui::InputText("Path", &strTexturePath);
+		ImGui::SameLine();
+		if(ImGui::Button("Apply"))
+			SetTexture(strTexturePath);
+	}
 }
 
 BaseRTTI* SpriteComp::CreateSpriteComponent(GameObject* owner)

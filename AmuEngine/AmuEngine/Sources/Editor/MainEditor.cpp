@@ -1,11 +1,14 @@
 #include "MainEditor.h"
-#include "../imgui/imgui_impl_glfw.h"
-#include "../imgui/imgui_impl_opengl3.h"
 #include "../Components/Components.h"
 #include <vector>
 #include <string>
 
 editor::MainEditor::EDITOR_DATA editor::MainEditor::editor_data;
+
+editor::MainEditor::~MainEditor()
+{
+    ImGui::DestroyContext();
+}
 
 void editor::MainEditor::TopBar()
 {
@@ -86,42 +89,21 @@ void editor::MainEditor::ShowAllObject(bool* p_open)
     }
     else
     {
-        if (ImGui::TreeNode("Objects"))
+
+        for (auto& obj : GameObjectManager::GetInstance().GetAllObjects())
         {
-            ImGui::Columns(2, "Object", true);
-            for (int x = 0; x < 3; x++)
+            if (ImGui::TreeNode(obj.second.c_str()))
             {
-                bool open1 = ImGui::TreeNode((void*)(intptr_t)x, "Node%d", x);
-                ImGui::NextColumn();
-                ImGui::Text("Object Contents");
-                ImGui::NextColumn();
-                if (open1)
+                for (auto& comp : obj.first->GetComponents())
                 {
-                    for (int y = 0; y < 3; y++)
+                    if (ImGui::TreeNode(comp.first.c_str()))
                     {
-                        bool open2 = ImGui::TreeNode((void*)(intptr_t)y, "Node%d.%d", x, y);
-                        ImGui::NextColumn();
-                        ImGui::Text("Object Child Contents");
-                        if (open2)
-                        {
-                            ImGui::Text("Even more contents");
-                            if (ImGui::TreeNode("Tree in column"))
-                            {
-                                ImGui::Text("Hellow World");
-                                ImGui::TreePop();
-                            }
-                        }
-                        ImGui::NextColumn();
-                        if (open2)
-                        {
-                            ImGui::TreePop();
-                        }
+                        comp.second->Edit();
+                        ImGui::TreePop();
                     }
-                    ImGui::TreePop();
                 }
+                ImGui::TreePop();
             }
-            ImGui::Columns(1);
-            ImGui::TreePop();
         }
         ImGui::End();
     }
@@ -186,7 +168,11 @@ void editor::MainEditor::ShowMenuWindow()
 
 void editor::MainEditor::MainEditorInit(GLFWwindow* mainWindow)
 {
-
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGui::StyleColorsDark();
+    ImGuiIO& io = ImGui::GetIO();
+    io.Fonts->AddFontFromFileTTF("./Sources/Assets/Fonts/NeoDunggeunmoPro-Regular.ttf", 18.0f, NULL, io.Fonts->GetGlyphRangesKorean());
 }
 
 void editor::MainEditor::MainEditorUpdate()

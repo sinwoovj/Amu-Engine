@@ -30,10 +30,10 @@ void InitBackground()
 void UpdateBackground()
 {
 
-	SpriteComp* s = background->GetComponent<SpriteComp>();
+	/*SpriteComp* s = background->GetComponent<SpriteComp>();
 	TransformComp* t = background->GetComponent<TransformComp>();
 	t->SetRot(glm::radians(2.0f) * c);
-	c++;
+	c++;*/
 }
 
 void ExitBackground()

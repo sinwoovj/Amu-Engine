@@ -42,6 +42,8 @@ public:
 	//Other Fn
 	void PrintMatrix();
 
+	void Edit() override;
+
 	void LoadFromJson(const json&) override;
 	json SaveToJson() override;
 

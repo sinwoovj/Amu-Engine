@@ -507,6 +507,7 @@
     <ClInclude Include="Sources\RTTI\Registry.h" />
     <ClInclude Include="Sources\Serializer\Serializer.h" />
     <ClInclude Include="Sources\Utils\Direction.h" />
+    <ClInclude Include="Sources\Utils\EasyImgui.h" />
     <ClInclude Include="Sources\Utils\EasyOpengl.h" />
     <ClInclude Include="Sources\Utils\opengl.h" />
     <ClInclude Include="Sources\Utils\Size.h" />
@@ -715,6 +716,15 @@
   <ItemGroup>
     <Image Include="Sources\Assets\Sprite\Background\Exam.png" />
     <Image Include="Sources\Assets\Sprite\default.png" />
+    <Image Include="Sources\Assets\Sprite\Example\Icon1.png" />
+    <Image Include="Sources\Assets\Sprite\Example\Icon2.png" />
+    <Image Include="Sources\Assets\Sprite\Example\Icon3.png" />
+    <Image Include="Sources\Assets\Sprite\Example\Icon4.png" />
+    <Image Include="Sources\Assets\Sprite\Example\Icon5.png" />
+    <Image Include="Sources\Assets\Sprite\UI\Logo\DigiPen_RED.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="Sources\Assets\Fonts\NeoDunggeunmoPro-Regular.ttf" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

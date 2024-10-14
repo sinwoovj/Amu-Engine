@@ -49,6 +49,8 @@ public:
 	template <typename T>
 	T* GetComponent()const;
 	BaseComponent* GetBase(std::string);
+	
+	std::map<std::string, BaseComponent*> GetComponents() { return component; }
 
 	//GO will have a function to delete ANY TYPE of component
 	template <typename T>

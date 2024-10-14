@@ -6,15 +6,11 @@
 #include <opengl.h>
 #include <Utils.h>
 
-#include "../imgui/imgui.h"
-#include "../imgui/imgui_impl_glfw.h"
-#include "../imgui/imgui_impl_opengl3.h"
-
+#include <EasyImgui.h>
 #include "../Editor/MainEditor.h"
 
 GLboolean fullScreen = GL_FALSE;
-const GLint WIDTH = 720, HEIGHT = 480;
-const GLint FULLSCREENWIDTH = 2560, FULLSCREENHEIGHT = 1080;
+
 
 //---------------------------------------------
 GLFWwindow* mainWindow;
@@ -106,12 +102,12 @@ void fullscreenInput(int& LastFrameFullscreenKey)
     {
         if (fullScreen)
         {
-            glfwSetWindowSize(mainWindow, WIDTH, HEIGHT);
+            glfwSetWindowSize(mainWindow, windowWidth, windowHeight);
             fullScreen = GL_FALSE;
         }
         else
         {
-            glfwSetWindowSize(mainWindow, FULLSCREENWIDTH, FULLSCREENHEIGHT);
+            glfwSetWindowSize(mainWindow, fullscreenWindowWidth, fullscreenWindowHeight);
             fullScreen = GL_TRUE;
         }
     }
@@ -121,7 +117,7 @@ void fullscreenInput(int& LastFrameFullscreenKey)
 
 int main(void)
 {
-    if (AMSysInit(WIDTH, HEIGHT, "Amu Engine") )
+    if (AMSysInit(windowWidth, windowHeight, "Amu Engine") )
         return 1;
 
     // Editor Init

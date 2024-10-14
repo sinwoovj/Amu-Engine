@@ -5,12 +5,12 @@
       "type": "SpriteComp",
       "compData": {
         "color": [
-          255,
-          255,
-          255
+          1,
+          1,
+          1
         ],
         "alpha": 1.0,
-        "texturePath": "Sources/Assets/Sprite/Background/Exam.png"
+        "texturePath": "./Sources/Assets/Sprite/Background/Exam.png"
       }
     },
     {
@@ -21,8 +21,8 @@
           0.0
         ],
         "scale": [
-          1.0,
-          1.0
+          1600,
+          900
         ],
         "rotation": 0.0
       }

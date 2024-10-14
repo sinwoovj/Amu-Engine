@@ -123,7 +123,7 @@ void level::Sprite::SpriteCreateSprite1()
     glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
     */
     // 텍스처 로드 및 생성
-    SetTexture("Sources/Assets/Exam.png");
+    SetTexture("./Sources/Assets/Sprite/Background/Exam.png");
 
     if (texture)
     {

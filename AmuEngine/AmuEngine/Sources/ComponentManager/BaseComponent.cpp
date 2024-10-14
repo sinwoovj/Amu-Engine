@@ -1,6 +1,5 @@
 #include "BaseComponent.h"
 
-bool BaseComponent::Edit()
+void BaseComponent::Edit()
 {
-	return false;
 }

@@ -1,7 +1,7 @@
 #pragma once
 #include "../GameObject/GameObject.h"
 #include "../GameObjectManager/GameObjectManager.h"
-#include "../imgui/imgui.h"
+#include <EasyImgui.h>
 #include <opengl.h>
 
 namespace editor
@@ -17,7 +17,9 @@ namespace editor
 			Edit
 		};
 
+		~MainEditor();
 	public:
+		
 		struct ExampleTreeNode
 		{
 			// Tree structure

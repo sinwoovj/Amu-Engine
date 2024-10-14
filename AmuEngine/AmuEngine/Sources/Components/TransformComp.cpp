@@ -1,5 +1,8 @@
 #include "TransformComp.h"
 #include "../Camera/Camera.h"
+#include "SpriteComp.h"
+#include <Size.h>
+#include <EasyImgui.h>
 
 void TransformComp::CalculateMatrix()
 {
@@ -18,6 +21,7 @@ void TransformComp::CalculateMatrix()
 	//Concatenate them
 	Mtx33Concat(&transformMatrix , &scaleMtx, &rotationMtx);
 	Mtx33Concat(&transformMatrix , &translateMtx, &transformMatrix);
+
 }
 
 TransformComp::TransformComp(GameObject* _owner) : EngineComponent(_owner), pos({ 0,0 }), scale({ 1,1 }), rot(0), transformMatrix(glm::identity<glm::mat3>())
@@ -101,6 +105,49 @@ void TransformComp::PrintMatrix()
 
 		std::cout << " |";
 		std::cout << std::endl;
+	}
+}
+
+void TransformComp::Edit()
+{
+	ImGui::LabelText("label", "Value");
+
+	//Pos
+	ImGui::SeparatorText("Position");
+	{
+		ImGui::DragFloat("Pos X", &pos.x, 1);
+		ImGui::DragFloat("Pos Y", &pos.y, 1);
+		ImGui::PushID(1);
+		if (ImGui::Button("Initialize"))
+		{
+			pos = { 0 , 0 };
+		}
+		ImGui::PopID();
+	}
+	
+	//Scale
+	ImGui::SeparatorText("Scale");
+	{
+		ImGui::DragFloat("Width", &scale.x, 0.1, 0.0000001f);
+		ImGui::DragFloat("Height", &scale.y, 0.1, 0.0000001f);
+		ImGui::PushID(2);
+		if (ImGui::Button("Initialize"))
+		{
+			scale = { 1 , 1 };
+		}
+		ImGui::PopID();
+	}
+	
+	//Rot
+	ImGui::SeparatorText("Rotation");
+	{
+		ImGui::SliderAngle("Angle (Degrees)", &rot);
+		ImGui::PushID(3);
+		if (ImGui::Button("Initialize"))
+		{
+			rot = 0;
+		}
+		ImGui::PopID();
 	}
 }
 

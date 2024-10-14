@@ -24,7 +24,7 @@ public:
 	//Update function -> performs the logic, all my inherited classes will use the function with the same syntax
 	virtual void Update() = 0;
 
-	virtual bool Edit();
+	virtual void Edit();
 
 	GameObject* GetOwner() { return owner; }
 };

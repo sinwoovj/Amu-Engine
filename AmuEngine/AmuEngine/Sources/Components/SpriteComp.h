@@ -3,6 +3,7 @@
 #include "../ComponentManager/GraphicComponent.h"
 #include "../Components/TransformComp.h"
 #include <opengl.h>
+#include <Size.h>
 
 class SpriteComp : public GraphicComponent
 {
@@ -12,8 +13,9 @@ private:
 	float alpha;
 
 	//texture 
-	static int textureWidth;
-	static int textureHeight;
+	glm::vec2 textureSize;
+	static std::map<std::string, glm::vec2> nativeSize;
+
 	unsigned char* texture = nullptr;
 
 	//trans
@@ -47,18 +49,24 @@ public:
 
 	glm::vec3& GetColor() { return color; }
 	void SetColor(glm::vec3 Color);
-	static int GetTextureWidth() { return textureWidth; }
-	static void SetTextureWidth(int width) { textureWidth = width; }
-	static int GetTextureHeight() { return textureHeight; }
-	static void SetTextureHeight(int height) { textureHeight = height; }
+
+	glm::vec2 GetTextureSize() { return textureSize; }
+	void SetTextureSize(glm::vec2 size) { textureSize = size; }
+
+	static glm::vec2 GetNativeSize(std::string str);
+	static void SetNativeSize(std::string str, glm::vec2 size);
 	
+	void SetScale();
 	std::string GetTexturePath() { return texturePath; }
 	unsigned char& GetTexture() { return *texture; }
 	float GetAlpha() { return alpha; }
 	void SetAlpha(float Alpha) { alpha = Alpha; }
 	void SetTransparency();
+
 	void LoadFromJson(const json&) override;
 	json SaveToJson() override;
+
+	void Edit() override;
 
 	static BaseRTTI* CreateSpriteComponent(GameObject* owner);
 	static constexpr const char* TypeName = "SpriteComp";

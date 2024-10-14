@@ -13,7 +13,7 @@ void Mtx33Trans(glm::mat3* TransMtx, float x, float y)
 void Mtx33Rot(glm::mat3* RotMtx, float angle)
 {
 	// 각도를 라디안 단위로 변환 (glm의 rotate는 라디안을 사용)
-	float radians = glm::radians(angle);
+	float radians = angle;
 
 	// 회전 행렬 생성
 	glm::mat3 rotationMatrix = glm::mat3(1.0f);
