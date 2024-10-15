@@ -19,9 +19,9 @@
       "type": "SpriteComp",
       "compData": {
         "color": [
-          255,
-          255,
-          255
+          1,
+          1,
+          1
         ],
         "texturePath": "./Sources/Assets/Sprite/default.png",
         "alpha": 1.0

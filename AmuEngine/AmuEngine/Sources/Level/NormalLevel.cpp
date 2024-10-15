@@ -9,6 +9,7 @@
 #include "../Utils/Utils.h"
 #include "../Level/Menu.h"
 #include "../Background/Background.h"
+#include "../Player/player.h"
 #include "../Serializer/Serializer.h"
 #include "LevelManager.h"
 
@@ -24,9 +25,7 @@ level::NormalLevel::~NormalLevel()
 
 void level::NormalLevel::Init()
 {
-	Serializer::GetInstance().LoadLevel(LevelManager::GetInstance().GetDirectory() 
-		+ levelName + LevelManager::GetInstance().GetFilenameExtension());
-	InitBackground();
+	Serializer::GetInstance().LoadLevel(levelName);
 
 #ifdef _DEBUG
 	std::cout << "Current Level : " << levelName << std::endl;
@@ -36,8 +35,6 @@ void level::NormalLevel::Init()
 
 void level::NormalLevel::Update()
 {
-	UpdateBackground();
-
 	//if go menu
 	//GSM::GameStateManager::GetInstance().ChangeLevel(new Menu);
 	//if go next level
@@ -46,7 +43,7 @@ void level::NormalLevel::Update()
 
 void level::NormalLevel::Exit()
 {
-	//Clear
+
 }
 
 std::string level::NormalLevel::GetName()

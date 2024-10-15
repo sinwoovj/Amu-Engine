@@ -500,6 +500,7 @@
     <ClInclude Include="Sources\GSM\GameStateManager.h" />
     <ClInclude Include="Sources\Level\BaseLevel.h" />
     <ClInclude Include="Sources\Level\Menu.h" />
+    <ClInclude Include="Sources\Player\player.h" />
     <ClInclude Include="Sources\Prefab\Prefab.h" />
     <ClInclude Include="Sources\ResourceManager\ResourceManager.h" />
     <ClInclude Include="Sources\Resource\Resource.h" />
@@ -550,6 +551,7 @@
     <ClCompile Include="Sources\Level\Menu.cpp" />
     <ClCompile Include="Sources\Level\NormalLevel.cpp" />
     <ClCompile Include="Sources\main.cpp" />
+    <ClCompile Include="Sources\Player\player.cpp" />
     <ClCompile Include="Sources\Prefab\Prefab.cpp" />
     <ClCompile Include="Sources\ResourceManager\ResourceManager.cpp" />
     <ClCompile Include="Sources\Resource\Resource.cpp" />
@@ -706,6 +708,7 @@
     <None Include="Dependencies\GLM\glm\gtx\vector_angle.inl" />
     <None Include="Dependencies\GLM\glm\gtx\vector_query.inl" />
     <None Include="Dependencies\GLM\glm\gtx\wrap.inl" />
+    <None Include="imgui.ini" />
     <None Include="Sources\Assets\Level\test0.lvl" />
     <None Include="Sources\Assets\Level\test1.lvl" />
     <None Include="Sources\Assets\Level\test2.lvl" />

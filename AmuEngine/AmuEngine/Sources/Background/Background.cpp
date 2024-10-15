@@ -7,7 +7,6 @@
 #include "../Level/NormalLevel.h"
 
 GameObject* background = nullptr;
-int c = 0;
 void InitBackground()
 {
 	if (dynamic_cast<level::NormalLevel*>(GSM::GameStateManager::GetInstance().GetCurrentLevel()) != nullptr)
@@ -30,9 +29,9 @@ void InitBackground()
 void UpdateBackground()
 {
 
-	/*SpriteComp* s = background->GetComponent<SpriteComp>();
+	SpriteComp* s = background->GetComponent<SpriteComp>();
 	TransformComp* t = background->GetComponent<TransformComp>();
-	t->SetRot(glm::radians(2.0f) * c);
+	/*t->SetRot(glm::radians(2.0f) * c);
 	c++;*/
 }
 

@@ -21,16 +21,17 @@ void editor::MainEditor::TopBar()
     {
         if (ImGui::BeginMenu("File"))
         {
-            if (ImGui::MenuItem("Save All", "Ctrl+S")) { /* Do stuff */ }
+            //if (ImGui::MenuItem("Save All", "Ctrl+S")) { /* Do stuff */ }
+            if (ImGui::MenuItem("Quit", "Ctrl+Q")) { glfwSetWindowShouldClose(glfwGetCurrentContext(), true); }
 
             ImGui::Separator();
             if (ImGui::MenuItem("Close", "Ctrl+W")) { ImGui::CloseCurrentPopup(); }
-            if (ImGui::MenuItem("Quit", "Ctrl+Q")) { glfwSetWindowShouldClose(glfwGetCurrentContext(), true); }
 
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Level"))
         {
+            ImGui::SeparatorText("Level List");
             LevelManager::GetInstance().LoadLevels();
             for (auto& lvl : LevelManager::GetInstance().GetLevels())
             {
@@ -64,12 +65,9 @@ void editor::MainEditor::TopBar()
                 }
             }
 
-            ImGui::Spacing();
-            ImGui::Spacing();
-            ImGui::Spacing();
+            ImGui::SeparatorText("Level Option");
 
-
-            if (ImGui::MenuItem("Save Level", "Ctrl+S")) {
+            if (ImGui::MenuItem("Save Current Level", "Ctrl+S")) {
                 std::string currname = dynamic_cast<level::NormalLevel*>(GSM::GameStateManager::GetInstance().GetCurrentLevel())->GetName();
                 if (LevelManager::GetInstance().SaveLevel(currname))
                 {

@@ -1,33 +1,66 @@
 {
-  "Background": {
-    "object": "Background",
-    "components": [
-      {
-        "type": "TransformComp",
-        "compData": {
-          "position": [
-            0.0,
-            0.0
-          ],
-          "scale": [
-            1.0,
-            1.0
-          ],
-          "rotation": 0.0
+  "objects": [
+    {
+      "object": "Background",
+      "components": [
+        {
+          "type": "TransformComp",
+          "compData": {
+            "position": [
+              0.0,
+              0.0
+            ],
+            "scale": [
+              1,
+              1
+            ],
+            "rotation": 0.0
+          }
+        },
+        {
+          "type": "SpriteComp",
+          "compData": {
+            "color": [
+              1,
+              1,
+              1
+            ],
+            "texturePath": "./Sources/Assets/Sprite/Background/Exam.png",
+            "alpha": 1.0
+          }
         }
-      },
-      {
-        "type": "SpriteComp",
-        "compData": {
-          "texturePath": "./Sources/Assets/Sprite/Background/Exam.png",
-          "color": [
-            1.0,
-            1.0,
-            1.0
-          ],
-          "alpha": 1.0
+      ]
+    },
+    {
+      "object": "Player",
+      "components": [
+        {
+          "type": "TransformComp",
+          "compData": {
+            "position": [
+              0.0,
+              0.0
+            ],
+            "scale": [
+              1.0,
+              1.0
+            ],
+            "rotation": 0.0
+          }
+        },
+        {
+          "type": "SpriteComp",
+          "compData": {
+            "color": [
+              1,
+              1,
+              1
+            ],
+            "texturePath": "./Sources/Assets/Sprite/Example/Icon3.png",
+            "alpha": 1.0
+          }
         }
-      }
-    ]
-  }
+      ]
+    }
+  ]
 }
