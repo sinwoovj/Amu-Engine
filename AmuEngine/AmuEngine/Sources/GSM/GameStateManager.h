@@ -41,7 +41,9 @@ namespace GSM
 		void Update();
 		void Exit();
 
-		BaseLevel* GetCurrentLevel() { return currentLevel; }
+		BaseLevel* GetCurrentLevel() { 
+			return currentLevel; 
+		}
 
 		//Functions to change level
 		void ChangeLevel(BaseLevel* newLvl);

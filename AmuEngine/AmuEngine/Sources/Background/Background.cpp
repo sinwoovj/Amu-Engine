@@ -4,13 +4,13 @@
 #include "../GameObjectManager/GameObjectManager.h"
 #include "../GSM/GameStateManager.h"
 #include "../Camera/Camera.h"
-#include "../Level/Menu.h"
+#include "../Level/NormalLevel.h"
 
 GameObject* background = nullptr;
 int c = 0;
 void InitBackground()
 {
-	if (dynamic_cast<level::Menu*>(GSM::GameStateManager::GetInstance().GetCurrentLevel()) != nullptr)
+	if (dynamic_cast<level::NormalLevel*>(GSM::GameStateManager::GetInstance().GetCurrentLevel()) != nullptr)
 	{
 		Prefab b("Background");
 		background = b.NewGameObject("Background");

@@ -1,5 +1,9 @@
 #include "MainEditor.h"
 #include "../Components/Components.h"
+#include "../Level/LevelManager.h"
+#include "../Serializer/Serializer.h"
+#include "../GSM/GameStateManager.h"
+#include "../Level/NormalLevel.h"
 #include <vector>
 #include <string>
 
@@ -17,9 +21,7 @@ void editor::MainEditor::TopBar()
     {
         if (ImGui::BeginMenu("File"))
         {
-            if (ImGui::MenuItem("Open File", "Ctrl+O")) { /* Do stuff */ }
-            if (ImGui::MenuItem("Save File", "Ctrl+S")) { /* Do stuff */ }
-            if (ImGui::MenuItem("Load File", "Ctrl+L")) {}
+            if (ImGui::MenuItem("Save All", "Ctrl+S")) { /* Do stuff */ }
 
             ImGui::Separator();
             if (ImGui::MenuItem("Close", "Ctrl+W")) { ImGui::CloseCurrentPopup(); }
@@ -29,31 +31,90 @@ void editor::MainEditor::TopBar()
         }
         if (ImGui::BeginMenu("Level"))
         {
-            if (ImGui::MenuItem("New Level", "Ctrl+N")) { /* Do stuff */ }
-            if (ImGui::MenuItem("Delete Level", "Ctrl+D")) { /* Do stuff */ }
-            if (ImGui::MenuItem("Save Level", "Ctrl+S")) { /* Do stuff */ }
-            if (ImGui::MenuItem("Load Level", "Ctrl+L")) {}
+            LevelManager::GetInstance().LoadLevels();
+            for (auto& lvl : LevelManager::GetInstance().GetLevels())
+            {
+                if (ImGui::BeginMenu(lvl.c_str()))
+                {
+                    if (ImGui::MenuItem("Delete Level", "Ctrl+D")) { 
+                        if (LevelManager::GetInstance().DeleteLevel(lvl))
+                        {
+                            // 성공
+                            std::cout << "성공" << std::endl;
+                        }
+                        else
+                        {
+                            // 실패
+                            std::cout << "실패" << std::endl;
+                        }
+                    }
+                    if (ImGui::MenuItem("Load Level", "Ctrl+L")) { 
+                        if (LevelManager::GetInstance().LoadLevel(lvl))
+                        {
+                            // 성공
+                            std::cout << "성공" << std::endl;
+                        }
+                        else
+                        {
+                            // 실패
+                            std::cout << "실패" << std::endl;
+                        }
+                    }
+                    ImGui::EndMenu();
+                }
+            }
 
+            ImGui::Spacing();
+            ImGui::Spacing();
+            ImGui::Spacing();
+
+
+            if (ImGui::MenuItem("Save Level", "Ctrl+S")) {
+                std::string currname = dynamic_cast<level::NormalLevel*>(GSM::GameStateManager::GetInstance().GetCurrentLevel())->GetName();
+                if (LevelManager::GetInstance().SaveLevel(currname))
+                {
+                    // 성공
+                    std::cout << "성공" << std::endl;
+                }
+                else
+                {
+                    // 실패
+                    std::cout << "실패" << std::endl;
+                }
+            }
+            if (ImGui::BeginMenu("Add Level")) {
+                static std::string addLvlName = "";
+                ImGui::InputText("Level Name", &addLvlName);
+                if (ImGui::Button("Add"))
+                {
+                    if (LevelManager::GetInstance().AddLevel(addLvlName))
+                    {
+                        // 성공
+                        std::cout << "성공" << std::endl;
+                    }
+                    else
+                    {
+                        // 실패
+                        std::cout << "실패" << std::endl;
+                    }
+                }
+                ImGui::EndMenu();
+            }
             ImGui::Separator();
             if (ImGui::MenuItem("Close", "Ctrl+W")) { ImGui::CloseCurrentPopup(); }
             ImGui::EndMenu();
         }
-        if (ImGui::BeginMenu("Object"))
-        {
-            if (ImGui::MenuItem("New Object", "Ctrl+N")) { /* Do stuff */ }
-            if (ImGui::MenuItem("Delete Object", "Ctrl+D")) { /* Do stuff */ }
+        //if (ImGui::BeginMenu("Object"))
+        //{
+        //    if (ImGui::MenuItem("New Object", "Ctrl+N")) { /* Do stuff */ }
+        //    if (ImGui::MenuItem("Delete Object", "Ctrl+D")) { /* Do stuff */ }
 
-            ImGui::Separator();
-            if (ImGui::MenuItem("Close", "Ctrl+W")) { ImGui::CloseCurrentPopup(); }
-            ImGui::EndMenu();
-        }
+        //    ImGui::Separator();
+        //    if (ImGui::MenuItem("Close", "Ctrl+W")) { ImGui::CloseCurrentPopup(); }
+        //    ImGui::EndMenu();
+        //}
         if (ImGui::BeginMenu("Window"))
         {
-            if (ImGui::MenuItem("Show Levels", "Ctrl+L", &editor_data.ShowAllLevels))
-            {
-
-            }
-            
             if (ImGui::MenuItem("Show Objects", "Ctrl+O", &editor_data.ShowAllObects)) {
 
             }
@@ -81,9 +142,11 @@ void editor::MainEditor::TopBar()
     }*/
 }
 
-void editor::MainEditor::ShowAllObject(bool* p_open)
+void editor::MainEditor::ShowLevelObject(bool* p_open)
 {
-    if (!ImGui::Begin("Objects", p_open))
+    if (!ImGui::Begin((dynamic_cast<level::NormalLevel*>(GSM::GameStateManager::GetInstance().GetCurrentLevel()) == nullptr
+        ? "Create Any Level!" : 
+        dynamic_cast<level::NormalLevel*>(GSM::GameStateManager::GetInstance().GetCurrentLevel())->GetName()).c_str(), p_open))
     {
         ImGui::End();
     }
@@ -108,53 +171,6 @@ void editor::MainEditor::ShowAllObject(bool* p_open)
     }
 }
 
-void editor::MainEditor::ShowAllLevel(bool* p_open)
-{
-    if (!ImGui::Begin("Levels", p_open))
-    {
-        ImGui::End();
-    }
-    else
-    {
-        if (ImGui::TreeNode("Tree"))
-        {
-            ImGui::Columns(2, "tree", true);
-            for (int x = 0; x < 3; x++)
-            {
-                bool open3 = ImGui::TreeNode((void*)(intptr_t)x, "Node%d", x);
-                ImGui::NextColumn();
-                ImGui::Text("Node contents");
-                ImGui::NextColumn();
-                if (open3)
-                {
-                    for (int y = 0; y < 3; y++)
-                    {
-                        bool open4 = ImGui::TreeNode((void*)(intptr_t)y, "Node%d.%d", x, y);
-                        ImGui::NextColumn();
-                        ImGui::Text("Node contents");
-                        if (open4)
-                        {
-                            ImGui::Text("Even more contents");
-                            if (ImGui::TreeNode("Tree in column"))
-                            {
-                                ImGui::Text("The quick brown fox jumps over the lazy dog");
-                                ImGui::TreePop();
-                            }
-                        }
-                        ImGui::NextColumn();
-                        if (open4)
-                            ImGui::TreePop();
-                    }
-                    ImGui::TreePop();
-                }
-            }
-            ImGui::Columns(1);
-            ImGui::TreePop();
-        }
-        ImGui::End();
-    }
-}
-
 void editor::MainEditor::SelectedObjectWindow()
 {
     //ImGui::Begin
@@ -167,6 +183,7 @@ void editor::MainEditor::ShowMenuWindow()
 
 void editor::MainEditor::MainEditorInit(GLFWwindow* mainWindow)
 {
+    // Set Korean Font
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGui::StyleColorsDark();
@@ -179,8 +196,7 @@ void editor::MainEditor::MainEditorUpdate()
     //Top Bar
     TopBar();
     // https://stackoverflow.com/questions/66955023/closing-an-imgui-window-this-seems-like-it-should-be-easy-how-does-one-do-it
-    if (editor_data.ShowAllLevels) { ShowAllLevel(&editor_data.ShowAllLevels); }
-    if (editor_data.ShowAllObects) { ShowAllObject(&editor_data.ShowAllObects); }
+    if (editor_data.ShowAllObects) { ShowLevelObject(&editor_data.ShowAllObects); }
     
 }
 

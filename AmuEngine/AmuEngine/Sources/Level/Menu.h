@@ -7,13 +7,12 @@ namespace level
 {
 	class Menu : public GSM::BaseLevel
 	{
-		//test
-		int c = 0;
 	public:
 		GameObject* backGround = nullptr;
 
 		void Init() override;
 		void Update() override;
 		void Exit() override;
+		std::string GetName() override;
 	};
 }

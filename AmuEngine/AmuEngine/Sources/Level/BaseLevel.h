@@ -1,5 +1,5 @@
 #pragma once
-
+#include <string>
 namespace GSM
 {
 	class BaseLevel
@@ -15,5 +15,7 @@ namespace GSM
 		virtual void Update() = 0;
 		//Exit
 		virtual void Exit() = 0;
+		//Get Name
+		virtual std::string GetName() = 0;
 	};
 }

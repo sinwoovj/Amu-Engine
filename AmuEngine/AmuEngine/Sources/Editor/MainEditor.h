@@ -70,7 +70,6 @@ namespace editor
 		struct EDITOR_DATA
 		{
 			bool ShowAllObects = false;
-			bool ShowAllLevels = false;
 		};
 		static EDITOR_DATA editor_data;
 
@@ -78,8 +77,7 @@ namespace editor
 		MainEditor(const MainEditor&) {}
 
 		void TopBar();
-		void ShowAllObject(bool* p_open);
-		void ShowAllLevel(bool* p_open);
+		void ShowLevelObject(bool* p_open);
 		void SelectedObjectWindow();
 		void ShowMenuWindow();
 

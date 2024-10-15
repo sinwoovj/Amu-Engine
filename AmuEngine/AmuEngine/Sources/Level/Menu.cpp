@@ -12,11 +12,15 @@ void level::Menu::Init()
 
 void level::Menu::Update()
 {
-	if (glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_0) == GLFW_PRESS)
-		GSM::GameStateManager::GetInstance().ChangeLevel(new level::NormalLevel(0));
+
 }
 
 void level::Menu::Exit() 
 {
 	
+}
+
+std::string level::Menu::GetName()
+{
+	return "Menu";
 }

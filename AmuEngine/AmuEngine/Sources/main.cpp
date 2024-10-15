@@ -8,6 +8,8 @@
 
 #include <EasyImgui.h>
 #include "../Editor/MainEditor.h"
+#include <iostream>
+#include <Windows.h>
 
 GLboolean fullScreen = GL_FALSE;
 
@@ -17,6 +19,9 @@ GLFWwindow* mainWindow;
 
 int AMSysInit(GLint width, GLint height, const char* title)
 {
+    // UTF-8 설정
+    SetConsoleOutputCP(CP_UTF8);
+
     // 로케일 국가 한국 지정
     _wsetlocale(LC_ALL, L"Korean");
 

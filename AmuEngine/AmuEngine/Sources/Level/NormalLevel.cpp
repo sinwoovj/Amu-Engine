@@ -10,8 +10,9 @@
 #include "../Level/Menu.h"
 #include "../Background/Background.h"
 #include "../Serializer/Serializer.h"
+#include "LevelManager.h"
 
-level::NormalLevel::NormalLevel(int _level) : level(_level)
+level::NormalLevel::NormalLevel(std::string str) : levelName(str)
 {
 
 }
@@ -23,11 +24,12 @@ level::NormalLevel::~NormalLevel()
 
 void level::NormalLevel::Init()
 {
-	Serializer::GetInstance().LoadLevel("./Sources/Assets/Level/test" + std::to_string(level) + ".lvl");
+	Serializer::GetInstance().LoadLevel(LevelManager::GetInstance().GetDirectory() 
+		+ levelName + LevelManager::GetInstance().GetFilenameExtension());
 	InitBackground();
 
 #ifdef _DEBUG
-	std::cout << "Current Level : " << level << std::endl;
+	std::cout << "Current Level : " << levelName << std::endl;
 #endif
 
 }
@@ -39,10 +41,15 @@ void level::NormalLevel::Update()
 	//if go menu
 	//GSM::GameStateManager::GetInstance().ChangeLevel(new Menu);
 	//if go next level
-	//GSM::GameStateManager::GetInstance().ChangeLevel(new NormalLevel(level + 1));
+	//GSM::GameStateManager::GetInstance().ChangeLevel(new NormalLevel("something"));
 }
 
 void level::NormalLevel::Exit()
 {
 	//Clear
+}
+
+std::string level::NormalLevel::GetName()
+{
+	return levelName;
 }

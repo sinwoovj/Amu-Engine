@@ -20,6 +20,7 @@ public:
 		return instance;
 	}
 
-	void LoadLevel(const std::string& filename);
-	void SaveLevel(const std::string& filename);
+	bool LoadLevel(const std::string& str);
+	bool ExistChangePoint(const std::string& str);
+	bool SaveLevel(const std::string& str);
 };

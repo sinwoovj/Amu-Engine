@@ -7,18 +7,21 @@
 #include "../Components/Components.h"
 #include "../RTTI/Registry.h"
 #include "../Prefab/Prefab.h"
+#include "../Level/LevelManager.h"
 
 using json = nlohmann::ordered_json;	// Map. Orders the order the variables were declared in
 
-void Serializer::LoadLevel(const std::string& filename)
+bool Serializer::LoadLevel(const std::string& str)
 {
 	// Open file
 	std::fstream file;
+	std::string filename = LevelManager::GetInstance().GetDirectory() + str + LevelManager::GetInstance().GetFilenameExtension();
 	file.open(filename, std::fstream::in);
 
 	// Check the file is valid
 	if (!file.is_open())
-		throw std::invalid_argument("Serializer::LoadLevel Invalid filename " + filename);
+		return false;
+		//throw std::invalid_argument("Serializer::LoadLevel Invalid filename " + filename);
 
 	json allData;
 	file >> allData;	// the json has all the file data
@@ -55,9 +58,62 @@ void Serializer::LoadLevel(const std::string& filename)
 		if (go->GetComponent<ColliderComp>() != nullptr)
 			go->GetComponent<ColliderComp>()->SetCollider();
 	}
+	return true;
 }
 
-void Serializer::SaveLevel(const std::string& filename)
+bool Serializer::ExistChangePoint(const std::string& str)
+{
+	json allData;
+
+	// Counter instead of name as I do not have one
+	int i = 0;
+
+	for (auto go : GameObjectManager::GetInstance().GetAllObjects())
+	{
+		if (go.first->prefabName.compare("") == 0)
+			continue;
+
+		json obj;
+		obj["object"] = go.first->prefabName;
+
+		json components;
+
+		TransformComp* t = go.first->GetComponent<TransformComp>();
+		if (t != nullptr)
+			components.push_back(t->SaveToJson());
+
+		SpriteComp* s = go.first->GetComponent<SpriteComp>();
+		if (s != nullptr)
+			components.push_back(s->SaveToJson());
+
+		obj["components"] = components;
+
+		if (go.first->name.size() > 0)
+		{
+			allData[go.first->name] = obj;
+		}
+		else
+			allData["objects"].push_back(obj);
+	}
+
+	// Open file
+	std::string filename = LevelManager::GetInstance().GetDirectory() + str + LevelManager::GetInstance().GetFilenameExtension();
+	std::fstream file;
+	file.open(filename, std::fstream::in);
+	std::ifstream ifile(filename, std::ios::binary | std::ios::ate);
+	
+	if (!file.is_open())
+		 throw std::invalid_argument("Serializer::SaveLevel file write error " + filename);
+	if (ifile.tellg() == 0)
+		return false;
+
+	json j;
+	file >> j;
+
+	return j == allData ? false : true;
+}
+
+bool Serializer::SaveLevel(const std::string& str)
 {
 	json allData;
 
@@ -94,12 +150,15 @@ void Serializer::SaveLevel(const std::string& filename)
 
 	// Open file
 	std::fstream file;
+	std::string filename = LevelManager::GetInstance().GetDirectory() + str + LevelManager::GetInstance().GetFilenameExtension();
 	file.open(filename, std::fstream::out);	// Open as write mode. Create it if it does not exist!
 
 	if (!file.is_open())
-		throw std::invalid_argument("Serializer::SaveLevel file write error " + filename);
+		return false;
+		//throw std::invalid_argument("Serializer::SaveLevel file write error " + str);
 
 	file << std::setw(2) << allData;	// Separates in lines and each section
 
 	file.close();
+	return true;
 }

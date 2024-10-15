@@ -1,5 +1,6 @@
 #pragma once
 #include "BaseLevel.h"
+#include <string>
 class GameObject;
 
 namespace level
@@ -8,13 +9,14 @@ namespace level
 	{
 		GameObject* player = nullptr;
 
-		int level;
+		std::string levelName = "";
 
 	public:
-		NormalLevel(int _level);
+		NormalLevel(std::string str);
 		~NormalLevel() override;
 		void Init() override;
 		void Update() override;
 		void Exit() override;
+		std::string GetName() override;
 	};
 }
