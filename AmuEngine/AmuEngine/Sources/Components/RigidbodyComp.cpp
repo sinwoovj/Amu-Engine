@@ -1,5 +1,6 @@
 ﻿#include "RigidbodyComp.h"
 #include "TransformComp.h"
+#include <EasyImgui.h>
 #include "../Utils/Direction.h"
 
 bool RigidbodyComp::CheckEpsilon(float v, float EP)
@@ -280,6 +281,82 @@ void RigidbodyComp::Update()
 	}
 
 	t->SetPos({ x, y });
+}
+
+void RigidbodyComp::Edit()
+{
+	ImGui::LabelText("label", "Value");
+
+	//Show indicator line
+	ImGui::SeparatorText("Gravity");
+	{
+		static bool gravity = false;
+		ImGui::Checkbox("Use Gravity", &gravity);
+		if (gravity)
+		{
+			useGravity = true;
+		}
+		else
+		{
+			useGravity = false;
+		}
+	}
+
+	//Drag
+	ImGui::SeparatorText("Drag");
+	{
+		ImGui::DragFloat("Value", &drag, 0.01);
+		ImGui::PushID(1);
+		if (ImGui::Button("Initialize"))
+		{
+			drag = 1.01f;
+		}
+		ImGui::PopID();
+	}
+	
+	//Rot
+	ImGui::SeparatorText("Rotation");
+	{
+		ImGui::SliderAngle("Angle (Degrees)", &targetRot);
+		ImGui::PushID(2);
+		if (ImGui::Button("Initialize"))
+		{
+			targetRot = 0;
+		}
+		ImGui::PopID();
+	}
+
+	//Velocity
+	ImGui::SeparatorText("Velocity");
+	{
+		ImGui::DragFloat("X", &velocity.x, 0.01, 0);
+		ImGui::DragFloat("Y", &velocity.y, 0.01, 0);
+		ImGui::DragFloat("MAX X", &maxVelocity.x, 0.01, velocity.x);
+		ImGui::DragFloat("MAX Y", &maxVelocity.y, 0.01, velocity.y);
+		ImGui::PushID(3);
+		if (ImGui::Button("Initialize"))
+		{
+			velocity = { 0,0 };
+			maxVelocity = { 500, 500 };
+		}
+		ImGui::PopID();
+	}
+
+	//Acceleration
+	ImGui::SeparatorText("Acceleration");
+	{
+		ImGui::DragFloat("X", &acceleration.x, 0.01, 0);
+		ImGui::DragFloat("Y", &acceleration.y, 0.01, 0);
+		ImGui::DragFloat("MAX X", &maxAcceleration.x, 0.01, velocity.x);
+		ImGui::DragFloat("MAX Y", &maxAcceleration.y, 0.01, velocity.y);
+		ImGui::PushID(4);
+		if (ImGui::Button("Initialize"))
+		{
+			acceleration = { 0,0 };
+			maxAcceleration = { 500, 500 };
+		}
+		ImGui::PopID();
+	}
 }
 
 void RigidbodyComp::LoadFromJson(const json& data)

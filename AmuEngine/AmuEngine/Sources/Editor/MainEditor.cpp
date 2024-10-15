@@ -89,7 +89,6 @@ void editor::MainEditor::ShowAllObject(bool* p_open)
     }
     else
     {
-
         for (auto& obj : GameObjectManager::GetInstance().GetAllObjects())
         {
             if (ImGui::TreeNode(obj.second.c_str()))

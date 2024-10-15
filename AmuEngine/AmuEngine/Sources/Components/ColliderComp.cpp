@@ -3,7 +3,7 @@
 #include "RigidbodyComp.h"
 #include "../CollisionManager/CollisionManager.h"
 #include "../EventManager/EventManager.h"
-
+#include <EasyImgui.h>
 
 ColliderComp::ColliderComp(GameObject* _owner) : EngineComponent(_owner), pos(), scale(), rot(0), vertices()
 {
@@ -93,6 +93,74 @@ void ColliderComp::SetCollider(float posX, float posY, float scaleX, float scale
 	scale.y = scaleY;
 
 	rot = _rot;
+}
+
+void ColliderComp::Edit()
+{
+	ImGui::LabelText("label", "Value");
+
+	//Show indicator line
+	static bool indicator = false;
+	ImGui::Checkbox("Show Indicator", &indicator);
+	if (indicator)
+	{
+		//º¸·ù
+	}
+	else
+	{
+
+	}
+
+	//Pos
+	ImGui::SeparatorText("Position");
+	{
+		ImGui::DragFloat("Pos X", &pos.x, 1);
+		ImGui::DragFloat("Pos Y", &pos.y, 1);
+		ImGui::PushID(1);
+		if (ImGui::Button("Initialize"))
+		{
+			pos = { 0 , 0 };
+		}
+		ImGui::PopID();
+	}
+
+	//Scale
+	static float scaleSize;
+	ImGui::SeparatorText("Scale");
+	{
+		static bool fixedRatio = false;
+		ImGui::Checkbox("Fixed Ratio", &fixedRatio);
+		if (fixedRatio)
+		{
+			scaleSize = scale.x;
+			ImGui::DragFloat("Size", &scaleSize, 0.01, 0.0000001f);
+			scale = { scaleSize, scaleSize };
+		}
+		else
+		{
+			ImGui::DragFloat("Width", &scale.x, 0.01, 0.0000001f);
+			ImGui::DragFloat("Height", &scale.y, 0.01, 0.0000001f);
+		}
+		ImGui::PushID(2);
+		if (ImGui::Button("Initialize"))
+		{
+			scaleSize = 1;
+			scale = { 1 , 1 };
+		}
+		ImGui::PopID();
+	}
+
+	//Rot
+	ImGui::SeparatorText("Rotation");
+	{
+		ImGui::SliderAngle("Angle (Degrees)", &rot);
+		ImGui::PushID(3);
+		if (ImGui::Button("Initialize"))
+		{
+			rot = 0;
+		}
+		ImGui::PopID();
+	}
 }
 
 void ColliderComp::LoadFromJson(const json& data)

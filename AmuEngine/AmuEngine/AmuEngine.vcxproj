@@ -705,6 +705,8 @@
     <None Include="Dependencies\GLM\glm\gtx\vector_query.inl" />
     <None Include="Dependencies\GLM\glm\gtx\wrap.inl" />
     <None Include="Sources\Assets\Level\test0.lvl" />
+    <None Include="Sources\Assets\Level\test1.lvl" />
+    <None Include="Sources\Assets\Level\test2.lvl" />
     <None Include="Sources\Assets\Prefab\Background.prefab" />
     <None Include="Sources\Assets\Prefab\Player.prefab" />
     <None Include="Sources\Assets\Prefab\Square.prefab" />

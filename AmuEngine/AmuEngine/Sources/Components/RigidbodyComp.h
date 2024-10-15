@@ -47,6 +47,8 @@ public:
 
 	void Update() override;
 
+	void Edit() override;
+
 	void LoadFromJson(const json&) override;
 	json SaveToJson() override;
 
