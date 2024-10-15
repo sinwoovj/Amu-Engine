@@ -7,6 +7,8 @@
 #include <vector>
 #include <string>
 
+bool showNewObjectPopup = false;
+
 editor::MainEditor::EDITOR_DATA editor::MainEditor::editor_data;
 
 editor::MainEditor::~MainEditor()
@@ -16,6 +18,12 @@ editor::MainEditor::~MainEditor()
 
 void editor::MainEditor::TopBar()
 {
+    std::string currname;
+    std::string selectLevel;
+    if (dynamic_cast<level::NormalLevel*>(GSM::GameStateManager::GetInstance().GetCurrentLevel()) != nullptr) // 가장 처음 로드할 때
+    {
+        currname = dynamic_cast<level::NormalLevel*>(GSM::GameStateManager::GetInstance().GetCurrentLevel())->GetName();
+    }
 
     ImGui::BeginMainMenuBar();
     {
@@ -33,12 +41,15 @@ void editor::MainEditor::TopBar()
         {
             ImGui::SeparatorText("Level List");
             LevelManager::GetInstance().LoadLevels();
+            
             for (auto& lvl : LevelManager::GetInstance().GetLevels())
             {
+                if (lvl == "")
+                    continue;
                 if (ImGui::BeginMenu(lvl.c_str()))
                 {
                     if (ImGui::MenuItem("Delete Level", "Ctrl+D")) { 
-                        if (LevelManager::GetInstance().DeleteLevel(lvl))
+                        if (LevelManager::GetInstance().DeleteLevel(lvl)) //Delete
                         {
                             // 성공
                             std::cout << "성공" << std::endl;
@@ -50,9 +61,10 @@ void editor::MainEditor::TopBar()
                         }
                     }
                     if (ImGui::MenuItem("Load Level", "Ctrl+L")) { 
-                        if (LevelManager::GetInstance().LoadLevel(lvl))
+                        if (LevelManager::GetInstance().LoadLevel(lvl)) //Load
                         {
                             // 성공
+                            selectLevel = lvl;
                             std::cout << "성공" << std::endl;
                         }
                         else
@@ -68,7 +80,6 @@ void editor::MainEditor::TopBar()
             ImGui::SeparatorText("Level Option");
 
             if (ImGui::MenuItem("Save Current Level", "Ctrl+S")) {
-                std::string currname = dynamic_cast<level::NormalLevel*>(GSM::GameStateManager::GetInstance().GetCurrentLevel())->GetName();
                 if (LevelManager::GetInstance().SaveLevel(currname))
                 {
                     // 성공
@@ -102,6 +113,9 @@ void editor::MainEditor::TopBar()
             if (ImGui::MenuItem("Close", "Ctrl+W")) { ImGui::CloseCurrentPopup(); }
             ImGui::EndMenu();
         }
+
+
+
         //if (ImGui::BeginMenu("Object"))
         //{
         //    if (ImGui::MenuItem("New Object", "Ctrl+N")) { /* Do stuff */ }
@@ -122,7 +136,50 @@ void editor::MainEditor::TopBar()
             ImGui::EndMenu();
         }
     };
+    // 새 오브젝트 생성 팝업 처리
+    if (showNewObjectPopup)
+    {
+        ImGui::OpenPopup("     Load Level Popup     ");  // 팝업 열기
+        showNewObjectPopup = false;  // 플래그 리셋
+    }
+    if (ImGui::BeginPopupModal("     Load Level Popup     ", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+    {
+        ImGui::Text("     Save this level?     ");
+        ImGui::Spacing();
+        ImGui::SameLine();
+        ImGui::Spacing();
+        ImGui::SameLine();
+        ImGui::Spacing();
+        ImGui::SameLine();
+        ImGui::Spacing();
+        ImGui::SameLine();
+        ImGui::Spacing();
+        ImGui::SameLine();
+        if (ImGui::Button("Yes"))
+        {
+            Serializer::GetInstance().SaveLevel(currname);
+            GSM::GameStateManager::GetInstance().ChangeLevel(new level::NormalLevel(selectLevel));
+            ImGui::EndPopup();
+        }
+        ImGui::SameLine();
+        ImGui::Spacing();
+        ImGui::SameLine();
+        ImGui::Spacing();
+        ImGui::SameLine();
+        ImGui::Spacing();
+        ImGui::SameLine();
+        ImGui::Spacing();
+        ImGui::SameLine();
+        if (ImGui::Button("No"))
+        {
+            GSM::GameStateManager::GetInstance().ChangeLevel(new level::NormalLevel(selectLevel));
+            ImGui::EndPopup();
+        }
+        ImGui::EndPopup();
+    }
     ImGui::EndMainMenuBar();
+
+
 
     /*
     Can Add Components

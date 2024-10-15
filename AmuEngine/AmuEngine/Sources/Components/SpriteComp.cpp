@@ -267,7 +267,7 @@ void SpriteComp::SetTexture(std::string path)
 	{
 		glUseProgram(sprite_shader);
 
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textureSize.x, textureSize.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)textureSize.x, (GLsizei)textureSize.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture);
 		glGenerateMipmap(GL_TEXTURE_2D);
 
 		unsigned char loc = glGetUniformLocation(sprite_shader, "ortho");

@@ -6,6 +6,8 @@
 #include "NormalLevel.h"
 #include <io.h>
 
+extern bool showNewObjectPopup;
+
 bool LevelManager::FindLevel(const std::string& str)
 {
     for (auto& lvl : levels)
@@ -56,20 +58,7 @@ bool LevelManager::LoadLevel(const std::string& str)
     std::string currname = dynamic_cast<level::NormalLevel*>(GSM::GameStateManager::GetInstance().GetCurrentLevel())->GetName();
     if (Serializer::GetInstance().ExistChangePoint(currname))
     {
-        if (ImGui::BeginPopup("Load Level"))
-        {
-            ImGui::Text("Save this level?");
-            if (ImGui::Button("Yes"))
-            {
-                Serializer::GetInstance().SaveLevel(currname);
-                GSM::GameStateManager::GetInstance().ChangeLevel(new level::NormalLevel(str));
-            }
-            if (ImGui::Button("No"))
-            {
-                GSM::GameStateManager::GetInstance().ChangeLevel(new level::NormalLevel(str));
-            }
-            ImGui::EndPopup();
-        }
+        showNewObjectPopup = true;
     }
     else
     {

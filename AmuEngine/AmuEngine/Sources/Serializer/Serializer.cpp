@@ -110,7 +110,10 @@ bool Serializer::ExistChangePoint(const std::string& str)
 	json j;
 	file >> j;
 
-	return j == allData ? false : true;
+	if (j == allData)
+		return false;
+	else
+		return true;
 }
 
 bool Serializer::SaveLevel(const std::string& str)
