@@ -175,6 +175,18 @@ void editor::MainEditor::TopBar()
                     std::cout << "실패" << std::endl;
                 }
             }
+            if (ImGui::MenuItem("Undo Current Level", "Ctrl+U")) {
+                if (LevelManager::GetInstance().UndoLevel(editor_data.currLevelName))
+                {
+                    // 성공
+                    std::cout << "성공" << std::endl;
+                }
+                else
+                {
+                    // 실패
+                    std::cout << "실패" << std::endl;
+                }
+            }
             if (ImGui::BeginMenu("Add Level")) {
                 if (ImGui::InputText("Level Name", &editor_data.addLvlName, ImGuiInputTextFlags_EnterReturnsTrue))
                 {
@@ -227,18 +239,14 @@ void editor::MainEditor::ShowLevelObject(bool* p_open)
     }
     else
     {
-        if (ImGui::Begin(dynamic_cast<level::NormalLevel*>(GSM::GameStateManager::GetInstance().GetCurrentLevel())->GetName().c_str(), p_open))
+        if (ImGui::Begin(dynamic_cast<level::NormalLevel*>(GSM::GameStateManager::GetInstance().
+            GetCurrentLevel())->GetName().c_str(), p_open))
         {
             ImGui::SeparatorText("Object List");
             for (auto& obj : GameObjectManager::GetInstance().GetAllObjects())
             {
                 if (ImGui::TreeNode(obj.first.c_str()))
                 {
-                    if (ImGui::IsMouseClicked(ImGuiMouseButton_Right))
-                    {
-                        editor_data.selectObjectName = obj.first;
-                        editor_data.showObjectListRightClickPopup = true;
-                    }
                     for (auto& comp : obj.second->GetComponents())
                     {
                         if (ImGui::TreeNode(comp.first.c_str()))
@@ -248,6 +256,14 @@ void editor::MainEditor::ShowLevelObject(bool* p_open)
                         }
                     }
                     ImGui::TreePop();
+                }
+                if (ImGui::IsItemHovered())
+                {
+                    if (ImGui::IsMouseClicked(ImGuiMouseButton_Right))
+                    {
+                        editor_data.selectObjectName = obj.first;
+                        editor_data.showObjectListRightClickPopup = true;
+                    }
                 }
             }
 

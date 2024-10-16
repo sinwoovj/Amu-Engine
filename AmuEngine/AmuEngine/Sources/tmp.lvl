@@ -61,7 +61,7 @@
               1.0
             ],
             "alpha": 1.0,
-            "texturePath": "./Sources/Assets/Sprite/Example/Icon3.png",
+            "texturePath": "./Sources/Assets/Sprite/Example/Icon2.png",
             "textureSize": [
               200.0,
               200.0

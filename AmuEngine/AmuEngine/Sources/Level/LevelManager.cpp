@@ -36,7 +36,6 @@ bool LevelManager::LoadLevels()
         std::string name = fd.name;
         name = name.substr(0, name.rfind(filenameExtension));
         levels.push_back(name);
-        //std::cout << fd.name << std::endl;
     } while (_findnext(handle, &fd) == 0);
     _findclose(handle);
 
@@ -77,6 +76,14 @@ bool LevelManager::SaveLevel(const std::string& str)
     return true;
 }
 
+bool LevelManager::UndoLevel(const std::string& str)
+{
+    if (!FindLevel(str))
+        return false;
+    Serializer::GetInstance().LoadLevel(str);
+    return true;
+}
+
 bool LevelManager::AddLevel(const std::string& str)
 {
     return false;
@@ -84,7 +91,36 @@ bool LevelManager::AddLevel(const std::string& str)
 
 bool LevelManager::DeleteLevel(const std::string& str)
 {
-    return false;
+    // str에 해당하는 레벨이 있는지 확인
+    if (std::find(levels.begin(), levels.end(), str) == levels.end())
+        return false;
+
+    std::string currLvl;
+    if (dynamic_cast<level::NormalLevel*>(GSM::GameStateManager::GetInstance().GetCurrentLevel()) == nullptr)
+        currLvl = "";
+    else
+        currLvl = dynamic_cast<level::NormalLevel*>(GSM::GameStateManager::GetInstance().GetCurrentLevel())->GetName();
+    // 만약 지우려는 레벨이 현재 레벨이라면 지우고 현재 레벨 ""으로 설정
+    if (str == currLvl)
+        GSM::GameStateManager::GetInstance().ChangeLevel(new level::NormalLevel(""));
+
+    // levels에서 str에 해당하는 lvl 지우기
+    levels.erase(std::remove(levels.begin(), levels.end(), str), levels.end());
+
+    // 파일 삭제
+    std::string path = directory + str + filenameExtension; // ./Sources/Assets/Level/{str}.lvl
+    // _unlink()는 파일을 삭제할 때 사용 -- return value (0 = complete, -1 = fail)
+    if (_unlink(path.c_str()) == 0) {
+        std::cout << path << " : File deleted successfully.\n";
+    }
+    else {
+        std::perror("Error deleting file");
+        return false;
+    }
+
+
+
+    return true;
 }
 
 std::string LevelManager::GetDirectory()

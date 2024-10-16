@@ -13,6 +13,9 @@ using json = nlohmann::ordered_json;	// Map. Orders the order the variables were
 
 bool Serializer::LoadLevel(const std::string& str)
 {
+	if (str == "") //초기값일 경우
+		return true;
+
 	// Open file
 	std::fstream file;
 	std::string filename = LevelManager::GetInstance().GetDirectory() + str + LevelManager::GetInstance().GetFilenameExtension();
