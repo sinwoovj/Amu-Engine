@@ -716,10 +716,10 @@
     <None Include="Sources\Assets\Prefab\Player.prefab" />
     <None Include="Sources\Assets\Prefab\Square.prefab" />
     <None Include="Sources\ComponentManager\ComponentManager.inl" />
+    <None Include="Sources\default.lvl" />
     <None Include="Sources\EventManager\EventManager.inl" />
     <None Include="Sources\GameObject\GameObject.inl" />
     <None Include="Sources\ResourceManager\ResourceManager.inl" />
-    <None Include="Sources\tmp.lvl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Sources\Assets\Sprite\Background\Exam.png" />

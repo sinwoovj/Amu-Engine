@@ -101,6 +101,49 @@ void editor::MainEditor::PopUp()
         }
         ImGui::EndPopup();
     }
+
+    //같은 이름의 레벨이 있을 때 띄우는 팝업
+    if (editor_data.showAlreadyHaveSameNameLevelPopup)
+    {
+        ImGui::OpenPopup("     Warning : Delete Level     ");
+        editor_data.showAlreadyHaveSameNameLevelPopup = false;
+    }
+
+    if (ImGui::BeginPopup("     Warning : Delete Level     "))
+    {
+        ImGui::Text("This level name is already exist.\n Please type another level name.");
+        ImGui::Columns(1);
+        if (ImGui::Button("Ok"))
+        {
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
+    }
+
+    //Level 추가 팝업
+    if (editor_data.showAddLevelPopup)
+    {
+        ImGui::OpenPopup("##Add Level##");
+        editor_data.showAddLevelPopup = false;
+    }
+    if (ImGui::BeginPopup("##Add Level##"))
+    {
+        if (ImGui::InputText("Level Name", &editor_data.addLvlName, ImGuiInputTextFlags_EnterReturnsTrue))
+        {
+            if (LevelManager::GetInstance().AddLevel(editor_data.addLvlName))
+            {
+                // 성공
+                std::cout << "성공" << std::endl;
+            }
+            else
+            {
+                // 실패
+                std::cout << "실패" << std::endl;
+            }
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
+    }
 }
 
 void editor::MainEditor::TopBar()
@@ -187,24 +230,13 @@ void editor::MainEditor::TopBar()
                     std::cout << "실패" << std::endl;
                 }
             }
-            if (ImGui::BeginMenu("Add Level")) {
-                if (ImGui::InputText("Level Name", &editor_data.addLvlName, ImGuiInputTextFlags_EnterReturnsTrue))
-                {
-                    if (LevelManager::GetInstance().AddLevel(editor_data.addLvlName))
-                    {
-                        // 성공
-                        std::cout << "성공" << std::endl;
-                    }
-                    else
-                    {
-                        // 실패
-                        std::cout << "실패" << std::endl;
-                    }
-                }
-                ImGui::EndMenu();
+            if (ImGui::MenuItem("Add Level", "Ctrl+A")) {
+                editor_data.showAddLevelPopup = true;
             }
             ImGui::Separator();
-            if (ImGui::MenuItem("Close", "Ctrl+W")) { ImGui::CloseCurrentPopup(); }
+            if (ImGui::MenuItem("Close", "Ctrl+W")) { 
+                ImGui::CloseCurrentPopup(); 
+            }
             ImGui::EndMenu();
         }
 

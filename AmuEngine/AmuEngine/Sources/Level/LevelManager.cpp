@@ -1,5 +1,6 @@
 #include "LevelManager.h"
 #include <iostream>
+#include <fstream>
 #include "../Serializer/Serializer.h"
 #include "../GSM/GameStateManager.h"
 #include "../GameObject/GameObject.h"
@@ -8,6 +9,9 @@
 #include "NormalLevel.h"
 #include <io.h>
 #include "../Editor/MainEditor.h"
+#include "json.hpp"
+
+using json = nlohmann::ordered_json;	// Map. Orders the order the variables were declared in
 
 extern bool showNewObjectPopup;
 
@@ -86,7 +90,42 @@ bool LevelManager::UndoLevel(const std::string& str)
 
 bool LevelManager::AddLevel(const std::string& str)
 {
-    return false;
+    // str에 해당하는 레벨이 있는지 확인
+    if (std::find(levels.begin(), levels.end(), str) != levels.end())
+    {
+        // 중복되는 이름이 있다는 팝업을 띄움
+        editor::MainEditor::editor_data.showAlreadyHaveSameNameLevelPopup = true;
+        return false;
+    }
+
+    // lvl 디렉터리에 str에 해당하는 패스로 파일을 생성함, 해당 패스에 default.lvl를 저장한다.
+    std::string defaultLvlFilename = "./Sources/default.lvl";
+    
+    // Open file
+    std::fstream defaultLvlFile;
+    defaultLvlFile.open(defaultLvlFilename, std::fstream::in);
+
+    // Check the file is valid
+    if (!defaultLvlFile.is_open())
+         throw std::invalid_argument("defaultLvlFile Invalid filename " + defaultLvlFilename);
+
+    json allData;
+    defaultLvlFile >> allData;	// the json has all the file data
+
+    std::string filename = LevelManager::GetInstance().GetDirectory() + str + LevelManager::GetInstance().GetFilenameExtension();
+
+    // Open file
+    std::ofstream file;
+    file.open(filename, std::fstream::out);	// Open as write mode. Create it if it does not exist!
+
+    if (!file.is_open())
+        return false;
+    //throw std::invalid_argument("Serializer::SaveLevel file write error " + str);
+
+    file << std::setw(2) << allData;	// Separates in lines and each section
+
+    file.close();
+    return true;
 }
 
 bool LevelManager::DeleteLevel(const std::string& str)
@@ -117,8 +156,6 @@ bool LevelManager::DeleteLevel(const std::string& str)
         std::perror("Error deleting file");
         return false;
     }
-
-
 
     return true;
 }

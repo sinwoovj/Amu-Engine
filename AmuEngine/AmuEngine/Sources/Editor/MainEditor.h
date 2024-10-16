@@ -34,6 +34,8 @@ namespace editor
 			bool showNewObjectPopup = false;
 			bool showAddObjectPopup = false;
 			bool showObjectListRightClickPopup = false;
+			bool showAlreadyHaveSameNameLevelPopup = false;
+			bool showAddLevelPopup = false;
 
 			// Normal State Variable
 			bool DeleteObject = false;

@@ -70,43 +70,59 @@ bool Serializer::ExistChangePoint(const std::string& str)
 	//Set json
 	json currData;
 
-	// Counter instead of name as I do not have one
-	int i = 0;
-
-	for (auto go : GameObjectManager::GetInstance().GetAllObjects())
+	if (GameObjectManager::GetInstance().GetAllObjects().size() <= 0)
 	{
-		if (go.second->prefabName.compare("") == 0)
-			continue;
+		std::string defaultLvlFilename = "./Sources/default.lvl";
 
-		json obj;
-		obj["object"] = go.second->prefabName;
+		// Open file
+		std::fstream defaultLvlFile;
+		defaultLvlFile.open(defaultLvlFilename, std::fstream::in);
 
-		json components;
+		// Check the file is valid
+		if (!defaultLvlFile.is_open())
+			throw std::invalid_argument("defaultLvlFile Invalid filename " + defaultLvlFilename);
 
-		TransformComp* t = go.second->GetComponent<TransformComp>();
-		if (t != nullptr)
-			components.push_back(t->SaveToJson());
+		json allData;
+		defaultLvlFile >> allData;	// the json has all the file data
+		currData = allData;
+	}
+	else
+	{
+		for (auto go : GameObjectManager::GetInstance().GetAllObjects())
+		{
+			if (go.second->prefabName.compare("") == 0)
+				continue;
 
-		SpriteComp* s = go.second->GetComponent<SpriteComp>();
-		if (s != nullptr)
-			components.push_back(s->SaveToJson());
+			json obj;
+			obj["object"] = go.second->prefabName;
 
-		obj["components"] = components;
+			json components;
 
-		currData["objects"].push_back(obj);
+			TransformComp* t = go.second->GetComponent<TransformComp>();
+			if (t != nullptr)
+				components.push_back(t->SaveToJson());
+
+			SpriteComp* s = go.second->GetComponent<SpriteComp>();
+			if (s != nullptr)
+				components.push_back(s->SaveToJson());
+
+			obj["components"] = components;
+
+			currData["objects"].push_back(obj);
+		}
 	}
 
 	// Open file
-	std::fstream currfile;
-	std::string tmpfilename = "./Sources/tmp.lvl";
-	currfile.open(tmpfilename, std::fstream::out);	// Open as write mode. Create it if it does not exist!
+	//std::fstream currfile;
+	//std::string tmpfilename = "./Sources/tmp.lvl";
+	//currfile.open(tmpfilename, std::fstream::out);	// Open as write mode. Create it if it does not exist!
 
-	if (!currfile.is_open())
-		throw std::invalid_argument("Serializer::SaveLevel file write error " + str);
+	//if (!currfile.is_open())
+	//	throw std::invalid_argument("Serializer::SaveLevel file write error " + str);
 
-	currfile << std::setw(2) << currData;	// Separates in lines and each section
+	//currfile << std::setw(2) << currData;	// Separates in lines and each section
 
-	currfile.close();
+	//currfile.close();
 
 	// Get Data in File
 	// Open file
@@ -131,30 +147,44 @@ bool Serializer::SaveLevel(const std::string& str)
 {
 	json allData;
 
-	// Counter instead of name as I do not have one
-	int i = 0;
-
-	for (auto go : GameObjectManager::GetInstance().GetAllObjects())
+	if (GameObjectManager::GetInstance().GetAllObjects().size() <= 0)
 	{
-		if (go.second->prefabName.compare("") == 0)
-			continue;
+		std::string defaultLvlFilename = "./Sources/default.lvl";
 
-		json obj;
-		obj["object"] = go.second->prefabName;
+		// Open file
+		std::fstream defaultLvlFile;
+		defaultLvlFile.open(defaultLvlFilename, std::fstream::in);
 
-		json components;
+		// Check the file is valid
+		if (!defaultLvlFile.is_open())
+			throw std::invalid_argument("defaultLvlFile Invalid filename " + defaultLvlFilename);
 
-		TransformComp* t = go.second->GetComponent<TransformComp>();
-		if (t != nullptr)
-			components.push_back(t->SaveToJson());
+		defaultLvlFile >> allData;	// the json has all the file data
+	}
+	else
+	{
+		for (auto go : GameObjectManager::GetInstance().GetAllObjects())
+		{
+			if (go.second->prefabName.compare("") == 0)
+				continue;
 
-		SpriteComp* s = go.second->GetComponent<SpriteComp>();
-		if (s != nullptr)
-			components.push_back(s->SaveToJson());
+			json obj;
+			obj["object"] = go.second->prefabName;
+
+			json components;
+
+			TransformComp* t = go.second->GetComponent<TransformComp>();
+			if (t != nullptr)
+				components.push_back(t->SaveToJson());
+
+			SpriteComp* s = go.second->GetComponent<SpriteComp>();
+			if (s != nullptr)
+				components.push_back(s->SaveToJson());
 		
-		obj["components"] = components;
+			obj["components"] = components;
 
-		allData["objects"].push_back(obj);
+			allData["objects"].push_back(obj);
+		}
 	}
 
 	// Open file
