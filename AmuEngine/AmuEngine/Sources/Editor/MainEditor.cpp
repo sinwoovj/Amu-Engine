@@ -8,6 +8,7 @@
 #include <string>
 
 bool showNewObjectPopup = false;
+bool showAddObjectPopup = false;
 
 editor::MainEditor::EDITOR_DATA editor::MainEditor::editor_data;
 
@@ -93,8 +94,7 @@ void editor::MainEditor::TopBar()
             }
             if (ImGui::BeginMenu("Add Level")) {
                 static std::string addLvlName = "";
-                ImGui::InputText("Level Name", &addLvlName);
-                if (ImGui::Button("Add"))
+                if (ImGui::InputText("Level Name", &addLvlName, ImGuiInputTextFlags_EnterReturnsTrue))
                 {
                     if (LevelManager::GetInstance().AddLevel(addLvlName))
                     {
@@ -136,6 +136,9 @@ void editor::MainEditor::TopBar()
             ImGui::EndMenu();
         }
     };
+
+    // PopUp
+
     // 새 오브젝트 생성 팝업 처리
     if (showNewObjectPopup)
     {
@@ -177,52 +180,82 @@ void editor::MainEditor::TopBar()
         }
         ImGui::EndPopup();
     }
-    ImGui::EndMainMenuBar();
 
-
-
-    /*
-    Can Add Components
-    Show Buttons with compnents options
-
-    TODO : Move to factory
-    */
-    /*if (ImGui::TreeNode("Add Component"))
+    if (showAddObjectPopup)
     {
-        std::vector<std::string> comps = { TransformComp::TypeName, Sprite2D::GetName() };
-        for (auto& compType : comps)
+        ImGui::OpenPopup("##Add Object##"); // 팝업 열기
+        showAddObjectPopup = false; // 플래그 리셋
+    }
+
+    if (ImGui::BeginPopup("##Add Object##"))
+    {
+        static std::string addObjName = "";
+        if (ImGui::InputText("Object Name", &addObjName, ImGuiInputTextFlags_EnterReturnsTrue))
         {
-            if
+            GameObjectManager::GetInstance().AddObject(addObjName);
+            if (GameObjectManager::GetInstance().GetObj(addObjName) == nullptr)
+                std::cout << "실패" << std::endl;
+            else
+                std::cout << "성공" << std::endl;
+            ImGui::CloseCurrentPopup();
         }
-    }*/
+        ImGui::EndPopup();
+    }
+
+    // End Main Menu Bar
+    ImGui::EndMainMenuBar();
 }
 
 void editor::MainEditor::ShowLevelObject(bool* p_open)
 {
-    if (!ImGui::Begin((dynamic_cast<level::NormalLevel*>(GSM::GameStateManager::GetInstance().GetCurrentLevel()) == nullptr
-        ? "Create Any Level!" : 
-        dynamic_cast<level::NormalLevel*>(GSM::GameStateManager::GetInstance().GetCurrentLevel())->GetName()).c_str(), p_open))
+    if (dynamic_cast<level::NormalLevel*>(GSM::GameStateManager::GetInstance().GetCurrentLevel()) == nullptr)
     {
+        if (ImGui::Begin("Create Any Level!"))
+        {
+            ImGui::SeparatorText("Object List");
+            ImGui::SeparatorText("Object Option");
+        }
         ImGui::End();
     }
     else
     {
-        for (auto& obj : GameObjectManager::GetInstance().GetAllObjects())
+        if (ImGui::Begin(dynamic_cast<level::NormalLevel*>(GSM::GameStateManager::GetInstance().GetCurrentLevel())->GetName().c_str(), p_open))
         {
-            if (ImGui::TreeNode(obj.first.c_str()))
+            ImGui::SeparatorText("Object List");
+            for (auto& obj : GameObjectManager::GetInstance().GetAllObjects())
             {
-                for (auto& comp : obj.second->GetComponents())
+                if (ImGui::TreeNode(obj.first.c_str()))
                 {
-                    if (ImGui::TreeNode(comp.first.c_str()))
+                    for (auto& comp : obj.second->GetComponents())
                     {
-                        comp.second->Edit();
-                        ImGui::TreePop();
+                        if (ImGui::TreeNode(comp.first.c_str()))
+                        {
+                            comp.second->Edit();
+                            ImGui::TreePop();
+                        }
                     }
+                    ImGui::TreePop();
                 }
-                ImGui::TreePop();
             }
+
+            ImGui::SeparatorText("Object Option");
+            ImGui::Columns(2, NULL, false);
+            if (ImGui::Button("Add Object"))
+            {
+                showAddObjectPopup = true;
+            }
+
+            ImGui::NextColumn();
+            if (ImGui::Button("Delete All Object"))
+            {
+                GameObjectManager::GetInstance().RemoveAllObject();
+                if (!GameObjectManager::GetInstance().GetAllObjects().empty())
+                    std::cout << "실패" << std::endl;
+                else
+                    std::cout << "성공" << std::endl;
+            }
+            ImGui::End();
         }
-        ImGui::End();
     }
 }
 

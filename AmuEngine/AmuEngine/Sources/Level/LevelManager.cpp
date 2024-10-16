@@ -2,6 +2,8 @@
 #include <iostream>
 #include "../Serializer/Serializer.h"
 #include "../GSM/GameStateManager.h"
+#include "../GameObject/GameObject.h"
+#include "../GameObjectManager/GameObjectManager.h"
 #include <EasyImgui.h>
 #include "NormalLevel.h"
 #include <io.h>
