@@ -7,6 +7,7 @@
 #include <EasyImgui.h>
 #include "NormalLevel.h"
 #include <io.h>
+#include "../Editor/MainEditor.h"
 
 extern bool showNewObjectPopup;
 
@@ -60,7 +61,7 @@ bool LevelManager::LoadLevel(const std::string& str)
     std::string currname = dynamic_cast<level::NormalLevel*>(GSM::GameStateManager::GetInstance().GetCurrentLevel())->GetName();
     if (Serializer::GetInstance().ExistChangePoint(currname))
     {
-        showNewObjectPopup = true;
+        editor::MainEditor::editor_data.showNewObjectPopup = true;
     }
     else
     {
