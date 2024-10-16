@@ -163,6 +163,7 @@ void ColliderComp::Edit()
 	}
 }
 
+
 void ColliderComp::LoadFromJson(const json& data)
 {
 	// Check how you saved, load from there

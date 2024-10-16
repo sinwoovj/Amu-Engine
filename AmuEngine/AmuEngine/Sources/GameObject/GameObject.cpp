@@ -2,16 +2,11 @@
 #include "../ComponentManager/BaseComponent.h"
 #include "../GameObjectManager/GameObjectManager.h"
 
-GameObject::GameObject() : type(None)
-{
-	name = "";
-	GameObjectManager::GetInstance().AddObject(this);
-}
 
 GameObject::GameObject(std::string str) : type(None)
 {
 	name = str;
-	GameObjectManager::GetInstance().InsertObject(this, str);
+	GameObjectManager::GetInstance().InsertObject(str , this);
 }
 
 GameObject::~GameObject()
@@ -19,7 +14,7 @@ GameObject::~GameObject()
 	auto objects = GameObjectManager::GetInstance().GetAllObjects();
 	for (auto it = objects.begin(); it != objects.end(); it++)
 	{
-		if (it->first == this)
+		if (it->second == this)
 		{
 			it = objects.erase(it);
 			break;

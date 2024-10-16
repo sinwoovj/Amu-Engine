@@ -11,8 +11,8 @@
               0.0
             ],
             "scale": [
-              1,
-              1
+              1.0,
+              1.0
             ],
             "rotation": 0.0
           }
@@ -21,12 +21,16 @@
           "type": "SpriteComp",
           "compData": {
             "color": [
-              1,
-              1,
-              1
+              1.0,
+              1.0,
+              1.0
             ],
+            "alpha": 1.0,
             "texturePath": "./Sources/Assets/Sprite/Background/Exam.png",
-            "alpha": 1.0
+            "textureSize": [
+              1000.0,
+              563.0
+            ]
           }
         }
       ]
@@ -52,12 +56,16 @@
           "type": "SpriteComp",
           "compData": {
             "color": [
-              1,
-              1,
-              1
+              1.0,
+              1.0,
+              1.0
             ],
+            "alpha": 1.0,
             "texturePath": "./Sources/Assets/Sprite/Example/Icon2.png",
-            "alpha": 1.0
+            "textureSize": [
+              471.0,
+              200.0
+            ]
           }
         }
       ]

@@ -159,7 +159,7 @@ void editor::MainEditor::TopBar()
         {
             Serializer::GetInstance().SaveLevel(currname);
             GSM::GameStateManager::GetInstance().ChangeLevel(new level::NormalLevel(selectLevel));
-            ImGui::EndPopup();
+            ImGui::CloseCurrentPopup();
         }
         ImGui::SameLine();
         ImGui::Spacing();
@@ -173,7 +173,7 @@ void editor::MainEditor::TopBar()
         if (ImGui::Button("No"))
         {
             GSM::GameStateManager::GetInstance().ChangeLevel(new level::NormalLevel(selectLevel));
-            ImGui::EndPopup();
+            ImGui::CloseCurrentPopup();
         }
         ImGui::EndPopup();
     }
@@ -209,9 +209,9 @@ void editor::MainEditor::ShowLevelObject(bool* p_open)
     {
         for (auto& obj : GameObjectManager::GetInstance().GetAllObjects())
         {
-            if (ImGui::TreeNode(obj.second.c_str()))
+            if (ImGui::TreeNode(obj.first.c_str()))
             {
-                for (auto& comp : obj.first->GetComponents())
+                for (auto& comp : obj.second->GetComponents())
                 {
                     if (ImGui::TreeNode(comp.first.c_str()))
                     {

@@ -355,15 +355,17 @@ void SpriteComp::LoadFromJson(const json& data)
 
 	if (compData != data.end())
 	{
-		auto it = compData->find("texturePath");
-		SetTexture(it.value());
-		texturePath = it.value();
-		it = compData->find("color");
+		auto it = compData->find("color");
 		color.r = it->begin().value();
 		color.g = (it->begin() + 1).value();
 		color.b = (it->begin() + 2).value();
 		it = compData->find("alpha");
 		alpha = it.value();
+		it = compData->find("texturePath");
+		SetTexture(it.value());
+		texturePath = it.value();
+		it = compData->find("textureSize");
+		SetTextureSize({ it->begin().value(), (it->begin() + 1).value() });
 	}
 }
 
@@ -373,9 +375,10 @@ json SpriteComp::SaveToJson()
 	data["type"] = TypeName;
 
 	json compData;
-	compData["texturePath"] = texturePath;
 	compData["color"] = { color.r,color.g,color.b };
 	compData["alpha"] = alpha;
+	compData["texturePath"] = texturePath;
+	compData["textureSize"] = { textureSize.x, textureSize.y };
 	data["compData"] = compData;
 
 	return data;
@@ -413,6 +416,7 @@ void SpriteComp::Edit()
 			SetTexture(strTexturePath);
 	}
 }
+
 
 BaseRTTI* SpriteComp::CreateSpriteComponent(GameObject* owner)
 {

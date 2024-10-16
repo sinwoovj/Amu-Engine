@@ -51,39 +51,39 @@ void Prefab::LoadPrefab()
 
 	file >> *data;
 }
-
-GameObject* Prefab::NewGameObject()
-{
-	GameObject* obj = new GameObject();
-
-	auto typeIt = data->find("entityType");
-	if (typeIt == data->end())
-		return nullptr;
-	
-	obj->type = typeIt.value();
-
-	auto compIt = data->find("components");
-	if (compIt == data->end())
-		return nullptr;
-
-	for (auto& comp : *compIt)
-	{
-		auto dataIt = comp.find("type");
-		if (dataIt == comp.end())
-			continue;
-
-		std::string typeName = dataIt.value().dump();
-		typeName = typeName.substr(1, typeName.size() - 2);
-
-		BaseRTTI* p = Registry::GetInstance().FindAndCreate(typeName, obj);
-		if (p != nullptr)
-			p->LoadFromJson(comp);
-	}
-
-	obj->prefabName = prefabName;
-
-	return obj;
-}
+//
+//GameObject* Prefab::NewGameObject()
+//{
+//	GameObject* obj = new GameObject();
+//
+//	auto typeIt = data->find("entityType");
+//	if (typeIt == data->end())
+//		return nullptr;
+//	
+//	obj->type = typeIt.value();
+//
+//	auto compIt = data->find("components");
+//	if (compIt == data->end())
+//		return nullptr;
+//
+//	for (auto& comp : *compIt)
+//	{
+//		auto dataIt = comp.find("type");
+//		if (dataIt == comp.end())
+//			continue;
+//
+//		std::string typeName = dataIt.value().dump();
+//		typeName = typeName.substr(1, typeName.size() - 2);
+//
+//		BaseRTTI* p = Registry::GetInstance().FindAndCreate(typeName, obj);
+//		if (p != nullptr)
+//			p->LoadFromJson(comp);
+//	}
+//
+//	obj->prefabName = prefabName;
+//
+//	return obj;
+//}
 
 GameObject* Prefab::NewGameObject(const std::string& _name)
 {

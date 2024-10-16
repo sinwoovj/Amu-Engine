@@ -8,26 +8,26 @@ GameObjectManager::~GameObjectManager()
 {
 	for (auto it : objects)
 	{
-		if (it.first)
-			delete it.first;
+		if (it.second)
+			delete it.second;
 	}
 }
 
-void GameObjectManager::InsertObject(GameObject* obj, std::string str)
+void GameObjectManager::InsertObject(const std::string& id, GameObject* obj)
 {
-	objects.insert({ obj, str });
+	objects.insert({ id, obj });
 }
 
-void GameObjectManager::AddObject(GameObject* obj)
+void GameObjectManager::AddObject(const std::string& id)
 {
-	objects.insert({ obj, "0" });
+	objects.insert({ id, new GameObject(id)});
 }
 
 GameObject* GameObjectManager::GetObj(const std::string& id) {
 	// my_Obj의 모든 요소를 순회하며 ID를 찾음
 	for (const auto& pair : objects) {
-		if (pair.second == id) {
-			return pair.first;
+		if (pair.first == id) {
+			return pair.second;
 		}
 	}
 	// 일치하는 ID가 없을 경우 nullptr 반환
@@ -40,19 +40,19 @@ GameObject* GameObjectManager::GetLastObject()
 	{
 		auto it = objects.end();
 		--it;
-		auto key = it->first;
-		return key;
+		auto value = it->second;
+		return value;
 	}
 	return nullptr;
 }
 
-void GameObjectManager::RemoveObject(GameObject* obj)
+void GameObjectManager::RemoveObject(const std::string& id)
 {
 	for (auto it = objects.begin(); it != objects.end(); it++)
 	{
-		if (it->first == obj)
+		if (it->first == id)
 		{
-			delete it->first;
+			delete it->second;
 			it = objects.erase(it);
 			return;
 		}
@@ -63,7 +63,7 @@ void GameObjectManager::RemoveAllObject()
 {
 	for (auto it = objects.begin(); it != objects.end(); it++)	
 	{
-		delete it->first;
+		delete it->second;
 	}
 
 	objects.clear();

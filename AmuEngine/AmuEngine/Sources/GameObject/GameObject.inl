@@ -51,14 +51,6 @@ inline T* GameObject::GetComponent() const
 	return nullptr;
 }
 
-
-inline bool GameObject::CompareComponents(GameObject* obj)
-{
-	if (obj == nullptr)
-		return false;
-	return true;
-}
-
 template<typename T>
 inline void GameObject::DeleteComponent()
 {

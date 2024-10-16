@@ -63,6 +63,49 @@ bool Serializer::LoadLevel(const std::string& str)
 
 bool Serializer::ExistChangePoint(const std::string& str)
 {
+
+	//Set json
+	json currData;
+
+	// Counter instead of name as I do not have one
+	int i = 0;
+
+	for (auto go : GameObjectManager::GetInstance().GetAllObjects())
+	{
+		if (go.second->prefabName.compare("") == 0)
+			continue;
+
+		json obj;
+		obj["object"] = go.second->prefabName;
+
+		json components;
+
+		TransformComp* t = go.second->GetComponent<TransformComp>();
+		if (t != nullptr)
+			components.push_back(t->SaveToJson());
+
+		SpriteComp* s = go.second->GetComponent<SpriteComp>();
+		if (s != nullptr)
+			components.push_back(s->SaveToJson());
+
+		obj["components"] = components;
+
+		currData["objects"].push_back(obj);
+	}
+
+	// Open file
+	std::fstream currfile;
+	std::string tmpfilename = "./Sources/tmp.lvl";
+	currfile.open(tmpfilename, std::fstream::out);	// Open as write mode. Create it if it does not exist!
+
+	if (!currfile.is_open())
+		throw std::invalid_argument("Serializer::SaveLevel file write error " + str);
+
+	currfile << std::setw(2) << currData;	// Separates in lines and each section
+
+	currfile.close();
+
+	// Get Data in File
 	// Open file
 	std::fstream file;
 	std::string filename = LevelManager::GetInstance().GetDirectory() + str + LevelManager::GetInstance().GetFilenameExtension();
@@ -70,58 +113,15 @@ bool Serializer::ExistChangePoint(const std::string& str)
 
 	// Check the file is valid
 	if (!file.is_open())
+		throw std::invalid_argument("Serializer::LoadLevel Invalid filename " + filename);
+
+	json fileData;
+	file >> fileData;	// the json has all the file data
+
+	if (fileData == currData)
 		return false;
-	//throw std::invalid_argument("Serializer::LoadLevel Invalid filename " + filename);
-
-	std::map<GameObject*, std::string> objects;
-
-	json originAllData;
-	file >> originAllData;	// the json has all the file data
-
-	json originobjects;
-	originobjects = originAllData.find("objects").value();
-
-	for (auto& item : originobjects)
-	{
-		auto objIt = item.find("object");
-		Prefab p(objIt.value());
-		GameObject* go = p.NewGameObject(objIt.value());
-
-		if (objIt != item.end())
-		{
-			auto compIt = item.find("components");
-			if (compIt == item.end())
-				continue;
-
-			// iterate on the json on cmp for each component, add it
-			for (auto& comp : *compIt)
-			{
-				auto dataIt = comp.find("type");
-				if (dataIt == comp.end())	// not found
-					continue;
-
-				std::string typeName = dataIt.value().dump();	// convert to string
-				typeName = typeName.substr(1, typeName.size() - 2);
-
-				go->GetBase(typeName)->LoadFromJson(comp);
-			}
-		}
-
-		if (go->GetComponent<ColliderComp>() != nullptr)
-			go->GetComponent<ColliderComp>()->SetCollider();
-
-		objects.insert({ go, objIt.value() });
-		
-	}
-	if (objects.size() != GameObjectManager::GetInstance().GetAllObjects().size())
-	{
-		for (auto& object : objects)
-		{
-			if (!object.first->CompareComponents(GameObjectManager::GetInstance().GetObj(object.second)))
-				return true;
-		}
-	}
-	return false;
+	else
+		return true;
 }
 
 bool Serializer::SaveLevel(const std::string& str)
@@ -133,19 +133,19 @@ bool Serializer::SaveLevel(const std::string& str)
 
 	for (auto go : GameObjectManager::GetInstance().GetAllObjects())
 	{
-		if (go.first->prefabName.compare("") == 0)
+		if (go.second->prefabName.compare("") == 0)
 			continue;
 
 		json obj;
-		obj["object"] = go.first->prefabName;
+		obj["object"] = go.second->prefabName;
 
 		json components;
 
-		TransformComp* t = go.first->GetComponent<TransformComp>();
+		TransformComp* t = go.second->GetComponent<TransformComp>();
 		if (t != nullptr)
 			components.push_back(t->SaveToJson());
 
-		SpriteComp* s = go.first->GetComponent<SpriteComp>();
+		SpriteComp* s = go.second->GetComponent<SpriteComp>();
 		if (s != nullptr)
 			components.push_back(s->SaveToJson());
 		

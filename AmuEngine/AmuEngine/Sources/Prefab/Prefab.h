@@ -23,6 +23,5 @@ public:
 
 	static void SavePrefab(const std::string& _name, GameObject* obj);
 	
-	GameObject* NewGameObject();
 	GameObject* NewGameObject(const std::string& _name);
 };

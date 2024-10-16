@@ -19,12 +19,16 @@
       "type": "SpriteComp",
       "compData": {
         "color": [
-          1,
-          1,
-          1
+          1.0,
+          1.0,
+          1.0
         ],
+        "alpha": 1.0,
         "texturePath": "./Sources/Assets/Sprite/default.png",
-        "alpha": 1.0
+        "textureSize": [
+          400.0,
+          400.0
+        ]
       }
     },
     {

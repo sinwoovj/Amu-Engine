@@ -27,7 +27,6 @@ public:
 		Checker,
 	};
 
-	GameObject();
 	GameObject(std::string str);
 	GameObject(const GameObject& other) = delete;
 	GameObject& operator=(const GameObject& other) = delete;
@@ -53,8 +52,6 @@ public:
 	std::map<std::string, BaseComponent*> GetComponents() { return component; }
 
 	//GO will have a function to delete ANY TYPE of component
-	bool CompareComponents(GameObject* obj);
-	
 	template <typename T>
 	void DeleteComponent();
 
