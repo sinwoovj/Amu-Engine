@@ -19,7 +19,7 @@ editor::MainEditor::~MainEditor()
 void editor::MainEditor::TopBar()
 {
     std::string currname;
-    std::string selectLevel;
+    static std::string selectLevel;
     if (dynamic_cast<level::NormalLevel*>(GSM::GameStateManager::GetInstance().GetCurrentLevel()) != nullptr) // 가장 처음 로드할 때
     {
         currname = dynamic_cast<level::NormalLevel*>(GSM::GameStateManager::GetInstance().GetCurrentLevel())->GetName();
@@ -46,7 +46,7 @@ void editor::MainEditor::TopBar()
             {
                 if (lvl == "")
                     continue;
-                if (ImGui::BeginMenu(lvl.c_str()))
+                if (ImGui::BeginMenu(lvl.c_str(), lvl != currname))
                 {
                     if (ImGui::MenuItem("Delete Level", "Ctrl+D")) { 
                         if (LevelManager::GetInstance().DeleteLevel(lvl)) //Delete

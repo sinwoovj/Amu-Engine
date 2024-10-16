@@ -63,57 +63,65 @@ bool Serializer::LoadLevel(const std::string& str)
 
 bool Serializer::ExistChangePoint(const std::string& str)
 {
-	json allData;
-
-	// Counter instead of name as I do not have one
-	int i = 0;
-
-	for (auto go : GameObjectManager::GetInstance().GetAllObjects())
-	{
-		if (go.first->prefabName.compare("") == 0)
-			continue;
-
-		json obj;
-		obj["object"] = go.first->prefabName;
-
-		json components;
-
-		TransformComp* t = go.first->GetComponent<TransformComp>();
-		if (t != nullptr)
-			components.push_back(t->SaveToJson());
-
-		SpriteComp* s = go.first->GetComponent<SpriteComp>();
-		if (s != nullptr)
-			components.push_back(s->SaveToJson());
-
-		obj["components"] = components;
-
-		if (go.first->name.size() > 0)
-		{
-			allData[go.first->name] = obj;
-		}
-		else
-			allData["objects"].push_back(obj);
-	}
-
 	// Open file
-	std::string filename = LevelManager::GetInstance().GetDirectory() + str + LevelManager::GetInstance().GetFilenameExtension();
 	std::fstream file;
+	std::string filename = LevelManager::GetInstance().GetDirectory() + str + LevelManager::GetInstance().GetFilenameExtension();
 	file.open(filename, std::fstream::in);
-	std::ifstream ifile(filename, std::ios::binary | std::ios::ate);
-	
+
+	// Check the file is valid
 	if (!file.is_open())
-		 throw std::invalid_argument("Serializer::SaveLevel file write error " + filename);
-	if (ifile.tellg() == 0)
 		return false;
+	//throw std::invalid_argument("Serializer::LoadLevel Invalid filename " + filename);
 
-	json j;
-	file >> j;
+	std::map<GameObject*, std::string> objects;
 
-	if (j == allData)
-		return false;
-	else
-		return true;
+	json originAllData;
+	file >> originAllData;	// the json has all the file data
+
+	json originobjects;
+	originobjects = originAllData.find("objects").value();
+
+	for (auto& item : originobjects)
+	{
+		auto objIt = item.find("object");
+		Prefab p(objIt.value());
+		GameObject* go = p.NewGameObject(objIt.value());
+
+		if (objIt != item.end())
+		{
+			auto compIt = item.find("components");
+			if (compIt == item.end())
+				continue;
+
+			// iterate on the json on cmp for each component, add it
+			for (auto& comp : *compIt)
+			{
+				auto dataIt = comp.find("type");
+				if (dataIt == comp.end())	// not found
+					continue;
+
+				std::string typeName = dataIt.value().dump();	// convert to string
+				typeName = typeName.substr(1, typeName.size() - 2);
+
+				go->GetBase(typeName)->LoadFromJson(comp);
+			}
+		}
+
+		if (go->GetComponent<ColliderComp>() != nullptr)
+			go->GetComponent<ColliderComp>()->SetCollider();
+
+		objects.insert({ go, objIt.value() });
+		
+	}
+	if (objects.size() != GameObjectManager::GetInstance().GetAllObjects().size())
+	{
+		for (auto& object : objects)
+		{
+			if (!object.first->CompareComponents(GameObjectManager::GetInstance().GetObj(object.second)))
+				return true;
+		}
+	}
+	return false;
 }
 
 bool Serializer::SaveLevel(const std::string& str)
@@ -143,12 +151,7 @@ bool Serializer::SaveLevel(const std::string& str)
 		
 		obj["components"] = components;
 
-		if (go.first->name.size() > 0)
-		{
-			allData[go.first->name] = obj;
-		}
-		else
-			allData["objects"].push_back(obj);
+		allData["objects"].push_back(obj);
 	}
 
 	// Open file

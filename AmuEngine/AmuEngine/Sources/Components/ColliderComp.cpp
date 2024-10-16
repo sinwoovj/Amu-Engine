@@ -133,13 +133,13 @@ void ColliderComp::Edit()
 		if (fixedRatio)
 		{
 			scaleSize = scale.x;
-			ImGui::DragFloat("Size", &scaleSize, 0.01, 0.0000001f);
+			ImGui::DragFloat("Size", &scaleSize, 0.01f, 0.0000001f);
 			scale = { scaleSize, scaleSize };
 		}
 		else
 		{
-			ImGui::DragFloat("Width", &scale.x, 0.01, 0.0000001f);
-			ImGui::DragFloat("Height", &scale.y, 0.01, 0.0000001f);
+			ImGui::DragFloat("Width", &scale.x, 0.01f, 0.0000001f);
+			ImGui::DragFloat("Height", &scale.y, 0.01f, 0.0000001f);
 		}
 		ImGui::PushID(2);
 		if (ImGui::Button("Initialize"))

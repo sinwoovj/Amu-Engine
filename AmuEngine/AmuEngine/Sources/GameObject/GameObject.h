@@ -53,6 +53,8 @@ public:
 	std::map<std::string, BaseComponent*> GetComponents() { return component; }
 
 	//GO will have a function to delete ANY TYPE of component
+	bool CompareComponents(GameObject* obj);
+	
 	template <typename T>
 	void DeleteComponent();
 
