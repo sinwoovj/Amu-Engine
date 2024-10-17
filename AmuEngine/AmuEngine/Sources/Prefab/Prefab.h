@@ -21,6 +21,7 @@ public:
 	Prefab(std::string _name);
 	~Prefab();
 
+	json* GetData() { return data; }
 	static void SavePrefab(const std::string& _name, GameObject* obj);
 	
 	GameObject* NewGameObject(const std::string& _name);

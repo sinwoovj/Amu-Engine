@@ -35,8 +35,14 @@ bool Serializer::LoadLevel(const std::string& str)
 	for (auto& item : objects)
 	{
 		auto objIt = item.find("object");
+
+		GameObject* go;
+		//prefab setting
 		Prefab p(objIt.value());
-		GameObject* go = p.NewGameObject(objIt.value());
+		if (p.GetData() == nullptr)
+			go = new GameObject(objIt.value());
+		else
+			go = p.NewGameObject(objIt.value());
 
 		if (objIt != item.end())
 		{
@@ -106,6 +112,8 @@ bool Serializer::ExistChangePoint(const std::string& str)
 			if (s != nullptr)
 				components.push_back(s->SaveToJson());
 
+			//Rigidbody, ColliderComp 추가 예정
+
 			obj["components"] = components;
 
 			currData["objects"].push_back(obj);
@@ -165,22 +173,31 @@ bool Serializer::SaveLevel(const std::string& str)
 	{
 		for (auto go : GameObjectManager::GetInstance().GetAllObjects())
 		{
-			if (go.second->prefabName.compare("") == 0)
-				continue;
+			/*if (go.second->prefabName.compare("") == 0)
+				continue;*/
 
 			json obj;
-			obj["object"] = go.second->prefabName;
+			obj["object"] = go.first;
 
 			json components;
 
-			TransformComp* t = go.second->GetComponent<TransformComp>();
-			if (t != nullptr)
-				components.push_back(t->SaveToJson());
+			if (!go.second->GetComponents().empty())
+			{
+				TransformComp* t = go.second->GetComponent<TransformComp>();
+				if (t != nullptr)
+					components.push_back(t->SaveToJson());
 
-			SpriteComp* s = go.second->GetComponent<SpriteComp>();
-			if (s != nullptr)
-				components.push_back(s->SaveToJson());
-		
+				SpriteComp* s = go.second->GetComponent<SpriteComp>();
+				if (s != nullptr)
+					components.push_back(s->SaveToJson());
+
+				//Rigidbody, ColliderComp 추가 예정
+
+			}
+			else
+			{
+				components = "";
+			}
 			obj["components"] = components;
 
 			allData["objects"].push_back(obj);

@@ -44,12 +44,17 @@ void Prefab::LoadPrefab()
 
 	file.open(filename, std::fstream::in);
 
-	if (!file.is_open())
-		throw std::invalid_argument("Prefab::LoadPrefab Invalid filename " + filename);
+	if (!file.is_open()) //해당하는 프리팹이 없음
+	{
+		data = nullptr;
+		//throw std::invalid_argument("Prefab::LoadPrefab Invalid filename " + filename);
+	}
+	else
+	{
+		data = new json;
 
-	data = new json;
-
-	file >> *data;
+		file >> *data;
+	}
 }
 //
 //GameObject* Prefab::NewGameObject()
