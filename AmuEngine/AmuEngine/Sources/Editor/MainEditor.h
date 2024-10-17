@@ -6,8 +6,6 @@
 
 namespace editor
 {
-	class GameObject;
-
 	class MainEditor
 	{
 		enum EditorMode
@@ -26,14 +24,18 @@ namespace editor
 			std::string currLevelName = "";
 			std::string selectLevelName = "";
 			std::string selectObjectName = "";
+			std::string selectCompName = "";
 			std::string addLvlName = "";
 			std::string addObjName = "";
 
 			// Show State Variable
 			bool showAllObjects = false;
+
+			// Show Popup
 			bool showNewObjectPopup = false;
 			bool showAddObjectPopup = false;
 			bool showObjectListRightClickPopup = false;
+			bool showCompListRightClickPopup = false;
 			bool showAlreadyHaveSameNameLevelPopup = false;
 			bool showAddLevelPopup = false;
 

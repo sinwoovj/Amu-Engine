@@ -41,12 +41,17 @@ public:
 
 	template <typename T>
 	T* AddComponent(BaseComponent* comp);
+
+	void AddComponent(std::string name);
 	
+	bool ExistComponent(std::string name);
+
 	//GO will have a function to find if it already has a component of ANY TYPE
 	template <typename T>
 	T* GetComponent();
 	template <typename T>
-	T* GetComponent()const;
+	T* GetComponent() const;
+
 	BaseComponent* GetBase(std::string);
 	
 	std::map<std::string, BaseComponent*> GetComponents() { return component; }

@@ -1,5 +1,6 @@
 #include "GameObject.h"
 #include "../ComponentManager/BaseComponent.h"
+#include "../Components/Components.h"
 #include "../GameObjectManager/GameObjectManager.h"
 
 
@@ -27,6 +28,36 @@ GameObject::~GameObject()
 			delete it.second;	
 	}
 	component.clear();
+}
+
+void GameObject::AddComponent(std::string name)
+{
+	if (name == compName[0])
+	{
+		this->AddComponent<SpriteComp>();
+	}
+	else if (name == compName[1])
+	{
+		this->AddComponent<TransformComp>();
+	}
+	else if (name == compName[2])
+	{
+		this->AddComponent<ColliderComp>();
+	}
+	else if (name == compName[3])
+	{
+		this->AddComponent<RigidbodyComp>();
+	}
+}
+
+bool GameObject::ExistComponent(std::string name)
+{
+	auto it = component.find(name);
+	if (it != component.end())
+	{
+		return true;
+	}
+	return false;
 }
 
 BaseComponent* GameObject::GetBase(std::string typeName)

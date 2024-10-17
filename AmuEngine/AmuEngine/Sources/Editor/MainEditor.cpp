@@ -3,6 +3,10 @@
 #include "../Level/LevelManager.h"
 #include "../Serializer/Serializer.h"
 #include "../GSM/GameStateManager.h"
+#include "../GameObjectManager/GameObjectManager.h"
+#include "../GameObject/GameObject.h"
+#include "../ComponentManager/ComponentManager.h"
+#include "../Components/Components.h"
 #include "../Level/NormalLevel.h"
 #include <vector>
 #include <string>
@@ -99,6 +103,20 @@ void editor::MainEditor::PopUp()
                 std::cout << "성공" << std::endl;
             ImGui::CloseCurrentPopup();
         }
+        if (ImGui::BeginMenu("Add Component"))
+        {
+            GameObject* obj = GameObjectManager::GetInstance().GetObj(editor_data.selectObjectName);
+            for (auto& cName : compName)
+            {
+                if (ImGui::MenuItem(cName.c_str(), NULL, false, obj->ExistComponent(cName)))
+                {
+                    obj->AddComponent(cName);
+                    ImGui::CloseCurrentPopup();
+                }
+                
+            }
+            ImGui::EndMenu();
+        }
         ImGui::EndPopup();
     }
 
@@ -131,6 +149,32 @@ void editor::MainEditor::PopUp()
         if (ImGui::InputText("Level Name", &editor_data.addLvlName, ImGuiInputTextFlags_EnterReturnsTrue))
         {
             if (LevelManager::GetInstance().AddLevel(editor_data.addLvlName))
+            {
+                // 성공
+                std::cout << "성공" << std::endl;
+            }
+            else
+            {
+                // 실패
+                std::cout << "실패" << std::endl;
+            }
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
+    }
+
+    //컴포넌트 우클릭 팝업
+    if (editor_data.showCompListRightClickPopup)
+    {
+        ImGui::OpenPopup("##Delete Component##");
+        editor_data.showCompListRightClickPopup = false;
+    }
+    if (ImGui::BeginPopup("##Delete Component##"))
+    {
+        if (ImGui::MenuItem("Delete Component"))
+        {
+            GameObjectManager::GetInstance().GetObj(editor_data.selectObjectName)->RemoveComponent(editor_data.selectCompName);
+            if (GameObjectManager::GetInstance().GetObj(editor_data.selectObjectName)->GetBase(editor_data.selectCompName) == nullptr)
             {
                 // 성공
                 std::cout << "성공" << std::endl;
@@ -279,24 +323,57 @@ void editor::MainEditor::ShowLevelObject(bool* p_open)
             {
                 if (ImGui::TreeNode(obj.first.c_str()))
                 {
+                    if (ImGui::IsItemHovered())
+                    {
+                        if (ImGui::IsMouseClicked(ImGuiMouseButton_Right))
+                        {
+                            editor_data.selectObjectName = obj.first;
+                            editor_data.showObjectListRightClickPopup = true;
+                        }
+                    }
                     for (auto& comp : obj.second->GetComponents())
                     {
                         if (ImGui::TreeNode(comp.first.c_str()))
                         {
+                            if (ImGui::IsItemHovered())
+                            {
+                                if (ImGui::IsMouseClicked(ImGuiMouseButton_Right))
+                                {
+                                    editor_data.selectObjectName = obj.first;
+                                    editor_data.selectCompName = comp.first;
+                                    editor_data.showCompListRightClickPopup = true;
+                                }
+                            }
                             comp.second->Edit();
                             ImGui::TreePop();
+                        }
+                        else
+                        {
+                            if (ImGui::IsItemHovered())
+                            {
+                                if (ImGui::IsMouseClicked(ImGuiMouseButton_Right))
+                                {
+                                    editor_data.selectObjectName = obj.first;
+                                    editor_data.selectCompName = comp.first;
+                                    editor_data.showCompListRightClickPopup = true;
+                                }
+                            }
                         }
                     }
                     ImGui::TreePop();
                 }
-                if (ImGui::IsItemHovered())
+                else
                 {
-                    if (ImGui::IsMouseClicked(ImGuiMouseButton_Right))
+                    if (ImGui::IsItemHovered())
                     {
-                        editor_data.selectObjectName = obj.first;
-                        editor_data.showObjectListRightClickPopup = true;
+                        if (ImGui::IsMouseClicked(ImGuiMouseButton_Right))
+                        {
+                            editor_data.selectObjectName = obj.first;
+                            editor_data.showObjectListRightClickPopup = true;
+                        }
                     }
                 }
+                
             }
 
             ImGui::SeparatorText("Object Option");

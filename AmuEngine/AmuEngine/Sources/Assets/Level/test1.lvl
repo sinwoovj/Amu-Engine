@@ -26,10 +26,10 @@
               1.0
             ],
             "alpha": 1.0,
-            "texturePath": "./Sources/Assets/Sprite/Background/Exam.png",
+            "texturePath": "./Sources/Assets/Sprite/default.png",
             "textureSize": [
-              1000.0,
-              563.0
+              400.0,
+              400.0
             ]
           }
         }
