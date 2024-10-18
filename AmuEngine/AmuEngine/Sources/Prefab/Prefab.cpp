@@ -107,10 +107,10 @@ GameObject* Prefab::NewGameObject(const std::string& _name)
 	for (auto& comp : *compIt)
 	{
 		auto dataIt = comp.find("type");
+		std::string typeName = dataIt.value().dump();
 		if (dataIt == comp.end())
 			continue;
 
-		std::string typeName = dataIt.value().dump();
 		typeName = typeName.substr(1, typeName.size() - 2);
 
 		BaseRTTI* p = Registry::GetInstance().FindAndCreate(typeName, obj);

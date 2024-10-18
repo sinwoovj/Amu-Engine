@@ -1,5 +1,8 @@
 #pragma once
 #include <string>
+#include "json.hpp"
+
+using json = nlohmann::ordered_json;	// Map. Orders the order the variables were declared in
 
 class Serializer
 {
@@ -20,6 +23,9 @@ public:
 		return instance;
 	}
 
+	json GetLevelData(const std::string& str);
+	json GetObjectData(json level, const std::string& str);
+	json GetComponentData(json Object, const std::string& str);
 	bool LoadLevel(const std::string& str);
 	bool ExistChangePoint(const std::string& str);
 	bool SaveLevel(const std::string& str);

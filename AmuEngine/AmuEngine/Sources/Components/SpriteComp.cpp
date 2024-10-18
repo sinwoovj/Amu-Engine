@@ -45,6 +45,7 @@ std::map<std::string, glm::vec2> SpriteComp::nativeSize;
 
 SpriteComp::SpriteComp(GameObject* _owner) : GraphicComponent(_owner)
 {
+	owner = _owner;
 	color = { 1.f,1.f,1.f };
 	alpha = 1;
 	sprite_EBO = 0;
@@ -61,6 +62,10 @@ SpriteComp::SpriteComp(GameObject* _owner) : GraphicComponent(_owner)
 SpriteComp::~SpriteComp()
 {
 	ResourceManager::GetInstance().UnloadResource(texturePath);
+	//TODO delete gl stuff that i generated (glGen...)
+	glDeleteVertexArrays(1, &sprite_VAO);
+	glDeleteBuffers(1, &sprite_VBO);
+	glDeleteBuffers(1, &sprite_EBO);
 }
 
 void SpriteComp::SpriteSetSprite()
@@ -75,9 +80,9 @@ void SpriteComp::SpriteCreateSprite()
 	float vertices[] = {
 		// positions   // colors           // sprite_texture coords
 		 -0.5f,  -0.5f, 1.0f,  1.0f, 1.0f, 1.0f,   0.0f,  0.0f, // top right
-		 0.5f, -0.5f, 1.0f,  1.0f, 1.0f, 1.0f,   -1.0f,  0.0f, // bottom right
-		 0.5f,  0.5f, 1.0f,  1.0f, 1.0f, 1.0f,   -1.0f,  -1.0f, // bottom left
-		-0.5f,  0.5f, 1.0f,  0.0f, 1.0f, 1.0f,   0.0f,  -1.0f  // top left 
+		 0.5f, -0.5f, 1.0f,  1.0f, 1.0f, 1.0f,   1.0f,  0.0f, // bottom right
+		 0.5f,  0.5f, 1.0f,  1.0f, 1.0f, 1.0f,   1.0f,  1.0f, // bottom left
+		-0.5f,  0.5f, 1.0f,  0.0f, 1.0f, 1.0f,   0.0f,  1.0f  // top left 
 	};
 	// 2D를 표현할 때 정점좌표의 z값은 1이여야 transform할 때 mat랑 연산 할 때 정상적인 값이 도출된다.
 
@@ -120,6 +125,8 @@ void SpriteComp::SpriteCreateSprite()
 
 	// Texture //
 
+
+	//Generate texture
 	glGenTextures(1, &sprite_texture);
 	glBindTexture(GL_TEXTURE_2D, sprite_texture);
 	// 텍스처 wrapping/filtering 옵션 설정(현재 바인딩된 텍스처 객체에 대해)
@@ -127,6 +134,8 @@ void SpriteComp::SpriteCreateSprite()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
 	/*
 	if in option of gl_clamp_to_border
 	float borderColor[] = { 1.0f, 1.0f, 0.0f, 1.0f };
@@ -213,17 +222,18 @@ void SpriteComp::SpriteCompileShader()
 
 void SpriteComp::SpriteDrawSprite()
 {
-	glBindTexture(GL_TEXTURE_2D, sprite_texture);
 
 	// Shader 적용
 	glUseProgram(sprite_shader);
 
 	glBindVertexArray(sprite_VAO);
 
+	glBindTexture(GL_TEXTURE_2D, sprite_texture);
 	// 데이터를 바탕으로 그리기
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	// 데이터 바인딩 해제
 	glBindVertexArray(0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 
 	// Shader 해제
 	glUseProgram(0);
@@ -248,13 +258,15 @@ void SpriteComp::SpriteApplyTransform()
 	glUseProgram(0);
 }
 
-void SpriteComp::SetTexture(std::string path)
+bool SpriteComp::SetTexture(std::string path)
 {
 	if (path == "")
 		path = "./Sources/Assets/Sprite/default.png";
+	/*else
+		glDeleteTextures(1, &sprite_texture);*/
 
-	if (path == texturePath)
-		return;
+	/*if (path == texturePath)
+		return true;*/
 
 	ResourceManager::GetInstance().UnloadResource(texturePath);
 	
@@ -262,26 +274,32 @@ void SpriteComp::SetTexture(std::string path)
 
 	texture = ResourceManager::GetInstance().GetResource<unsigned char>(path);
 
-	textureSize = nativeSize.find(path)->second;
-
 	if (texture)
 	{
+		textureSize = nativeSize.find(path)->second;
+
+		glBindTexture(GL_TEXTURE_2D, sprite_texture);
 		glUseProgram(sprite_shader);
 
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)textureSize.x, (GLsizei)textureSize.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture);
 		glGenerateMipmap(GL_TEXTURE_2D);
+		
 
 		unsigned char loc = glGetUniformLocation(sprite_shader, "ortho");
 
-		glm::mat4 ortho = glm::ortho((float)windowWidthHalf, (float)-windowWidthHalf, (float)windowHeightHalf, (float)-windowHeightHalf);
+		glm::mat4 ortho = glm::ortho((float)-windowWidthHalf, (float)windowWidthHalf, (float)-windowHeightHalf, (float)windowHeightHalf);
 		glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(ortho));
 
 		glUseProgram(0);
+
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 	else
 	{
 		std::cout << "Failed to load texture : " << texturePath << std::endl;
+		return false;
 	}
+	return true;
 }
 
 void SpriteComp::SetTransparency()
@@ -396,7 +414,7 @@ void SpriteComp::Edit()
 		ImGui::ColorEdit4("Color", *clr);
 	}
 
-	//Texture Size
+	//Texture Sized
 	ImGui::SeparatorText("Scale");
 	{
 		ImGui::DragFloat("Width", &textureSize.x, 1, 0.0000001f);
@@ -406,14 +424,16 @@ void SpriteComp::Edit()
 			textureSize = owner->GetComponent<SpriteComp>()->GetNativeSize(owner->GetComponent<SpriteComp>()->GetTexturePath());
 		}
 	}
-
 	//Texture Path
+	std::cout << this->owner->GetName() << std::endl;
 	ImGui::SeparatorText("Texture Path");
 	{
 		editor::MainEditor::editor_data.modifySpritePath = texturePath;
 		if (ImGui::InputText("Path", &editor::MainEditor::editor_data.modifySpritePath, ImGuiInputTextFlags_EnterReturnsTrue))
 		{
+			std::cout << this->owner->GetName() << std::endl;
 			SetTexture(editor::MainEditor::editor_data.modifySpritePath);
+			
 		}
 	}
 }

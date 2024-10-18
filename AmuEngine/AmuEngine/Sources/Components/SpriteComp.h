@@ -30,6 +30,7 @@ private:
 	std::string texturePath;
 
 public:
+	GameObject* owner;
 	SpriteComp(GameObject* _owner);
 	~SpriteComp();
 

@@ -113,7 +113,6 @@ void editor::MainEditor::PopUp()
                     obj->AddComponent(cName);
                     ImGui::CloseCurrentPopup();
                 }
-                
             }
             ImGui::EndMenu();
         }
@@ -392,19 +391,9 @@ void editor::MainEditor::ShowLevelObject(bool* p_open)
                 else
                     std::cout << "¼º°ø" << std::endl;
             }
-            ImGui::End();
         }
+        ImGui::End(); 
     }
-}
-
-void editor::MainEditor::SelectedObjectWindow()
-{
-    //ImGui::Begin
-}
-
-void editor::MainEditor::ShowMenuWindow()
-{
-
 }
 
 void editor::MainEditor::MainEditorInit(GLFWwindow* mainWindow)
@@ -423,7 +412,6 @@ void editor::MainEditor::MainEditorUpdate()
     TopBar();
     // https://stackoverflow.com/questions/66955023/closing-an-imgui-window-this-seems-like-it-should-be-easy-how-does-one-do-it
     if (editor_data.showAllObjects) { ShowLevelObject(&editor_data.showAllObjects); }
-    
 }
 
 void editor::MainEditor::MainEditorExit()

@@ -1,8 +1,10 @@
 #include "GameObject.h"
+#include "../Serializer/Serializer.h"
 #include "../ComponentManager/BaseComponent.h"
 #include "../Components/Components.h"
 #include "../GameObjectManager/GameObjectManager.h"
-
+#include "../GSM/GameStateManager.h"
+#include "../Level/NormalLevel.h"
 
 GameObject::GameObject(std::string str) : type(None)
 {
@@ -37,6 +39,14 @@ void GameObject::AddComponent(std::string name)
 		if (!this->ExistComponent("TransformComp"))
 			this->AddComponent("TransformComp");
 		this->AddComponent<SpriteComp>();
+		this->GetComponent<SpriteComp>()->SetTexture(this->GetComponent<SpriteComp>()->GetTexturePath());
+		
+		/*Serializer* sz = &Serializer::GetInstance();
+		auto compData = sz->GetComponentData(sz->GetObjectData(
+			sz->GetLevelData(dynamic_cast<level::NormalLevel*>(GSM::GameStateManager::GetInstance().GetCurrentLevel())->GetName()),
+			this->name),
+		name);
+		this->GetComponent<SpriteComp>()->LoadFromJson(compData);*/
 	}
 	else if (name == compName[1])
 	{
@@ -47,6 +57,7 @@ void GameObject::AddComponent(std::string name)
 		if (!this->ExistComponent("TransformComp"))
 			this->AddComponent("TransformComp");
 		this->AddComponent<ColliderComp>();
+		this->GetComponent<ColliderComp>()->SetCollider();
 	}
 	else if (name == compName[3])
 	{
@@ -55,6 +66,7 @@ void GameObject::AddComponent(std::string name)
 			this->AddComponent("ColliderComp");
 		this->AddComponent<RigidbodyComp>();
 	}
+
 }
 
 bool GameObject::ExistComponent(std::string name)

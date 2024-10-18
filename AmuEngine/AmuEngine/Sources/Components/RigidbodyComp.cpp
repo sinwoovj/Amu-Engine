@@ -329,10 +329,18 @@ void RigidbodyComp::Edit()
 	//Velocity
 	ImGui::SeparatorText("Velocity");
 	{
-		ImGui::DragFloat("X", &velocity.x, 0.01f, 0);
-		ImGui::DragFloat("Y", &velocity.y, 0.01f, 0);
-		ImGui::DragFloat("MAX X", &maxVelocity.x, 0.01f, velocity.x);
-		ImGui::DragFloat("MAX Y", &maxVelocity.y, 0.01f, velocity.y);
+		ImGui::Text("X");
+		ImGui::SameLine();
+		ImGui::DragFloat("##VelocityX", &velocity.x, 0.01f, 0, maxVelocity.x);
+		ImGui::Text("Y");
+		ImGui::SameLine();
+		ImGui::DragFloat("##VelocityY", &velocity.y, 0.01f, 0, maxVelocity.x);
+		ImGui::Text("MAX X");
+		ImGui::SameLine();
+		ImGui::DragFloat("##VelocityMAX X", &maxVelocity.x, 0.01f, velocity.x);
+		ImGui::Text("MAX X");
+		ImGui::SameLine();
+		ImGui::DragFloat("##VelocityMAX Y", &maxVelocity.y, 0.01f, velocity.y);
 		ImGui::PushID(3);
 		if (ImGui::Button("Initialize"))
 		{
@@ -345,10 +353,18 @@ void RigidbodyComp::Edit()
 	//Acceleration
 	ImGui::SeparatorText("Acceleration");
 	{
-		ImGui::DragFloat("X", &acceleration.x, 0.01f, 0);
-		ImGui::DragFloat("Y", &acceleration.y, 0.01f, 0);
-		ImGui::DragFloat("MAX X", &maxAcceleration.x, 0.01f, velocity.x);
-		ImGui::DragFloat("MAX Y", &maxAcceleration.y, 0.01f, velocity.y);
+		ImGui::Text("X");
+		ImGui::SameLine();
+		ImGui::DragFloat("##AccelerationX", &acceleration.x, 0.01f, 0, maxAcceleration.x);
+		ImGui::Text("Y");
+		ImGui::SameLine();
+		ImGui::DragFloat("##AccelerationY", &acceleration.y, 0.01f, 0, maxAcceleration.y);
+		ImGui::Text("MAX X");
+		ImGui::SameLine();
+		ImGui::DragFloat("##AccelerationMAX X", &maxAcceleration.x, 0.01f, velocity.x);
+		ImGui::Text("MAX X");
+		ImGui::SameLine();
+		ImGui::DragFloat("##AccelerationMAX Y", &maxAcceleration.y, 0.01f, velocity.y);
 		ImGui::PushID(4);
 		if (ImGui::Button("Initialize"))
 		{

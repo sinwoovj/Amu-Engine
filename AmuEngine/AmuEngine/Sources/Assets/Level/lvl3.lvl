@@ -1,0 +1,74 @@
+{
+  "objects": [
+    {
+      "object": "hdasf",
+      "components": [
+        {
+          "type": "TransformComp",
+          "compData": {
+            "position": [
+              -475.0,
+              0.0
+            ],
+            "scale": [
+              1.0,
+              1.0
+            ],
+            "rotation": 0.0
+          }
+        },
+        {
+          "type": "SpriteComp",
+          "compData": {
+            "color": [
+              1.0,
+              1.0,
+              1.0
+            ],
+            "alpha": 1.0,
+            "texturePath": "./Sources/Assets/Sprite/Example/Icon2.png",
+            "textureSize": [
+              200.0,
+              200.0
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "object": "heloo",
+      "components": [
+        {
+          "type": "TransformComp",
+          "compData": {
+            "position": [
+              414.0,
+              0.0
+            ],
+            "scale": [
+              1.0,
+              1.0
+            ],
+            "rotation": 0.0
+          }
+        },
+        {
+          "type": "SpriteComp",
+          "compData": {
+            "color": [
+              1.0,
+              1.0,
+              1.0
+            ],
+            "alpha": 1.0,
+            "texturePath": "./Sources/Assets/Sprite/default.png",
+            "textureSize": [
+              380.0,
+              400.0
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

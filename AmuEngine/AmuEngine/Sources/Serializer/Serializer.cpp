@@ -1,6 +1,5 @@
 #include <fstream>
 #include "Serializer.h"
-#include "json.hpp"
 #include "../ComponentManager/BaseComponent.h"
 #include "../ComponentManager/ComponentManager.h"
 #include "../GameObjectManager/GameObjectManager.h"
@@ -9,7 +8,65 @@
 #include "../Prefab/Prefab.h"
 #include "../Level/LevelManager.h"
 
-using json = nlohmann::ordered_json;	// Map. Orders the order the variables were declared in
+json Serializer::GetLevelData(const std::string& str)
+{
+	auto lvls = LevelManager::GetInstance().GetLevels();
+	if (std::find(lvls.begin(),	lvls.end(), str) ==	lvls.end()) //levels 벡터 안에 str에 해당하는 값이 없을 경우
+		return nullptr;
+
+	// Open file
+	std::fstream file;
+	std::string filename = LevelManager::GetInstance().GetDirectory() + str + LevelManager::GetInstance().GetFilenameExtension();
+	file.open(filename, std::fstream::in);
+
+	// Check the file is valid
+	if (!file.is_open())
+		return nullptr;
+	//throw std::invalid_argument("Serializer::LoadLevel Invalid filename " + filename);
+
+	json allData;
+	file >> allData;	// the json has all the file data
+
+	return allData;
+}
+
+json Serializer::GetObjectData(json level, const std::string& str)
+{
+	json objects;
+	objects = level.find("objects").value();
+
+	for (auto& item : objects)
+	{
+		auto objIt = item.find("object");
+		
+		if (objIt.value() == str)
+			return item;
+	}
+	return nullptr;
+}
+
+json Serializer::GetComponentData(json Object, const std::string& str)
+{
+
+	auto compIt = Object.find("components");
+	if (compIt == Object.end())
+		return nullptr;
+
+	// iterate on the json on cmp for each component, add it
+	for (auto& comp : *compIt)
+	{
+		auto dataIt = comp.find("type");
+		if (dataIt == comp.end())	// not found
+			continue;
+
+		std::string typeName = dataIt.value().dump();	// convert to string
+		typeName = typeName.substr(1, typeName.size() - 2);
+
+		if (typeName == str)
+			return comp;
+	}
+	return nullptr;
+}
 
 bool Serializer::LoadLevel(const std::string& str)
 {
@@ -39,58 +96,32 @@ bool Serializer::LoadLevel(const std::string& str)
 		GameObject* go;
 		//prefab setting
 		Prefab p(objIt.value());
-		if (p.GetData() == nullptr)
+		if (p.GetData() == nullptr) go = new GameObject(objIt.value());
+		else go = p.NewGameObject(objIt.value());
+
+		if (objIt != item.end())
 		{
-			go = new GameObject(objIt.value());
-			if (objIt != item.end())
+			auto compIt = item.find("components");
+			if (compIt == item.end())
+				continue;
+
+			// iterate on the json on cmp for each component, add it
+			for (auto& comp : *compIt)
 			{
-				auto compIt = item.find("components");
-				if (compIt == item.end())
+				auto dataIt = comp.find("type");
+				if (dataIt == comp.end())	// not found
 					continue;
 
-				// iterate on the json on cmp for each component, add it
-				for (auto& comp : *compIt)
+				std::string typeName = dataIt.value().dump();	// convert to string
+				typeName = typeName.substr(1, typeName.size() - 2);
+
+				if (p.GetData() == nullptr)
 				{
-					auto dataIt = comp.find("type");
-					if (dataIt == comp.end())	// not found
-						continue;
-
-					std::string typeName = dataIt.value().dump();	// convert to string
-					typeName = typeName.substr(1, typeName.size() - 2);
-
 					go->AddComponent(typeName);
-					go->LoadFromJson(typeName, comp);
 				}
+				go->LoadFromJson(typeName, comp);
 			}
-			if (go->GetComponent<ColliderComp>() != nullptr)
-				go->GetComponent<ColliderComp>()->SetCollider();
 		}
-		else
-		{
-			go = p.NewGameObject(objIt.value());
-			if (objIt != item.end())
-			{
-				auto compIt = item.find("components");
-				if (compIt == item.end())
-					continue;
-
-				// iterate on the json on cmp for each component, add it
-				for (auto& comp : *compIt)
-				{
-					auto dataIt = comp.find("type");
-					if (dataIt == comp.end())	// not found
-						continue;
-
-					std::string typeName = dataIt.value().dump();	// convert to string
-					typeName = typeName.substr(1, typeName.size() - 2);
-
-					go->LoadFromJson(typeName, comp);
-				}
-			}
-			if (go->GetComponent<ColliderComp>() != nullptr)
-				go->GetComponent<ColliderComp>()->SetCollider();
-		}
-
 	}
 	return true;
 }

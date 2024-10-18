@@ -55,6 +55,7 @@ public:
 	template <typename T>
 	T* GetComponent() const;
 
+	std::string GetName() { return name; } 
 	void LoadFromJson(std::string name, json& comp);
 	
 	std::map<std::string, BaseComponent*> GetComponents() { return component; }

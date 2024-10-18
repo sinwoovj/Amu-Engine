@@ -51,8 +51,6 @@ namespace editor
 		void PopUp();
 		void TopBar();
 		void ShowLevelObject(bool* p_open);
-		void SelectedObjectWindow();
-		void ShowMenuWindow();
 
 		void MainEditorInit(GLFWwindow* mainWindow);
 		void MainEditorUpdate();
