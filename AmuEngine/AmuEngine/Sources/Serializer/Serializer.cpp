@@ -40,32 +40,57 @@ bool Serializer::LoadLevel(const std::string& str)
 		//prefab setting
 		Prefab p(objIt.value());
 		if (p.GetData() == nullptr)
-			go = new GameObject(objIt.value());
-		else
-			go = p.NewGameObject(objIt.value());
-
-		if (objIt != item.end())
 		{
-			auto compIt = item.find("components");
-			if (compIt == item.end())
-				continue;
-
-			// iterate on the json on cmp for each component, add it
-			for (auto& comp : *compIt)
+			go = new GameObject(objIt.value());
+			if (objIt != item.end())
 			{
-				auto dataIt = comp.find("type");
-				if (dataIt == comp.end())	// not found
+				auto compIt = item.find("components");
+				if (compIt == item.end())
 					continue;
 
-				std::string typeName = dataIt.value().dump();	// convert to string
-				typeName = typeName.substr(1, typeName.size() - 2);
+				// iterate on the json on cmp for each component, add it
+				for (auto& comp : *compIt)
+				{
+					auto dataIt = comp.find("type");
+					if (dataIt == comp.end())	// not found
+						continue;
 
-				go->LoadFromJson(typeName, comp);
+					std::string typeName = dataIt.value().dump();	// convert to string
+					typeName = typeName.substr(1, typeName.size() - 2);
+
+					go->AddComponent(typeName);
+					go->LoadFromJson(typeName, comp);
+				}
 			}
+			if (go->GetComponent<ColliderComp>() != nullptr)
+				go->GetComponent<ColliderComp>()->SetCollider();
+		}
+		else
+		{
+			go = p.NewGameObject(objIt.value());
+			if (objIt != item.end())
+			{
+				auto compIt = item.find("components");
+				if (compIt == item.end())
+					continue;
+
+				// iterate on the json on cmp for each component, add it
+				for (auto& comp : *compIt)
+				{
+					auto dataIt = comp.find("type");
+					if (dataIt == comp.end())	// not found
+						continue;
+
+					std::string typeName = dataIt.value().dump();	// convert to string
+					typeName = typeName.substr(1, typeName.size() - 2);
+
+					go->LoadFromJson(typeName, comp);
+				}
+			}
+			if (go->GetComponent<ColliderComp>() != nullptr)
+				go->GetComponent<ColliderComp>()->SetCollider();
 		}
 
-		if (go->GetComponent<ColliderComp>() != nullptr)
-			go->GetComponent<ColliderComp>()->SetCollider();
 	}
 	return true;
 }
@@ -190,8 +215,14 @@ bool Serializer::SaveLevel(const std::string& str)
 				SpriteComp* s = go.second->GetComponent<SpriteComp>();
 				if (s != nullptr)
 					components.push_back(s->SaveToJson());
-
-				//Rigidbody, ColliderComp 추가 예정
+				
+				RigidbodyComp* r = go.second->GetComponent<RigidbodyComp>();
+				if (r != nullptr)
+					components.push_back(r->SaveToJson());
+				
+				ColliderComp* c = go.second->GetComponent<ColliderComp>();
+				if (c != nullptr)
+					components.push_back(c->SaveToJson());
 
 			}
 			else

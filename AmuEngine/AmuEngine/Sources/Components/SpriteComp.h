@@ -34,7 +34,7 @@ public:
 	~SpriteComp();
 
 	//Setting
-	void SetTexture(std::string s);
+	bool SetTexture(std::string s);
 	void SpriteSetSprite();
 	void SpriteCreateSprite();
 	void SpriteAddShader(GLuint theProgram, const char* shaderCode, GLenum shaderType);
