@@ -54,11 +54,10 @@ inline T* GameObject::GetComponent() const
 template<typename T>
 inline void GameObject::DeleteComponent()
 {
-	T* p = GetComponent<T>();
-
-	if (p)
+	auto it = component.find(T::TypeName);
+	if (it != component.end())
 	{
-		delete p;
-		component.erase(typeid(T).name());
+		delete it->second;
+		component.erase(T::TypeName);
 	}
 }

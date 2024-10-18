@@ -108,7 +108,7 @@ void editor::MainEditor::PopUp()
             GameObject* obj = GameObjectManager::GetInstance().GetObj(editor_data.selectObjectName);
             for (auto& cName : compName)
             {
-                if (ImGui::MenuItem(cName.c_str(), NULL, false, obj->ExistComponent(cName)))
+                if (ImGui::MenuItem(cName.c_str(), NULL, false, !obj->ExistComponent(cName)))
                 {
                     obj->AddComponent(cName);
                     ImGui::CloseCurrentPopup();
@@ -174,7 +174,7 @@ void editor::MainEditor::PopUp()
         if (ImGui::MenuItem("Delete Component"))
         {
             GameObjectManager::GetInstance().GetObj(editor_data.selectObjectName)->RemoveComponent(editor_data.selectCompName);
-            if (GameObjectManager::GetInstance().GetObj(editor_data.selectObjectName)->GetBase(editor_data.selectCompName) == nullptr)
+            if (!GameObjectManager::GetInstance().GetObj(editor_data.selectObjectName)->ExistComponent(editor_data.selectCompName))
             {
                 // 성공
                 std::cout << "성공" << std::endl;

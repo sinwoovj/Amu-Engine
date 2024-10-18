@@ -60,7 +60,7 @@ bool Serializer::LoadLevel(const std::string& str)
 				std::string typeName = dataIt.value().dump();	// convert to string
 				typeName = typeName.substr(1, typeName.size() - 2);
 
-				go->GetBase(typeName)->LoadFromJson(comp);
+				go->LoadFromJson(typeName, comp);
 			}
 		}
 

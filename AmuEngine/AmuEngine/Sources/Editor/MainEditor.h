@@ -25,6 +25,7 @@ namespace editor
 			std::string selectLevelName = "";
 			std::string selectObjectName = "";
 			std::string selectCompName = "";
+			std::string modifySpritePath = "";
 			std::string addLvlName = "";
 			std::string addObjName = "";
 

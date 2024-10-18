@@ -1,6 +1,9 @@
 #pragma once
 #include <map>
 #include <string>
+#include <json.hpp>
+
+using json = nlohmann::ordered_json;	// Map. Orders the order the variables were declared in
 
 class BaseComponent;
 
@@ -52,7 +55,7 @@ public:
 	template <typename T>
 	T* GetComponent() const;
 
-	BaseComponent* GetBase(std::string);
+	void LoadFromJson(std::string name, json& comp);
 	
 	std::map<std::string, BaseComponent*> GetComponents() { return component; }
 

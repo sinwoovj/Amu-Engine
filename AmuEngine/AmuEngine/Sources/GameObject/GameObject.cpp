@@ -7,7 +7,7 @@
 GameObject::GameObject(std::string str) : type(None)
 {
 	name = str;
-	GameObjectManager::GetInstance().InsertObject(str , this);
+	GameObjectManager::GetInstance().InsertObject(str, this);
 }
 
 GameObject::~GameObject()
@@ -25,7 +25,7 @@ GameObject::~GameObject()
 	for (auto& it : component)
 	{
 		if (it.second)
-			delete it.second;	
+			delete it.second;
 	}
 	component.clear();
 }
@@ -34,6 +34,8 @@ void GameObject::AddComponent(std::string name)
 {
 	if (name == compName[0])
 	{
+		if (!this->ExistComponent("TransformComp"))
+			this->AddComponent("TransformComp");
 		this->AddComponent<SpriteComp>();
 	}
 	else if (name == compName[1])
@@ -42,10 +44,15 @@ void GameObject::AddComponent(std::string name)
 	}
 	else if (name == compName[2])
 	{
+		if (!this->ExistComponent("TransformComp"))
+			this->AddComponent("TransformComp");
 		this->AddComponent<ColliderComp>();
 	}
 	else if (name == compName[3])
 	{
+
+		if (!this->ExistComponent("ColliderComp"))
+			this->AddComponent("ColliderComp");
 		this->AddComponent<RigidbodyComp>();
 	}
 }
@@ -60,24 +67,51 @@ bool GameObject::ExistComponent(std::string name)
 	return false;
 }
 
-BaseComponent* GameObject::GetBase(std::string typeName)
+void GameObject::LoadFromJson(std::string name, json& comp)
 {
-	auto it = component.find(typeName);
-	if (it != component.end())
+	if (name == compName[0])
 	{
-		return it->second;
+		this->GetComponent<SpriteComp>()->LoadFromJson(comp);
 	}
-
-	return nullptr;
+	else if (name == compName[1])
+	{
+		this->GetComponent<TransformComp>()->LoadFromJson(comp);
+	}
+	else if (name == compName[2])
+	{
+		this->GetComponent<ColliderComp>()->LoadFromJson(comp);
+	}
+	else if (name == compName[3])
+	{
+		this->GetComponent<RigidbodyComp>()->LoadFromJson(comp);
+	}
 }
 
 void GameObject::RemoveComponent(std::string name)
 {
-	auto it = component.find(name);
-	if (it != component.end())
+	if (name == compName[0])
 	{
-		delete it->second;
-		component.erase(name);
+		this->DeleteComponent<SpriteComp>();
+	}
+	else if (name == compName[1])
+	{
+		if (this->ExistComponent("SpriteComp"))
+			this->DeleteComponent<SpriteComp>();
+		if (this->ExistComponent("RigidbodyComp"))
+			this->DeleteComponent<RigidbodyComp>();
+		if (this->ExistComponent("ColliderComp"))
+			this->DeleteComponent<ColliderComp>();
+		this->DeleteComponent<TransformComp>();
+	}
+	else if (name == compName[2])
+	{
+		if (this->ExistComponent("RigidbodyComp"))
+			this->DeleteComponent<RigidbodyComp>();
+		this->DeleteComponent<ColliderComp>();
+	}
+	else if (name == compName[3])
+	{
+		this->DeleteComponent<RigidbodyComp>();
 	}
 }
 

@@ -3,6 +3,7 @@
 #include "../ResourceManager/ResourceManager.h"
 #include <EasyImgui.h>
 #include <EasyOpengl.h>
+#include "../Editor/MainEditor.h"
 // ¡§¡° Ω¶¿Ã¥ı Vertex Shader
 const char* spriteVShader = R"(
 #version 330 core
@@ -312,8 +313,8 @@ void SpriteComp::Update()
 	//Set transform
 	//Get the transform from my owner transfrom comp
 	SpriteApplyTransform();
-	//Set Scale to Texture
-	//SetScale();
+	// Set Texture
+	
 	//Set color 
 	SetTransparency();
 
@@ -409,11 +410,11 @@ void SpriteComp::Edit()
 	//Texture Path
 	ImGui::SeparatorText("Texture Path");
 	{
-		std::string strTexturePath = texturePath;
-		ImGui::InputText("Path", &strTexturePath);
-		ImGui::SameLine();
-		if(ImGui::Button("Apply"))
-			SetTexture(strTexturePath);
+		editor::MainEditor::editor_data.modifySpritePath = texturePath;
+		if (ImGui::InputText("Path", &editor::MainEditor::editor_data.modifySpritePath, ImGuiInputTextFlags_EnterReturnsTrue))
+		{
+			SetTexture(editor::MainEditor::editor_data.modifySpritePath);
+		}
 	}
 }
 
