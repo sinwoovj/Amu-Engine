@@ -10,6 +10,7 @@
 #include "../Serializer/Serializer.h"
 #include "../RTTI/Registry.h"
 #include "../Camera/Camera.h"
+#include "../Layer/LayerManager.h"
 
 GSM::GameStateManager::GameStateManager() : previousLevel(nullptr), currentLevel(nullptr) {}
 
@@ -47,6 +48,7 @@ void GSM::GameStateManager::Update()
         currentLevel->Update();
 
         ComponentManager<GraphicComponent>::GetInstance().Update();
+        LayerManager::GetInstance().Update();
     }
 }
 

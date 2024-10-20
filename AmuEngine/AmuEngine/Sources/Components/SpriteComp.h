@@ -43,8 +43,9 @@ public:
 	void SpriteDrawSprite();
 	void SpriteApplyTransform();
 
+	
 	//Draw
-	void Update() override;
+	void Update();
 
 	//Gettors/Settors
 

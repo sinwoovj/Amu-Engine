@@ -4,6 +4,7 @@
 #include <EasyImgui.h>
 #include <EasyOpengl.h>
 #include "../Editor/MainEditor.h"
+#include "../Layer/LayerManager.h"
 // 정점 쉐이더 Vertex Shader
 const char* spriteVShader = R"(
 #version 330 core
@@ -45,6 +46,7 @@ std::map<std::string, glm::vec2> SpriteComp::nativeSize;
 
 SpriteComp::SpriteComp(GameObject* _owner) : GraphicComponent(_owner)
 {
+	//기본 세팅
 	owner = _owner;
 	color = { 1.f,1.f,1.f };
 	alpha = 1;
@@ -57,6 +59,8 @@ SpriteComp::SpriteComp(GameObject* _owner) : GraphicComponent(_owner)
 	textureSize = { 400, 400 };
 	trans = nullptr;
 	SpriteSetSprite();
+	//스프라이트 매니저에 등록
+	LayerManager::GetInstance().AddSpriteList(this);
 }
 
 SpriteComp::~SpriteComp()
@@ -66,6 +70,8 @@ SpriteComp::~SpriteComp()
 	glDeleteVertexArrays(1, &sprite_VAO);
 	glDeleteBuffers(1, &sprite_VBO);
 	glDeleteBuffers(1, &sprite_EBO);
+	LayerManager::GetInstance().RemoveSpriteList(this);
+
 }
 
 void SpriteComp::SpriteSetSprite()
@@ -153,7 +159,7 @@ void SpriteComp::SpriteAddShader(GLuint theProgram, const char* shaderCode, GLen
 	GLuint theShader = glCreateShader(shaderType);
 
 	// 쉐이더 코드를 저장할 배열 생성
-	const GLchar* theCode[1];
+	const GLchar* theCode[1]{};
 	theCode[0] = shaderCode;
 
 	// 쉐이더 코드 길이를 저장할 배열 생성
@@ -336,6 +342,7 @@ void SpriteComp::Update()
 	//Set color 
 	SetTransparency();
 
+	// Draw
 	SpriteDrawSprite();
 }
 

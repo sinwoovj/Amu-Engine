@@ -5,7 +5,6 @@
 #include "Example/Triangle.h"
 #include <opengl.h>
 #include <Utils.h>
-
 #include <EasyImgui.h>
 #include "../Editor/MainEditor.h"
 #include <iostream>
