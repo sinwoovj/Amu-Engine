@@ -469,7 +469,6 @@
     <ClInclude Include="Sources\imgui\imstb_rectpack.h" />
     <ClInclude Include="Sources\imgui\imstb_textedit.h" />
     <ClInclude Include="Sources\imgui\imstb_truetype.h" />
-    <ClInclude Include="Sources\Layer\LayerManager.h" />
     <ClInclude Include="Sources\Level\LevelManager.h" />
     <ClInclude Include="Sources\Level\NormalLevel.h" />
     <ClInclude Include="Sources\Background\Background.h" />
@@ -548,7 +547,6 @@
     <ClCompile Include="Sources\imgui\imgui_stdlib.cpp" />
     <ClCompile Include="Sources\imgui\imgui_tables.cpp" />
     <ClCompile Include="Sources\imgui\imgui_widgets.cpp" />
-    <ClCompile Include="Sources\Layer\LayerManager.cpp" />
     <ClCompile Include="Sources\Level\LevelManager.cpp" />
     <ClCompile Include="Sources\Level\Menu.cpp" />
     <ClCompile Include="Sources\Level\NormalLevel.cpp" />
@@ -726,6 +724,7 @@
   <ItemGroup>
     <Image Include="Sources\Assets\Sprite\Background\Exam.png" />
     <Image Include="Sources\Assets\Sprite\default.png" />
+    <Image Include="Sources\Assets\Sprite\Editor\MenuButtons.png" />
     <Image Include="Sources\Assets\Sprite\Example\Icon1.png" />
     <Image Include="Sources\Assets\Sprite\Example\Icon2.png" />
     <Image Include="Sources\Assets\Sprite\Example\Icon3.png" />

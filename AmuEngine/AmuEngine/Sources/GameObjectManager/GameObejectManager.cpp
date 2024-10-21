@@ -1,4 +1,5 @@
 #include "GameObjectManager.h"
+#include "../Components/SpriteComp.h"
 
 GameObjectManager::GameObjectManager()
 {
@@ -10,6 +11,19 @@ GameObjectManager::~GameObjectManager()
 	{
 		if (it.second)
 			delete it.second;
+	}
+}
+
+void GameObjectManager::Update()
+{
+	//sorting objects for layer
+
+	//update objects
+	for (auto& obj : objects)
+	{
+		GameObject* o = obj.second;
+		//sorting objects for orderinlayer of spriteComp
+		o->GetComponent<SpriteComp>()->Update();
 	}
 }
 

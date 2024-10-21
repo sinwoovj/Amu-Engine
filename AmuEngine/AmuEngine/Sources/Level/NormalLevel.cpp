@@ -28,7 +28,7 @@ void level::NormalLevel::Init()
 	Serializer::GetInstance().LoadLevel(levelName);
 
 #ifdef _DEBUG
-	std::cout << "Current Level : " << levelName << std::endl;
+	//std::cout << "Current Level : " << levelName << std::endl;
 #endif
 
 }

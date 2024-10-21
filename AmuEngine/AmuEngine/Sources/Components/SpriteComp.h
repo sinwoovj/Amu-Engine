@@ -29,6 +29,7 @@ private:
 
 	std::string texturePath;
 
+	int orderinLayer = 0;
 public:
 	GameObject* owner;
 	SpriteComp(GameObject* _owner);
@@ -59,11 +60,18 @@ public:
 	static void SetNativeSize(std::string str, glm::vec2 size);
 	
 	void SetScale();
+	
 	std::string GetTexturePath() { return texturePath; }
+	
 	unsigned char& GetTexture() { return *texture; }
+	
 	float GetAlpha() { return alpha; }
 	void SetAlpha(float Alpha) { alpha = Alpha; }
+	
 	void SetTransparency();
+
+	int GetOrderInlayer() { return orderinLayer; }
+	void GetOrderInlayer(int num) { orderinLayer = num; }
 
 	void LoadFromJson(const json&) override;
 	json SaveToJson() override;

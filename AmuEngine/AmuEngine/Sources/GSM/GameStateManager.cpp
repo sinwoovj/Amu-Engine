@@ -8,9 +8,9 @@
 #include "../GameObjectManager/GameObjectManager.h"
 #include "../ResourceManager/ResourceManager.h"
 #include "../Serializer/Serializer.h"
+#include "../Editor/MainEditor.h"
 #include "../RTTI/Registry.h"
 #include "../Camera/Camera.h"
-#include "../Layer/LayerManager.h"
 
 GSM::GameStateManager::GameStateManager() : previousLevel(nullptr), currentLevel(nullptr) {}
 
@@ -35,12 +35,15 @@ void GSM::GameStateManager::Update()
 {
     if (currentLevel)
     {
+        if (editor::MainEditor::editorMode == editor::MainEditor::EditorMode::Edit)
+            currentLevel->Init();
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
         Camera::GetInstance().Update();
 
         ComponentManager<LogicComponent>::GetInstance().Update();
-        ComponentManager<EngineComponent>::GetInstance().Update();
+        if(editor::MainEditor::editorMode == editor::MainEditor::EditorMode::Play)
+            ComponentManager<EngineComponent>::GetInstance().Update();
 
         CollisionManager::GetInstance().Update();
         EventManager::GetInstance().DispatchAllEvents();
@@ -48,7 +51,7 @@ void GSM::GameStateManager::Update()
         currentLevel->Update();
 
         ComponentManager<GraphicComponent>::GetInstance().Update();
-        LayerManager::GetInstance().Update();
+        GameObjectManager::GetInstance().Update();
     }
 }
 

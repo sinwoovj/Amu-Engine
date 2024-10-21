@@ -14,8 +14,11 @@ private:
 	std::map<std::string, BaseComponent*> component;
 	std::string prefabName;
 	std::string name;
+	std::string layer;
+	std::string tag;
 
 public:
+
 	enum Type
 	{
 		None,
@@ -54,6 +57,13 @@ public:
 	T* GetComponent();
 	template <typename T>
 	T* GetComponent() const;
+
+	void SetLayer(std::string str) { layer = str; }
+	std::string GetLayer() { return layer; }
+
+	void SetTag(std::string str) { tag = str; }
+	std::string GetTag() { return tag; }
+
 
 	std::string GetName() { return name; } 
 	void LoadFromJson(std::string name, json& comp);

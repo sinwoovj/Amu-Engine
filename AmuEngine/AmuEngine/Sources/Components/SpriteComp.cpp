@@ -4,7 +4,6 @@
 #include <EasyImgui.h>
 #include <EasyOpengl.h>
 #include "../Editor/MainEditor.h"
-#include "../Layer/LayerManager.h"
 // 정점 쉐이더 Vertex Shader
 const char* spriteVShader = R"(
 #version 330 core
@@ -59,8 +58,6 @@ SpriteComp::SpriteComp(GameObject* _owner) : GraphicComponent(_owner)
 	textureSize = { 400, 400 };
 	trans = nullptr;
 	SpriteSetSprite();
-	//스프라이트 매니저에 등록
-	LayerManager::GetInstance().AddSpriteList(this);
 }
 
 SpriteComp::~SpriteComp()
@@ -70,7 +67,6 @@ SpriteComp::~SpriteComp()
 	glDeleteVertexArrays(1, &sprite_VAO);
 	glDeleteBuffers(1, &sprite_VBO);
 	glDeleteBuffers(1, &sprite_EBO);
-	LayerManager::GetInstance().RemoveSpriteList(this);
 
 }
 
@@ -130,7 +126,6 @@ void SpriteComp::SpriteCreateSprite()
 	// https://heinleinsgame.tistory.com/9#google_vignette
 
 	// Texture //
-
 
 	//Generate texture
 	glGenTextures(1, &sprite_texture);

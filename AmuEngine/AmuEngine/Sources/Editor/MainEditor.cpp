@@ -6,10 +6,13 @@
 #include "../GameObjectManager/GameObjectManager.h"
 #include "../GameObject/GameObject.h"
 #include "../ComponentManager/ComponentManager.h"
+#include "../GSM/GameStateManager.h"
 #include "../Components/Components.h"
 #include "../Level/NormalLevel.h"
 #include <vector>
 #include <string>
+
+editor::MainEditor::EditorMode editor::MainEditor::editorMode = Edit;
 
 editor::MainEditor::EDITOR_DATA editor::MainEditor::editor_data;
 
@@ -282,7 +285,6 @@ void editor::MainEditor::TopBar()
             }
             ImGui::EndMenu();
         }
-
         if (ImGui::BeginMenu("Window"))
         {
             if (ImGui::MenuItem("Show Objects", "Ctrl+O", &editor_data.showAllObjects)) {
@@ -293,6 +295,48 @@ void editor::MainEditor::TopBar()
             if (ImGui::MenuItem("Close", "Ctrl+W")) { ImGui::CloseCurrentPopup(); }
             ImGui::EndMenu();
         }
+
+        // UV coordinates are often (0.0f, 0.0f) and (1.0f, 1.0f) to display an entire textures.
+        // Here are trying to display only a 32x32 pixels area of the texture, hence the UV computation.
+        // Read about UV coordinates here: https://github.com/ocornut/imgui/wiki/Image-Loading-and-Displaying-Examples
+
+
+        ImGuiIO& io = ImGui::GetIO();
+        //io.Fonts->AddFontDefault();
+
+        ImTextureID my_tex_id = io.Fonts->TexID;
+        float my_tex_w = (float)io.Fonts->TexWidth;
+        float my_tex_h = (float)io.Fonts->TexHeight;
+
+        ImVec2 size1 = ImVec2(20.0f, 20.0f);                        // Size of the image we want to make visible
+        ImVec2 uv0 = ImVec2(0.f, 0.f);                              // UV coordinates for lower-left
+        ImVec2 uv1 = ImVec2(my_tex_w, my_tex_h);                    // UV coordinates for (32,32) in our texture
+        ImVec2 size2 = ImVec2(20.0f, 20.0f);                        // Size of the image we want to make visible
+        ImVec2 uv2 = ImVec2(0.f, 0.f);                              // UV coordinates for lower-left
+        ImVec2 uv3 = ImVec2(my_tex_w, my_tex_h);                    // UV coordinates for (32,32) in our texture
+        ImVec2 size3 = ImVec2(20.0f, 20.0f);                        // Size of the image we want to make visible
+        ImVec2 uv4 = ImVec2(0.f, 0.f);                              // UV coordinates for lower-left
+        ImVec2 uv5 = ImVec2(my_tex_w, my_tex_h);                    // UV coordinates for (32,32) in our texturein our texture
+        
+        ImVec4 bg_col = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);             // Black background
+        ImVec4 tint_col = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);           // No tint
+        
+        ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(1.0f, 1.0f));
+        if (ImGui::ImageButton("Play", my_tex_id, size1, uv0, uv1, bg_col, tint_col))
+        {
+            Serializer::GetInstance().SaveLevel(GSM::GameStateManager::GetInstance().GetCurrentLevel()->GetName());
+            editorMode = Play;
+        }
+        if (ImGui::ImageButton("Edit", my_tex_id, size2, uv2, uv3, bg_col, tint_col))
+        {
+            Serializer::GetInstance().LoadLevel(GSM::GameStateManager::GetInstance().GetCurrentLevel()->GetName());
+            editorMode = Edit;
+        }
+        if (ImGui::ImageButton("Pause", my_tex_id, size3, uv4, uv5, bg_col, tint_col))
+        {
+            editorMode = Pause;
+        }
+        ImGui::PopStyleVar();
     };
 
     PopUp();

@@ -9,6 +9,8 @@
 GameObject::GameObject(std::string str) : type(None)
 {
 	name = str;
+	layer = "Default";
+	tag = "Untagged";
 	GameObjectManager::GetInstance().InsertObject(str, this);
 }
 

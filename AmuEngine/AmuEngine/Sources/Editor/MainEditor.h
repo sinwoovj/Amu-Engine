@@ -8,15 +8,16 @@ namespace editor
 {
 	class MainEditor
 	{
+
+		~MainEditor();
+	public:
 		enum EditorMode
 		{
 			Play,
 			Pause,
 			Edit
 		};
-
-		~MainEditor();
-	public:
+		static EditorMode editorMode;
 
 		struct EDITOR_DATA
 		{
