@@ -1,6 +1,5 @@
 #include "BombComp.h"
 #include "../Bomb/BombManager.h"
-#include "../GameObject/GameObject.h"
 
 
 BOMB::BombComp::BombComp(GameObject* _owner)

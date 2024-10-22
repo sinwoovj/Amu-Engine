@@ -1,8 +1,9 @@
 #pragma once
+#include "../GameObject/GameObject.h"
 
 namespace BOMB
 {
-	static enum KindOfBomb
+	enum KindOfBomb
 	{
 		Default,
 		Poison,

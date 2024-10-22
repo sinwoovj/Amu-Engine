@@ -12,7 +12,7 @@ namespace BOMB
 	private:
 		std::map<std::string, GameObject*> bombs;
 
-		BombManager();
+		BombManager() = default;
 
 		//	Remove the compiler defined Copy Constructor and Assignment operator
 		BombManager(const BombManager& other) = delete;
