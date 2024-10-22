@@ -80,4 +80,5 @@ public:
 
 	static BaseRTTI* CreateSpriteComponent(GameObject* owner);
 	static constexpr const char* TypeName = "SpriteComp";
+	static constexpr const char* DefaultSprite = "./Sources/Assets/Sprite/default.png";
 };

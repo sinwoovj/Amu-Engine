@@ -5,6 +5,7 @@
 #include "../ComponentManager/ComponentManager.h"
 #include "../EventManager/EventManager.h"
 #include "../CollisionManager/CollisionManager.h"
+#include "../Bomb/BombManager.h"
 #include "../GameObjectManager/GameObjectManager.h"
 #include "../ResourceManager/ResourceManager.h"
 #include "../Serializer/Serializer.h"
@@ -43,6 +44,7 @@ void GSM::GameStateManager::Update()
         if (editor::MainEditor::editorMode == editor::MainEditor::EditorMode::Play)
         {
             ComponentManager<EngineComponent>::GetInstance().Update();
+            BOMB::BombManager::GetInstance().Update();
             CollisionManager::GetInstance().Update();
             EventManager::GetInstance().DispatchAllEvents();
             currentLevel->Update();

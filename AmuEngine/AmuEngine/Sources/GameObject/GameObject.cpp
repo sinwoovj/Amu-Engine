@@ -88,8 +88,7 @@ bool GameObject::ExistSingletonComponent(std::string name)
 				return true;
 		}
 	}
-	else
-		return false;
+	return false;
 }
 
 bool GameObject::ExistComponent(std::string name)

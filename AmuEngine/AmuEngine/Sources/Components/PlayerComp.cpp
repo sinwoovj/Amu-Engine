@@ -1,8 +1,6 @@
 #include "PlayerComp.h"
 #include <string>
-#include "TransformComp.h"
-#include "RigidbodyComp.h"
-#include "SpriteComp.h"
+#include "Components.h"
 #include "../Event/CollisionEvent.h"
 #include "../Utils/Utils.h"
 #include "../GSM/GameStateManager.h"
@@ -18,16 +16,25 @@ PlayerComp::PlayerComp(GameObject* _owner) : LogicComponent(_owner)
 
 PlayerComp::~PlayerComp()
 {
-}
+}	
 
 void PlayerComp::SetCamera(bool isfocus)
 {
 
 }
 
-void PlayerComp::CreateBomb()
+void PlayerComp::CreateBomb(BOMB::KindOfBomb kindofbomb)
 {
-
+	std::string bombName = "Bomb" + std::to_string(BOMB::BombManager::GetInstance().GetAllBombs().size());
+	GameObjectManager::GetInstance().AddObject(bombName);
+	GameObject* bombObj = GameObjectManager::GetInstance().GetObj(bombName);
+	bombObj->AddComponent<TransformComp>();
+	bombObj->GetComponent<TransformComp>()->SetPos(owner->GetComponent<TransformComp>()->GetPos());
+	bombObj->AddComponent<SpriteComp>();
+	bombObj->AddComponent<ColliderComp>();
+	bombObj->AddComponent<RigidbodyComp>();
+	bombObj->AddComponent<BOMB::BombComp>();
+	bombObj->GetComponent<BOMB::BombComp>()->SetBomb(kindofbomb);
 }
 
 void PlayerComp::Update()
@@ -70,10 +77,16 @@ void PlayerComp::Update()
 		r->SetVelocityY(speed);
 	}
 
-	if (glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_SPACE) == GLFW_PRESS)
+	int currentFrameKey = glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_SPACE);
+
+
+	if (currentFrameKey == GLFW_PRESS && currentFrameKey != LastFrameKey)
 	{
-		CreateBomb();
+		CreateBomb(BOMB::KindOfBomb::Default);
 	}
+
+	LastFrameKey = currentFrameKey;
+	
 	SetCamera(focusMe);
 }
 

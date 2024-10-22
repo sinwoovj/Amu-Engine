@@ -262,7 +262,7 @@ void SpriteComp::SpriteApplyTransform()
 bool SpriteComp::SetTexture(std::string path)
 {
 	if (path == "")
-		path = "./Sources/Assets/Sprite/default.png";
+		path = DefaultSprite;
 	/*else
 		glDeleteTextures(1, &sprite_texture);*/
 

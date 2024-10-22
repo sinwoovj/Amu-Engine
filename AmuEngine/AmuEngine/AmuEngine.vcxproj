@@ -736,6 +736,14 @@
     <Image Include="Sources\Assets\Sprite\Example\Icon3.png" />
     <Image Include="Sources\Assets\Sprite\Example\Icon4.png" />
     <Image Include="Sources\Assets\Sprite\Example\Icon5.png" />
+    <Image Include="Sources\Assets\Sprite\Object\Bombs\Default\idel.png" />
+    <Image Include="Sources\Assets\Sprite\Object\Bombs\Default\sound ex.png" />
+    <Image Include="Sources\Assets\Sprite\Object\Bombs\Ice\exp ice.png" />
+    <Image Include="Sources\Assets\Sprite\Object\Bombs\Ice\idel.png" />
+    <Image Include="Sources\Assets\Sprite\Object\Bombs\Magma\expl 50px 50.png" />
+    <Image Include="Sources\Assets\Sprite\Object\Bombs\Magma\idel 50px 50.png" />
+    <Image Include="Sources\Assets\Sprite\Object\Bombs\Poison\expl green.png" />
+    <Image Include="Sources\Assets\Sprite\Object\Bombs\Poison\idel.png" />
     <Image Include="Sources\Assets\Sprite\UI\Logo\DigiPen_RED.png" />
   </ItemGroup>
   <ItemGroup>

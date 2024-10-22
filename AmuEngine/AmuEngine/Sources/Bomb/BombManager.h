@@ -43,5 +43,7 @@ namespace BOMB
 		std::map<std::string, GameObject*>& GetAllBombs() { return bombs; }
 
 		void AddBomb(GameObject* obj);
+
+		void RemoveBomb(GameObject* obj);
 	};
 }
