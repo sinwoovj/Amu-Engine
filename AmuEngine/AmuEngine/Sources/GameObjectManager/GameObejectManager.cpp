@@ -23,7 +23,8 @@ void GameObjectManager::Update()
 	{
 		GameObject* o = obj.second;
 		//sorting objects for orderinlayer of spriteComp
-		o->GetComponent<SpriteComp>()->Update();
+		if(o->GetComponent<SpriteComp>() != nullptr)
+			o->GetComponent<SpriteComp>()->Update();
 	}
 }
 

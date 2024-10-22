@@ -212,6 +212,7 @@ void editor::MainEditor::TopBar()
 
             ImGui::EndMenu();
         }
+        ImGui::PushItemFlag(ImGuiItemFlags_Disabled, editorMode == Play || editorMode == Pause);
         if (ImGui::BeginMenu("Level"))
         {
             ImGui::SeparatorText("Level List");
@@ -287,6 +288,7 @@ void editor::MainEditor::TopBar()
             }
             ImGui::EndMenu();
         }
+        ImGui::PopItemFlag();
         if (ImGui::BeginMenu("Window"))
         {
             if (ImGui::MenuItem("Show Objects", "Ctrl+O", &editor_data.showAllObjects)) {
@@ -346,7 +348,7 @@ void editor::MainEditor::TopBar()
         ImGui::PushItemFlag(ImGuiItemFlags_Disabled, editorMode == Play);
         if (ImGui::Button("Play"))
         {
-            //Serializer::GetInstance().SaveLevel(GSM::GameStateManager::GetInstance().GetCurrentLevel()->GetName());
+            Serializer::GetInstance().SaveLevel(GSM::GameStateManager::GetInstance().GetCurrentLevel()->GetName());
             //save가 안되어 있을 시 팝업
             
             editorMode = Play;

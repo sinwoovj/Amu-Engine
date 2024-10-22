@@ -40,6 +40,8 @@ public:
 
 	void AddLayer(std::string);
 	void RemoveLayer(std::string);
+	void AddTag(std::string);
+	void RemoveTag(std::string);
 
 	void InsertObject(const std::string& id, GameObject* obj);
 	void AddObject(const std::string& id);

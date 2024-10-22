@@ -59,7 +59,6 @@ void GameObject::AddComponent(std::string name)
 		if (!this->ExistComponent("TransformComp"))
 			this->AddComponent("TransformComp");
 		this->AddComponent<ColliderComp>();
-		this->GetComponent<ColliderComp>()->SetCollider();
 	}
 	else if (name == compName[3])
 	{
@@ -67,6 +66,13 @@ void GameObject::AddComponent(std::string name)
 		if (!this->ExistComponent("ColliderComp"))
 			this->AddComponent("ColliderComp");
 		this->AddComponent<RigidbodyComp>();
+	}
+	else if (name == compName[4])
+	{
+
+		if (!this->ExistComponent("RigidbodyComp"))
+			this->AddComponent("RigidbodyComp");
+		this->AddComponent<PlayerComp>();
 	}
 
 }
@@ -99,6 +105,10 @@ void GameObject::LoadFromJson(std::string name, json& comp)
 	{
 		this->GetComponent<RigidbodyComp>()->LoadFromJson(comp);
 	}
+	else if (name == compName[4])
+	{
+		this->GetComponent<PlayerComp>()->LoadFromJson(comp);
+	}
 }
 
 void GameObject::RemoveComponent(std::string name)
@@ -126,6 +136,10 @@ void GameObject::RemoveComponent(std::string name)
 	else if (name == compName[3])
 	{
 		this->DeleteComponent<RigidbodyComp>();
+	}
+	else if (name == compName[4])
+	{
+		this->DeleteComponent<PlayerComp>();
 	}
 }
 
