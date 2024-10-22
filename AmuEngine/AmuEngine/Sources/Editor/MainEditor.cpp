@@ -80,7 +80,8 @@ void editor::MainEditor::PopUp()
     {
         if (ImGui::InputText("Object Name", &editor_data.addObjName, ImGuiInputTextFlags_EnterReturnsTrue))
         {
-            GameObjectManager::GetInstance().AddObject(editor_data.addObjName);
+            if(!GameObjectManager::GetInstance().AddObject(editor_data.addObjName))
+                editor_data.showAlreadyHaveSameNameObjectPopup = true;
             if (GameObjectManager::GetInstance().GetObj(editor_data.addObjName) == nullptr)
                 std::cout << "실패" << std::endl;
             else
@@ -113,7 +114,7 @@ void editor::MainEditor::PopUp()
             GameObject* obj = GameObjectManager::GetInstance().GetObj(editor_data.selectObjectName);
             for (auto& cName : compName)
             {
-                if (ImGui::MenuItem(cName.c_str(), NULL, false, !obj->ExistComponent(cName)))
+                if (ImGui::MenuItem(cName.c_str(), NULL, false, !obj->ExistComponent(cName) && !obj->ExistSingletonComponent(cName)))
                 {
                     obj->AddComponent(cName);
                     ImGui::CloseCurrentPopup();
@@ -134,6 +135,24 @@ void editor::MainEditor::PopUp()
     if (ImGui::BeginPopup("     Warning : Delete Level     "))
     {
         ImGui::Text("This level name is already exist.\n Please type another level name.");
+        ImGui::Columns(1);
+        if (ImGui::Button("Ok"))
+        {
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
+    }
+
+    //같은 이름의 오브젝트가 있을 때 띄우는 팝업
+    if (editor_data.showAlreadyHaveSameNameObjectPopup)
+    {
+        ImGui::OpenPopup("     Warning : Delete Object     ");
+        editor_data.showAlreadyHaveSameNameObjectPopup = false;
+    }
+
+    if (ImGui::BeginPopup("     Warning : Delete Object     "))
+    {
+        ImGui::Text("This Object name is already exist.\n Please type another Object name.");
         ImGui::Columns(1);
         if (ImGui::Button("Ok"))
         {

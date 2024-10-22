@@ -44,7 +44,7 @@ public:
 	void RemoveTag(std::string);
 
 	void InsertObject(const std::string& id, GameObject* obj);
-	void AddObject(const std::string& id);
+	bool AddObject(const std::string& id);
 	GameObject* GetObj(const std::string& id);
 	GameObject* GetLastObject();
 	void RemoveObject(const std::string& id);

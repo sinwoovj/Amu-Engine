@@ -39,6 +39,7 @@ namespace editor
 			bool showObjectListRightClickPopup = false;
 			bool showCompListRightClickPopup = false;
 			bool showAlreadyHaveSameNameLevelPopup = false;
+			bool showAlreadyHaveSameNameObjectPopup = false;
 			bool showAddLevelPopup = false;
 
 			// Normal State Variable

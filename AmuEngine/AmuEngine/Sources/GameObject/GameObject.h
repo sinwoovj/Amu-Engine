@@ -50,6 +50,8 @@ public:
 
 	void AddComponent(std::string name);
 	
+	bool ExistSingletonComponent(std::string name);
+
 	bool ExistComponent(std::string name);
 
 	//GO will have a function to find if it already has a component of ANY TYPE

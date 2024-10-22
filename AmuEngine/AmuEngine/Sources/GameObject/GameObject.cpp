@@ -77,6 +77,21 @@ void GameObject::AddComponent(std::string name)
 
 }
 
+bool GameObject::ExistSingletonComponent(std::string name)
+{
+	//Æ¯Á¤ ½Ì±ÛÅæ ÄÄÆ÷³ÍÆ® °É·¯ÁÜ
+	if (name == "PlayerComp")
+	{
+		for (auto& obj : GameObjectManager::GetInstance().GetAllObjects())
+		{
+			if (obj.second->ExistComponent(name))
+				return true;
+		}
+	}
+	else
+		return false;
+}
+
 bool GameObject::ExistComponent(std::string name)
 {
 	auto it = component.find(name);
@@ -84,6 +99,7 @@ bool GameObject::ExistComponent(std::string name)
 	{
 		return true;
 	}
+	
 	return false;
 }
 

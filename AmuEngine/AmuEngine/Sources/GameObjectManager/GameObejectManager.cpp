@@ -33,9 +33,12 @@ void GameObjectManager::InsertObject(const std::string& id, GameObject* obj)
 	objects.insert({ id, obj });
 }
 
-void GameObjectManager::AddObject(const std::string& id)
+bool GameObjectManager::AddObject(const std::string& id)
 {
+	if (objects.find(id) != objects.end())
+		return false;
 	objects.insert({ id, new GameObject(id)});
+	return true;
 }
 
 GameObject* GameObjectManager::GetObj(const std::string& id) {
