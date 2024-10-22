@@ -459,7 +459,7 @@
     <ClInclude Include="Extern\json\json.hpp" />
     <ClInclude Include="Extern\json\json_fwd.hpp" />
     <ClInclude Include="Sources\Bomb\BombManager.h" />
-    <ClInclude Include="Sources\Components\BombComp.h" />
+    <ClInclude Include="Sources\Bomb\BombComp.h" />
     <ClInclude Include="Sources\Components\PlayerComp.h" />
     <ClInclude Include="Sources\Editor\MainEditor.h" />
     <ClInclude Include="Sources\imgui\imconfig.h" />
@@ -521,6 +521,7 @@
   <ItemGroup>
     <ClCompile Include="Dependencies\GLM\glm\detail\glm.cpp" />
     <ClCompile Include="Sources\Background\Background.cpp" />
+    <ClCompile Include="Sources\Bomb\BombManager.cpp" />
     <ClCompile Include="Sources\Camera\Camera.cpp" />
     <ClCompile Include="Sources\CollisionManager\CollisionManager.cpp" />
     <ClCompile Include="Sources\ComponentManager\BaseComponent.cpp" />
@@ -528,7 +529,7 @@
     <ClCompile Include="Sources\ComponentManager\GraphicComponent.cpp" />
     <ClCompile Include="Sources\ComponentManager\InterfaceComponent.cpp" />
     <ClCompile Include="Sources\ComponentManager\LogicComponent.cpp" />
-    <ClCompile Include="Sources\Components\BombComp.cpp" />
+    <ClCompile Include="Sources\Bomb\BombComp.cpp" />
     <ClCompile Include="Sources\Components\ColliderComp.cpp" />
     <ClCompile Include="Sources\Components\PlayerComp.cpp" />
     <ClCompile Include="Sources\Components\RigidbodyComp.cpp" />
