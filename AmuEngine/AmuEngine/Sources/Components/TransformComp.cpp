@@ -24,7 +24,7 @@ void TransformComp::CalculateMatrix()
 
 }
 
-TransformComp::TransformComp(GameObject* _owner) : EngineComponent(_owner), pos({ 0,0 }), scale({ 1,1 }), rot(0), transformMatrix(glm::identity<glm::mat3>())
+TransformComp::TransformComp(GameObject* _owner) : LogicComponent(_owner), pos({ 0,0 }), scale({ 1,1 }), rot(0), transformMatrix(glm::identity<glm::mat3>())
 {
 	pos.x = 0;
 	pos.y = 0;

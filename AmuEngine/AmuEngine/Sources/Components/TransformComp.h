@@ -1,11 +1,11 @@
 #pragma once
 #include "../ComponentManager/ComponentManager.h"
-#include "../ComponentManager/EngineComponent.h"
+#include "../ComponentManager/LogicComponent.h"
 #include "../Event/Entity.h"
 
 #include <opengl.h>
 
-class TransformComp : public EngineComponent
+class TransformComp : public LogicComponent
 {
 private:
 	

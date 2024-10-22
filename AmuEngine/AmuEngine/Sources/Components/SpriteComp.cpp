@@ -427,7 +427,7 @@ void SpriteComp::Edit()
 		}
 	}
 	//Texture Path
-	std::cout << this->owner->GetName() << std::endl;
+	//std::cout << this->owner->GetName() << std::endl;
 	ImGui::SeparatorText("Texture Path");
 	{
 		editor::MainEditor::editor_data.modifySpritePath = texturePath;

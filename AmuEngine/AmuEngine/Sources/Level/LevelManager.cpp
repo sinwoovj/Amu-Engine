@@ -68,6 +68,7 @@ bool LevelManager::LoadLevel(const std::string& str)
     }
     else
     {
+        editor::MainEditor::editorMode = editor::MainEditor::EditorMode::Edit;
         GSM::GameStateManager::GetInstance().ChangeLevel(new level::NormalLevel(str));
     }
     return true;
@@ -84,6 +85,7 @@ bool LevelManager::UndoLevel(const std::string& str)
 {
     if (!FindLevel(str))
         return false;
+    GameObjectManager::GetInstance().RemoveAllObject();
     Serializer::GetInstance().LoadLevel(str);
     return true;
 }

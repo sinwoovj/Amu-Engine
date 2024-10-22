@@ -48,6 +48,7 @@ void editor::MainEditor::PopUp()
         {
             Serializer::GetInstance().SaveLevel(editor_data.currLevelName);
             GSM::GameStateManager::GetInstance().ChangeLevel(new level::NormalLevel(editor_data.selectLevelName));
+            editorMode = Edit;
             ImGui::CloseCurrentPopup();
         }
         ImGui::SameLine();
@@ -62,6 +63,7 @@ void editor::MainEditor::PopUp()
         if (ImGui::Button("No"))
         {
             GSM::GameStateManager::GetInstance().ChangeLevel(new level::NormalLevel(editor_data.selectLevelName));
+            editorMode = Edit;
             ImGui::CloseCurrentPopup();
         }
         ImGui::EndPopup();
@@ -301,42 +303,71 @@ void editor::MainEditor::TopBar()
         // Read about UV coordinates here: https://github.com/ocornut/imgui/wiki/Image-Loading-and-Displaying-Examples
 
 
-        ImGuiIO& io = ImGui::GetIO();
-        //io.Fonts->AddFontDefault();
+        //ImGuiIO& io = ImGui::GetIO();
+        ////io.Fonts->AddFontDefault();
 
-        ImTextureID my_tex_id = io.Fonts->TexID;
-        float my_tex_w = (float)io.Fonts->TexWidth;
-        float my_tex_h = (float)io.Fonts->TexHeight;
+        //ImTextureID my_tex_id = io.Fonts->TexID;
+        //float my_tex_w = (float)io.Fonts->TexWidth;
+        //float my_tex_h = (float)io.Fonts->TexHeight;
 
-        ImVec2 size1 = ImVec2(20.0f, 20.0f);                        // Size of the image we want to make visible
-        ImVec2 uv0 = ImVec2(0.f, 0.f);                              // UV coordinates for lower-left
-        ImVec2 uv1 = ImVec2(my_tex_w, my_tex_h);                    // UV coordinates for (32,32) in our texture
-        ImVec2 size2 = ImVec2(20.0f, 20.0f);                        // Size of the image we want to make visible
-        ImVec2 uv2 = ImVec2(0.f, 0.f);                              // UV coordinates for lower-left
-        ImVec2 uv3 = ImVec2(my_tex_w, my_tex_h);                    // UV coordinates for (32,32) in our texture
-        ImVec2 size3 = ImVec2(20.0f, 20.0f);                        // Size of the image we want to make visible
-        ImVec2 uv4 = ImVec2(0.f, 0.f);                              // UV coordinates for lower-left
-        ImVec2 uv5 = ImVec2(my_tex_w, my_tex_h);                    // UV coordinates for (32,32) in our texturein our texture
-        
-        ImVec4 bg_col = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);             // Black background
-        ImVec4 tint_col = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);           // No tint
-        
-        ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(1.0f, 1.0f));
-        if (ImGui::ImageButton("Play", my_tex_id, size1, uv0, uv1, bg_col, tint_col))
+        //ImVec2 size1 = ImVec2(20.0f, 20.0f);                        // Size of the image we want to make visible
+        //ImVec2 uv0 = ImVec2(0.f, 0.f);                              // UV coordinates for lower-left
+        //ImVec2 uv1 = ImVec2(my_tex_w, my_tex_h);                    // UV coordinates for (32,32) in our texture
+        //ImVec2 size2 = ImVec2(20.0f, 20.0f);                        // Size of the image we want to make visible
+        //ImVec2 uv2 = ImVec2(0.f, 0.f);                              // UV coordinates for lower-left
+        //ImVec2 uv3 = ImVec2(my_tex_w, my_tex_h);                    // UV coordinates for (32,32) in our texture
+        //ImVec2 size3 = ImVec2(20.0f, 20.0f);                        // Size of the image we want to make visible
+        //ImVec2 uv4 = ImVec2(0.f, 0.f);                              // UV coordinates for lower-left
+        //ImVec2 uv5 = ImVec2(my_tex_w, my_tex_h);                    // UV coordinates for (32,32) in our texturein our texture
+        //
+        //ImVec4 bg_col = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);             // Black background
+        //ImVec4 tint_col = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);           // No tint
+        //
+        //ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(1.0f, 1.0f));
+        //if (ImGui::ImageButton("Play", my_tex_id, size1, uv0, uv1, bg_col, tint_col))
+        //{
+        //    Serializer::GetInstance().SaveLevel(GSM::GameStateManager::GetInstance().GetCurrentLevel()->GetName());
+        //    editorMode = Play;
+        //}
+        //if (ImGui::ImageButton("Edit", my_tex_id, size2, uv2, uv3, bg_col, tint_col))
+        //{
+        //    Serializer::GetInstance().LoadLevel(GSM::GameStateManager::GetInstance().GetCurrentLevel()->GetName());
+        //    editorMode = Edit;
+        //}
+        //if (ImGui::ImageButton("Pause", my_tex_id, size3, uv4, uv5, bg_col, tint_col))
+        //{
+        //    editorMode = Pause;
+        //}
+        //ImGui::PopStyleVar();
+
+        for (int i = 0; i < 20; i++)
+            ImGui::Spacing();
+
+        ImGui::PushItemFlag(ImGuiItemFlags_Disabled, editorMode == Play);
+        if (ImGui::Button("Play"))
         {
-            Serializer::GetInstance().SaveLevel(GSM::GameStateManager::GetInstance().GetCurrentLevel()->GetName());
+            //Serializer::GetInstance().SaveLevel(GSM::GameStateManager::GetInstance().GetCurrentLevel()->GetName());
+            //save가 안되어 있을 시 팝업
+            
             editorMode = Play;
         }
-        if (ImGui::ImageButton("Edit", my_tex_id, size2, uv2, uv3, bg_col, tint_col))
+        ImGui::PopItemFlag();
+        ImGui::Spacing();
+        ImGui::PushItemFlag(ImGuiItemFlags_Disabled, editorMode == Edit);
+        if (ImGui::Button("Edit"))
         {
-            Serializer::GetInstance().LoadLevel(GSM::GameStateManager::GetInstance().GetCurrentLevel()->GetName());
             editorMode = Edit;
+            GameObjectManager::GetInstance().RemoveAllObject();
+            Serializer::GetInstance().LoadLevel(GSM::GameStateManager::GetInstance().GetCurrentLevel()->GetName());
         }
-        if (ImGui::ImageButton("Pause", my_tex_id, size3, uv4, uv5, bg_col, tint_col))
+        ImGui::PopItemFlag();
+        ImGui::Spacing();
+        ImGui::PushItemFlag(ImGuiItemFlags_Disabled, editorMode == Edit || editorMode == Pause);
+        if (ImGui::Button("Pause"))
         {
             editorMode = Pause;
         }
-        ImGui::PopStyleVar();
+        ImGui::PopItemFlag();
     };
 
     PopUp();

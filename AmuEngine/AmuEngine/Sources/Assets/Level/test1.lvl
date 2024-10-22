@@ -91,7 +91,7 @@
           "type": "TransformComp",
           "compData": {
             "position": [
-              0.0,
+              -166.0,
               0.0
             ],
             "scale": [
@@ -115,6 +115,34 @@
               1000.0,
               563.0
             ]
+          }
+        },
+        {
+          "type": "RigidbodyComp",
+          "compData": {
+            "velocity": [
+              0.0,
+              0.0
+            ],
+            "maxVelocity": [
+              500.0,
+              500.0
+            ],
+            "useGravity": false
+          }
+        },
+        {
+          "type": "ColliderComp",
+          "compData": {
+            "position": [
+              0.0,
+              0.0
+            ],
+            "scale": [
+              0.23999999463558197,
+              0.23999999463558197
+            ],
+            "rotation": 0.0
           }
         }
       ]
