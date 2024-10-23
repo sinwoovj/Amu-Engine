@@ -1,5 +1,6 @@
 #include "GameObjectManager.h"
 #include "../Components/SpriteComp.h"
+#include <algorithm>
 
 GameObjectManager::GameObjectManager()
 {
@@ -14,17 +15,38 @@ GameObjectManager::~GameObjectManager()
 	}
 }
 
+bool Comp(SpriteComp* first, SpriteComp* second)
+{
+	if (first->GetOrderInlayer() < second->GetOrderInlayer())
+		return true;
+	else
+		return false;
+}
+
 void GameObjectManager::Update()
 {
-	//sorting objects for layer
-
-	//update objects
-	for (auto& obj : objects)
+	//sorting objects for layer (Default, UI, Particle, ETC..)
+	for (auto& layer : Layer)
 	{
-		GameObject* o = obj.second;
-		//sorting objects for orderinlayer of spriteComp
-		if(o->GetComponent<SpriteComp>() != nullptr)
-			o->GetComponent<SpriteComp>()->Update();
+		std::list<SpriteComp*> orderinlayer;
+		for (auto& obj : objects)
+		{
+			GameObject* o = obj.second;
+			if (o->GetLayer() == layer)
+			{
+				//other component update
+				
+				//sorting objects for orderinlayer of spriteComp
+				if (o->GetComponent<SpriteComp>() != nullptr)
+					orderinlayer.push_back(o->GetComponent<SpriteComp>());
+			}
+		}
+		//order in layer update
+		orderinlayer.sort(Comp);
+		for (auto& obj : orderinlayer)
+		{
+			obj->Update();
+		}
 	}
 }
 
@@ -40,6 +62,11 @@ std::vector<std::string> GameObjectManager::GetTags()
 
 bool GameObjectManager::AddObjectLayer(std::string str)
 {
+	for (auto& it : DefaultLayer)
+	{
+		if (it == str)
+			return false;
+	}
 	if (!ExistObjectLayer(str)) {
 		Layer.push_back(str);
 		return true;
@@ -49,6 +76,11 @@ bool GameObjectManager::AddObjectLayer(std::string str)
 
 bool GameObjectManager::RemoveObjectLayer(std::string str)
 {
+	for (auto& it : DefaultLayer)
+	{
+		if (it == str)
+			return false;
+	}
 	if (ExistObjectLayer(str)){
 		Layer.erase(remove(Layer.begin(), Layer.end(), str), Layer.end());
 		return true;
@@ -80,6 +112,11 @@ std::string GameObjectManager::GetObjectLayer(std::string obj)
 
 bool GameObjectManager::AddObjectTag(std::string str)
 {
+	for (auto& it : DefaultTag)
+	{
+		if (it == str)
+			return false;
+	}
 	if (!ExistObjectTag(str)){
 		Tag.push_back(str);
 		return true;
@@ -89,6 +126,11 @@ bool GameObjectManager::AddObjectTag(std::string str)
 
 bool GameObjectManager::RemoveObjectTag(std::string str)
 {
+	for (auto& it : DefaultTag)
+	{
+		if (it == str)
+			return false;
+	}
 	if (ExistObjectTag(str)){
 		Tag.erase(remove(Layer.begin(), Layer.end(), str), Layer.end());
 		return true;

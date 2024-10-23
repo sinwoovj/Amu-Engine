@@ -250,6 +250,13 @@ void editor::MainEditor::PopUp()
             for (int n = 0; n < (int)layers.size(); n++)
             {
                 const bool is_selected = (editor_data.remove_layer_item_selected_idx == n);
+                bool is_layer_default = false;
+                for (auto& it : GameObjectManager::GetInstance().DefaultLayer)
+                {
+                    if (it == layers.at(n))
+                        is_layer_default = true;
+                }
+                if (is_layer_default) continue;
                 if (ImGui::Selectable(layers.at(n).c_str(), is_selected))
                 {
                     editor_data.remove_layer_item_selected_idx = n;
@@ -313,6 +320,13 @@ void editor::MainEditor::PopUp()
             for (int n = 0; n < (int)tags.size(); n++)
             {
                 const bool is_selected = (editor_data.remove_tag_item_selected_idx == n);
+                bool is_tag_default = false;
+                for (auto& it : GameObjectManager::GetInstance().DefaultTag)
+                {
+                    if (it == tags.at(n))
+                        is_tag_default = true;
+                }
+                if (is_tag_default) continue;
                 if (ImGui::Selectable(tags.at(n).c_str(), is_selected))
                 {
                     editor_data.remove_tag_item_selected_idx = n;
@@ -540,6 +554,7 @@ void editor::MainEditor::ShowLevelObject(bool* p_open)
             GetCurrentLevel())->GetName().c_str(), p_open))
         {
             ImGui::SeparatorText("Object List");
+            int id = 0;
             for (auto& obj : GameObjectManager::GetInstance().GetAllObjects())
             {
                 if (ImGui::TreeNode(obj.first.c_str()))
@@ -632,6 +647,7 @@ void editor::MainEditor::ShowLevelObject(bool* p_open)
                     }
                     ImGui::EndColumns();
                     //Buttons
+                    ImGui::PushID(id);
                     ImGui::Columns(2);
                     {
                         if (ImGui::Button("Add Layer"))
@@ -657,6 +673,8 @@ void editor::MainEditor::ShowLevelObject(bool* p_open)
                         }
                     }
                     ImGui::EndColumns();
+                    ImGui::PopID();
+                    id++;
                     ImGui::TreePop();
                 }
                 else

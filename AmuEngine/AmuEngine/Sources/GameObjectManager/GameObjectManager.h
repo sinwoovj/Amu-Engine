@@ -17,15 +17,30 @@ private:
 
 	static GameObjectManager* ptr;
 public:
+	//after editor.json에 추가할 예정
 	std::vector <std::string> Layer
 	{
 		"Default",
 		"UI",
 		"Particle"
+		//etc
 	};
 	std::vector <std::string> Tag
 	{
 		"Untagged"
+		//etc
+	};
+	const std::vector <std::string> DefaultLayer
+	{
+		"Default",
+		"UI",
+		"Particle"
+		//etc
+	};
+	const std::vector <std::string> DefaultTag
+	{
+		"Untagged"
+		//etc
 	};
 
 	void Update();

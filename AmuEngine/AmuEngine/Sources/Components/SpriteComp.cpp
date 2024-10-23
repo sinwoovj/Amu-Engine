@@ -438,6 +438,15 @@ void SpriteComp::Edit()
 			
 		}
 	}
+	//OrderInLayer
+	ImGui::SeparatorText("Order In Layer");
+	{
+		ImGui::DragInt("order in layer", &orderinLayer, 1, 0);
+		if (ImGui::Button("Initialize"))
+		{
+			orderinLayer = 0;
+		}
+	}
 }
 
 
