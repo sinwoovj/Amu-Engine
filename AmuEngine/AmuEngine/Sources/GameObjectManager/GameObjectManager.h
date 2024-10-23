@@ -1,6 +1,6 @@
 #pragma once
 #include <map>
-#include <list>
+#include <vector>
 #include <string>
 #include "../GameObject/GameObject.h"
 
@@ -17,13 +17,13 @@ private:
 
 	static GameObjectManager* ptr;
 public:
-	std::list <std::string> Layer
+	std::vector <std::string> Layer
 	{
 		"Default",
 		"UI",
 		"Particle"
 	};
-	std::list <std::string> tag
+	std::vector <std::string> Tag
 	{
 		"Untagged"
 	};
@@ -38,10 +38,20 @@ public:
 		return instance;
 	}
 
-	void AddLayer(std::string);
-	void RemoveLayer(std::string);
-	void AddTag(std::string);
-	void RemoveTag(std::string);
+	std::vector <std::string> GetLayers();
+	std::vector <std::string> GetTags();
+
+	bool AddObjectLayer(std::string str);
+	bool RemoveObjectLayer(std::string str);
+	bool ExistObjectLayer(std::string str);
+	void SetObjectLayer(std::string obj, std::string layer);
+	std::string GetObjectLayer(std::string obj);
+
+	bool AddObjectTag(std::string str);
+	bool RemoveObjectTag(std::string str);
+	bool ExistObjectTag(std::string str);
+	void SetObjectTag(std::string obj, std::string tag);
+	std::string GetObjectTag(std::string obj);
 
 	void InsertObject(const std::string& id, GameObject* obj);
 	bool AddObject(const std::string& id);

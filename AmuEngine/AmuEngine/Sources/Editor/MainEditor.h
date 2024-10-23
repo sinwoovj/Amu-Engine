@@ -29,6 +29,13 @@ namespace editor
 			std::string modifySpritePath = "";
 			std::string addLvlName = "";
 			std::string addObjName = "";
+			std::string addLayerName = "";
+			std::string addTagName = "";
+
+			int remove_layer_item_selected_idx = 0;
+			int layer_item_selected_idx = 0;
+			int remove_tag_item_selected_idx = 0;
+			int tag_item_selected_idx = 0;
 
 			// Show State Variable
 			bool showAllObjects = false;
@@ -41,6 +48,11 @@ namespace editor
 			bool showAlreadyHaveSameNameLevelPopup = false;
 			bool showAlreadyHaveSameNameObjectPopup = false;
 			bool showAddLevelPopup = false;
+
+			bool showAddLayerPopup = false;
+			bool showAddTagPopup = false;
+			bool showRemoveLayerPopup = false;
+			bool showRemoveTagPopup = false;
 
 			// Normal State Variable
 			bool DeleteObject = false;

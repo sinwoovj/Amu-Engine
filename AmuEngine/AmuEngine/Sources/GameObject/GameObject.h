@@ -37,6 +37,12 @@ public:
 	GameObject(const GameObject& other) = delete;
 	GameObject& operator=(const GameObject& other) = delete;
 
+	//Layer & Tag
+	void SetLayer(std::string str) { layer = str; }
+	std::string GetLayer() { return layer; }
+	void SetTag(std::string str) { tag = str; }
+	std::string GetTag() { return tag; }
+
 	//Components in the GO container are ALLOCATED IN THE HEAP, 
 	//so. When to GO is destroyed, the GO must be as well
 	~GameObject();
@@ -59,13 +65,6 @@ public:
 	T* GetComponent();
 	template <typename T>
 	T* GetComponent() const;
-
-	void SetLayer(std::string str) { layer = str; }
-	std::string GetLayer() { return layer; }
-
-	void SetTag(std::string str) { tag = str; }
-	std::string GetTag() { return tag; }
-
 
 	std::string GetName() { return name; } 
 	void LoadFromJson(std::string name, json& comp);
