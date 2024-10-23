@@ -15,7 +15,7 @@ using json = nlohmann::ordered_json;	// Map. Orders the order the variables were
 
 extern bool showNewObjectPopup;
 
-bool LevelManager::FindLevel(const std::string& str)
+bool LevelManager::ExistLevel(const std::string& str)
 {
     for (auto& lvl : levels)
     {
@@ -54,7 +54,7 @@ bool LevelManager::SaveLevels()
 bool LevelManager::LoadLevel(const std::string& str)
 {
     //　기존 레벨 파일에서 변경점이 있다면, 저장할 것인지 아닌지 팝업을 띄움
-    if (!FindLevel(str))
+    if (!ExistLevel(str))
         return false;
     if (dynamic_cast<level::NormalLevel*>(GSM::GameStateManager::GetInstance().GetCurrentLevel()) == nullptr) // 가장 처음 로드할 때
     {
@@ -75,7 +75,7 @@ bool LevelManager::LoadLevel(const std::string& str)
 }
 bool LevelManager::SaveLevel(const std::string& str)
 {
-    if (!FindLevel(str))
+    if (!ExistLevel(str))
         return false;
     Serializer::GetInstance().SaveLevel(str);
     return true;
@@ -83,7 +83,7 @@ bool LevelManager::SaveLevel(const std::string& str)
 
 bool LevelManager::UndoLevel(const std::string& str)
 {
-    if (!FindLevel(str))
+    if (!ExistLevel(str))
         return false;
     GameObjectManager::GetInstance().RemoveAllObject();
     Serializer::GetInstance().LoadLevel(str);

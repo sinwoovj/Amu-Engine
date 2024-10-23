@@ -39,7 +39,7 @@
           "compData": {
             "velocity": [
               0.0,
-              -100.0
+              0.0
             ],
             "maxVelocity": [
               500.0,

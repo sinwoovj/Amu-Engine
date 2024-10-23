@@ -24,7 +24,7 @@ public:
 	std::string GetFilenameExtension();
 	void SetDirectory(const std::string& str);
 	void SetFilenameExtension(const std::string& str);
-	bool FindLevel(const std::string& str);
+	bool ExistLevel(const std::string& str);
 	std::vector<std::string> GetLevels() { return levels; }
 	bool LoadLevels();
 	bool SaveLevels();

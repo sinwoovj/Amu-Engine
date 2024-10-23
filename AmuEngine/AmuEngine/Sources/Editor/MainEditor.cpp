@@ -350,6 +350,80 @@ void editor::MainEditor::PopUp()
         }
         ImGui::EndPopup();
     }
+
+    //레벨 이름 변경 팝업
+    if (editor_data.showChangeLevelPopup)
+    {
+        ImGui::OpenPopup("##Change Level##");
+        editor_data.showChangeLevelPopup = false;
+    }
+    if (ImGui::BeginPopup("##Change Level##"))
+    {
+        if (ImGui::InputText("New Level Name", &editor_data.changeLvlName, ImGuiInputTextFlags_EnterReturnsTrue))
+        {
+            //if (GameObjectManager::GetInstance().AddObjectTag(editor_data.changeLvlName))
+            //{
+            //    // 성공
+            //    std::cout << "성공" << std::endl;
+            //}
+            //else
+            //{
+            //    // 실패
+            //    std::cout << "실패" << std::endl;
+            //}
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
+    }
+
+    //오브젝트 이름 변경 팝업
+    if (editor_data.showChangeObjectPopup)
+    {
+        ImGui::OpenPopup("##Change Object##");
+        editor_data.showChangeObjectPopup = false;
+    }
+    if (ImGui::BeginPopup("##Change Object##"))
+    {
+        if (ImGui::InputText("New Object Name", &editor_data.addObjName, ImGuiInputTextFlags_EnterReturnsTrue))
+        {
+            if (GameObjectManager::GetInstance().AddObjectTag(editor_data.addObjName))
+            {
+                // 성공
+                std::cout << "성공" << std::endl;
+            }
+            else
+            {
+                // 실패
+                std::cout << "실패" << std::endl;
+            }
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
+    }
+
+    //레이어 이름 변경 팝업
+    if (editor_data.showChangeLayerPopup)
+    {
+        ImGui::OpenPopup("##Change Layer##");
+        editor_data.showChangeLayerPopup = false;
+    }
+    if (ImGui::BeginPopup("##Change Layer##"))
+    {
+
+        ImGui::EndPopup();
+    }
+
+    //태그 이름 변경 팝업
+    if (editor_data.showChangeTagPopup)
+    {
+        ImGui::OpenPopup("##Change Tag##");
+        editor_data.showChangeTagPopup = false;
+    }
+    if (ImGui::BeginPopup("##Change Tag##"))
+    {
+
+        ImGui::EndPopup();
+    }
 }
 
 void editor::MainEditor::TopBar()
@@ -394,6 +468,10 @@ void editor::MainEditor::TopBar()
                             // 실패
                             std::cout << "실패" << std::endl;
                         }
+                    }
+                    if (ImGui::MenuItem("Change Name", "Ctrl+C")) { //Change
+                        editor_data.selectLevelName = lvl;
+                        editor_data.showChangeLevelPopup = true;
                     }
                     ImGui::Separator();
                     if (ImGui::MenuItem("Delete Level", "Ctrl+D")) { 
@@ -458,48 +536,6 @@ void editor::MainEditor::TopBar()
             if (ImGui::MenuItem("Close", "Ctrl+W")) { ImGui::CloseCurrentPopup(); }
             ImGui::EndMenu();
         }
-
-        // UV coordinates are often (0.0f, 0.0f) and (1.0f, 1.0f) to display an entire textures.
-        // Here are trying to display only a 32x32 pixels area of the texture, hence the UV computation.
-        // Read about UV coordinates here: https://github.com/ocornut/imgui/wiki/Image-Loading-and-Displaying-Examples
-
-
-        //ImGuiIO& io = ImGui::GetIO();
-        ////io.Fonts->AddFontDefault();
-
-        //ImTextureID my_tex_id = io.Fonts->TexID;
-        //float my_tex_w = (float)io.Fonts->TexWidth;
-        //float my_tex_h = (float)io.Fonts->TexHeight;
-
-        //ImVec2 size1 = ImVec2(20.0f, 20.0f);                        // Size of the image we want to make visible
-        //ImVec2 uv0 = ImVec2(0.f, 0.f);                              // UV coordinates for lower-left
-        //ImVec2 uv1 = ImVec2(my_tex_w, my_tex_h);                    // UV coordinates for (32,32) in our texture
-        //ImVec2 size2 = ImVec2(20.0f, 20.0f);                        // Size of the image we want to make visible
-        //ImVec2 uv2 = ImVec2(0.f, 0.f);                              // UV coordinates for lower-left
-        //ImVec2 uv3 = ImVec2(my_tex_w, my_tex_h);                    // UV coordinates for (32,32) in our texture
-        //ImVec2 size3 = ImVec2(20.0f, 20.0f);                        // Size of the image we want to make visible
-        //ImVec2 uv4 = ImVec2(0.f, 0.f);                              // UV coordinates for lower-left
-        //ImVec2 uv5 = ImVec2(my_tex_w, my_tex_h);                    // UV coordinates for (32,32) in our texturein our texture
-        //
-        //ImVec4 bg_col = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);             // Black background
-        //ImVec4 tint_col = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);           // No tint
-        //
-        //ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(1.0f, 1.0f));
-        //if (ImGui::ImageButton("Play", my_tex_id, size1, uv0, uv1, bg_col, tint_col))
-        //{
-        //    Serializer::GetInstance().SaveLevel(GSM::GameStateManager::GetInstance().GetCurrentLevel()->GetName());
-        //    editorMode = Play;
-        //}
-        //if (ImGui::ImageButton("Edit", my_tex_id, size2, uv2, uv3, bg_col, tint_col))
-        //{
-        //    Serializer::GetInstance().LoadLevel(GSM::GameStateManager::GetInstance().GetCurrentLevel()->GetName());
-        //    editorMode = Edit;
-        //}
-        //if (ImGui::ImageButton("Pause", my_tex_id, size3, uv4, uv5, bg_col, tint_col))
-        //{
-        //    editorMode = Pause;
-        //}
-        //ImGui::PopStyleVar();
 
         for (int i = 0; i < 20; i++)
             ImGui::Spacing();

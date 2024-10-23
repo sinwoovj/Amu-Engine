@@ -23,14 +23,22 @@ namespace editor
 		{
 			// Data Variable
 			std::string currLevelName = "";
+
 			std::string selectLevelName = "";
 			std::string selectObjectName = "";
 			std::string selectCompName = "";
+
 			std::string modifySpritePath = "";
+
 			std::string addLvlName = "";
 			std::string addObjName = "";
 			std::string addLayerName = "";
 			std::string addTagName = "";
+
+			std::string changeLvlName = "";
+			std::string changeObjName = "";
+			std::string changeLayerName = "";
+			std::string changeTagName = "";
 
 			int remove_layer_item_selected_idx = 0;
 			int layer_item_selected_idx = 0;
@@ -53,6 +61,11 @@ namespace editor
 			bool showAddTagPopup = false;
 			bool showRemoveLayerPopup = false;
 			bool showRemoveTagPopup = false;
+
+			bool showChangeLevelPopup = false;
+			bool showChangeObjectPopup = false;
+			bool showChangeLayerPopup = false;
+			bool showChangeTagPopup = false;
 
 			// Normal State Variable
 			bool DeleteObject = false;
