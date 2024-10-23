@@ -9,8 +9,8 @@ namespace editor
 	class MainEditor
 	{
 
-		~MainEditor();
 	public:
+		~MainEditor();
 		enum EditorMode
 		{
 			Play,

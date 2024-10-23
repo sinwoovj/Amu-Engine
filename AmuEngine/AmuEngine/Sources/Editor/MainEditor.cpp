@@ -18,7 +18,6 @@ editor::MainEditor::EDITOR_DATA editor::MainEditor::editor_data;
 
 editor::MainEditor::~MainEditor()
 {
-    ImGui::DestroyContext();
 }
 
 void editor::MainEditor::PopUp()
@@ -383,10 +382,11 @@ void editor::MainEditor::TopBar()
                     continue;
                 if (ImGui::BeginMenu(lvl.c_str(), lvl != editor_data.currLevelName))
                 {
-                    if (ImGui::MenuItem("Delete Level", "Ctrl+D")) { 
-                        if (LevelManager::GetInstance().DeleteLevel(lvl)) //Delete
+                    if (ImGui::MenuItem("Load Level", "Ctrl+L")) {
+                        if (LevelManager::GetInstance().LoadLevel(lvl)) //Load
                         {
                             // 성공
+                            editor_data.selectLevelName = lvl;
                             std::cout << "성공" << std::endl;
                         }
                         else
@@ -395,11 +395,11 @@ void editor::MainEditor::TopBar()
                             std::cout << "실패" << std::endl;
                         }
                     }
-                    if (ImGui::MenuItem("Load Level", "Ctrl+L")) { 
-                        if (LevelManager::GetInstance().LoadLevel(lvl)) //Load
+                    ImGui::Separator();
+                    if (ImGui::MenuItem("Delete Level", "Ctrl+D")) { 
+                        if (LevelManager::GetInstance().DeleteLevel(lvl)) //Delete
                         {
                             // 성공
-                            editor_data.selectLevelName = lvl;
                             std::cout << "성공" << std::endl;
                         }
                         else
@@ -414,7 +414,7 @@ void editor::MainEditor::TopBar()
 
             ImGui::SeparatorText("Level Option");
 
-            if (ImGui::MenuItem("Save Current Level", "Ctrl+S")) {
+            if (ImGui::MenuItem("Save Level", "Ctrl+S")) {
                 if (LevelManager::GetInstance().SaveLevel(editor_data.currLevelName))
                 {
                     // 성공
@@ -426,7 +426,7 @@ void editor::MainEditor::TopBar()
                     std::cout << "실패" << std::endl;
                 }
             }
-            if (ImGui::MenuItem("Undo Current Level", "Ctrl+U")) {
+            if (ImGui::MenuItem("Undo Level", "Ctrl+U")) {
                 if (LevelManager::GetInstance().UndoLevel(editor_data.currLevelName))
                 {
                     // 성공
@@ -714,8 +714,6 @@ void editor::MainEditor::ShowLevelObject(bool* p_open)
 void editor::MainEditor::MainEditorInit(GLFWwindow* mainWindow)
 {
     // Set Korean Font
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
     ImGui::StyleColorsDark();
     ImGuiIO& io = ImGui::GetIO();
     io.Fonts->AddFontFromFileTTF("./Sources/Assets/Fonts/NeoDunggeunmoPro-Regular.ttf", 18.0f, NULL, io.Fonts->GetGlyphRangesKorean());
@@ -731,5 +729,4 @@ void editor::MainEditor::MainEditorUpdate()
 
 void editor::MainEditor::MainEditorExit()
 {
-
 }

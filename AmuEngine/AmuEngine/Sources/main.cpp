@@ -9,6 +9,8 @@
 #include "../Editor/MainEditor.h"
 #include <iostream>
 #include <Windows.h>
+#include <crtdbg.h> // To check for memory leaks
+
 
 GLboolean fullScreen = GL_FALSE;
 
@@ -121,6 +123,9 @@ void fullscreenInput(int& LastFrameFullscreenKey)
 
 int main(void)
 {
+    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+
+    //_CrtSetBreakAlloc(515);
     if (AMSysInit(windowWidth, windowHeight, "Amu Engine") )
         return 1;
 
@@ -174,6 +179,7 @@ int main(void)
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
+    delete mainEditor;
 
     glfwTerminate();
     return 0;

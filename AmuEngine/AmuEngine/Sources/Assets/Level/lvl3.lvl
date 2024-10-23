@@ -30,7 +30,8 @@
             "textureSize": [
               200.0,
               200.0
-            ]
+            ],
+            "orderinLayer": 0
           }
         },
         {

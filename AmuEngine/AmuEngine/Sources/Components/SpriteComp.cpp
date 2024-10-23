@@ -387,6 +387,8 @@ void SpriteComp::LoadFromJson(const json& data)
 		texturePath = it.value();
 		it = compData->find("textureSize");
 		SetTextureSize({ it->begin().value(), (it->begin() + 1).value() });
+		it = compData->find("orderinLayer");
+		orderinLayer = it.value();
 	}
 }
 
@@ -400,6 +402,7 @@ json SpriteComp::SaveToJson()
 	compData["alpha"] = alpha;
 	compData["texturePath"] = texturePath;
 	compData["textureSize"] = { textureSize.x, textureSize.y };
+	compData["orderinLayer"] = orderinLayer;
 	data["compData"] = compData;
 
 	return data;
@@ -441,7 +444,7 @@ void SpriteComp::Edit()
 	//OrderInLayer
 	ImGui::SeparatorText("Order In Layer");
 	{
-		ImGui::DragInt("order in layer", &orderinLayer, 1, 0);
+		ImGui::DragInt("order in layer", &orderinLayer, 1, -100, 100);
 		if (ImGui::Button("Initialize"))
 		{
 			orderinLayer = 0;

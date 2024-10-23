@@ -1,6 +1,42 @@
 {
   "objects": [
     {
+      "object": "HI",
+      "components": [
+        {
+          "type": "TransformComp",
+          "compData": {
+            "position": [
+              0.0,
+              0.0
+            ],
+            "scale": [
+              1.0,
+              1.0
+            ],
+            "rotation": 0.0
+          }
+        },
+        {
+          "type": "SpriteComp",
+          "compData": {
+            "color": [
+              1.0,
+              1.0,
+              1.0
+            ],
+            "alpha": 1.0,
+            "texturePath": "./Sources/Assets/Sprite/default.png",
+            "textureSize": [
+              400.0,
+              400.0
+            ],
+            "orderinLayer": 3
+          }
+        }
+      ]
+    },
+    {
       "object": "background",
       "components": [
         {
@@ -30,7 +66,8 @@
             "textureSize": [
               1000.0,
               563.0
-            ]
+            ],
+            "orderinLayer": 0
           }
         }
       ]
@@ -65,7 +102,8 @@
             "textureSize": [
               200.0,
               200.0
-            ]
+            ],
+            "orderinLayer": 0
           }
         }
       ]
@@ -100,7 +138,8 @@
             "textureSize": [
               200.0,
               200.0
-            ]
+            ],
+            "orderinLayer": 0
           }
         }
       ]
@@ -135,7 +174,8 @@
             "textureSize": [
               200.0,
               200.0
-            ]
+            ],
+            "orderinLayer": 0
           }
         }
       ]
