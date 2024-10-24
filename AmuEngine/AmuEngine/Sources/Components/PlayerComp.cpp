@@ -51,7 +51,9 @@ void PlayerComp::Update()
 	/*AudioComp* ad = owner->GetComponent<AudioComp>();
 	if (!ad) return;*/
 	
+	//if smooth step
 	r->SetVelocityX(0);
+	r->SetVelocityY(0);
 
 	if (glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_A) == GLFW_PRESS)
 	{

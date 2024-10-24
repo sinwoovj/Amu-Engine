@@ -255,6 +255,13 @@ bool Serializer::SaveLevel(const std::string& str)
 				if (c != nullptr)
 					components.push_back(c->SaveToJson());
 
+				PlayerComp* p = go.second->GetComponent<PlayerComp>();
+				if (p != nullptr)
+					components.push_back(p->SaveToJson());
+
+				BOMB::BombComp* b = go.second->GetComponent<BOMB::BombComp>();
+				if (b != nullptr)
+					components.push_back(b->SaveToJson());
 			}
 			else
 			{
