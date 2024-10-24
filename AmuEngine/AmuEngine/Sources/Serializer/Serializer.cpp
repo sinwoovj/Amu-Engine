@@ -101,6 +101,16 @@ bool Serializer::LoadLevel(const std::string& str)
 
 		if (objIt != item.end())
 		{
+			// layer
+			std::string layerName = item.find("layer").value().dump();
+			layerName = layerName.substr(1, layerName.size() - 2);
+			go->SetLayer(layerName);
+			// tag
+			std::string tagName = item.find("tag").value().dump();
+			tagName = tagName.substr(1, tagName.size() - 2);
+			go->SetTag(tagName);
+
+			// component
 			auto compIt = item.find("components");
 			if (compIt == item.end())
 				continue;
@@ -235,6 +245,12 @@ bool Serializer::SaveLevel(const std::string& str)
 			json obj;
 			obj["object"] = go.first;
 
+			// Layer
+			obj["layer"] = go.second->layer;
+			// Tag
+			obj["tag"] = go.second->tag;
+			
+			// Component
 			json components;
 
 			if (!go.second->GetComponents().empty())
