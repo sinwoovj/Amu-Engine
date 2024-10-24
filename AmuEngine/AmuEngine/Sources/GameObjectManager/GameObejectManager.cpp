@@ -132,7 +132,7 @@ bool GameObjectManager::RemoveObjectTag(std::string str)
 			return false;
 	}
 	if (ExistObjectTag(str)){
-		Tag.erase(remove(Layer.begin(), Layer.end(), str), Layer.end());
+		Tag.erase(remove(Tag.begin(), Tag.end(), str), Tag.end());
 		return true;
 	}
 	return false;

@@ -7,6 +7,7 @@
 #include "../RTTI/Registry.h"
 #include "../Prefab/Prefab.h"
 #include "../Level/LevelManager.h"
+#include "../Editor/MainEditor.h"
 
 json Serializer::GetLevelData(const std::string& str)
 {
@@ -85,6 +86,8 @@ bool Serializer::LoadLevel(const std::string& str)
 
 	json allData;
 	file >> allData;	// the json has all the file data
+
+	file.close();
 
 	json objects;
 	objects = allData.find("objects").value();
@@ -302,4 +305,64 @@ bool Serializer::SaveLevel(const std::string& str)
 
 	file.close();
 	return true;
+}
+
+void Serializer::LoadEditorSetting()
+{
+	// Open file
+	std::fstream file;
+	std::string editorFileName = editor::MainEditor::editor_data.editorFileName;
+	file.open(editorFileName, std::fstream::in);
+
+	// Check the file is valid
+	if (!file.is_open())
+	{
+		file.close();
+		SaveEditorSetting();
+		file.open(editorFileName, std::fstream::in);
+	}
+
+	json allData;
+	file >> allData;	// the json has all the file data
+
+	file.close();
+
+	json layers;
+	layers = allData.find("layers").value();
+
+	for (auto& layer : layers)
+	{
+		std::string layerName = layer.dump();	// convert to string
+		layerName = layerName.substr(1, layerName.size() - 2);
+		GameObjectManager::GetInstance().AddObjectLayer(layerName);
+	}
+
+	json tags;
+	tags = allData.find("tags").value();
+
+	for (auto& tag : tags)
+	{
+		std::string tagName = tag.dump();	// convert to string
+		tagName = tagName.substr(1, tagName.size() - 2);
+		GameObjectManager::GetInstance().AddObjectTag(tagName);
+	}
+}
+
+void Serializer::SaveEditorSetting()
+{
+	json allData;
+	
+	std::string editorFileName = editor::MainEditor::editor_data.editorFileName;
+
+	std::ofstream editorFile(editorFileName);
+
+	if (!editorFile.is_open())
+		throw std::invalid_argument("defaultLvlFile Invalid filename " + editorFileName);
+
+	allData["layers"] = GameObjectManager::GetInstance().GetLayers();
+	allData["tags"] = GameObjectManager::GetInstance().GetTags();
+
+	editorFile << std::setw(2) << allData;	// Separates in lines and each section
+
+	editorFile.close();
 }

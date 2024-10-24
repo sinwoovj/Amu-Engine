@@ -46,6 +46,7 @@ void editor::MainEditor::PopUp()
         if (ImGui::Button("Yes"))
         {
             Serializer::GetInstance().SaveLevel(editor_data.currLevelName);
+            Serializer::GetInstance().SaveEditorSetting();
             GSM::GameStateManager::GetInstance().ChangeLevel(new level::NormalLevel(editor_data.selectLevelName));
             editorMode = Edit;
             ImGui::CloseCurrentPopup();
@@ -544,6 +545,7 @@ void editor::MainEditor::TopBar()
         if (ImGui::Button("Play"))
         {
             Serializer::GetInstance().SaveLevel(GSM::GameStateManager::GetInstance().GetCurrentLevel()->GetName());
+            Serializer::GetInstance().SaveEditorSetting();
             //save가 안되어 있을 시 팝업
             
             editorMode = Play;
@@ -556,6 +558,7 @@ void editor::MainEditor::TopBar()
             editorMode = Edit;
             GameObjectManager::GetInstance().RemoveAllObject();
             Serializer::GetInstance().LoadLevel(GSM::GameStateManager::GetInstance().GetCurrentLevel()->GetName());
+            Serializer::GetInstance().LoadEditorSetting();
         }
         ImGui::PopItemFlag();
         ImGui::Spacing();
@@ -639,6 +642,15 @@ void editor::MainEditor::ShowLevelObject(bool* p_open)
                     {
                         auto layers = GameObjectManager::GetInstance().GetLayers();
 
+                        bool isLayerExistNow = false;
+                        for (auto& layer : layers)
+                        {
+                            if (obj.second->GetLayer() == layer)
+                                isLayerExistNow = true;
+                        }
+                        if (!isLayerExistNow)
+                            obj.second->SetLayer(*GameObjectManager::GetInstance().DefaultLayer.begin());
+
                         if (ImGui::BeginCombo("##Layer##", obj.second->GetLayer().c_str()))
                         {
                             for (int n = 0; n < (int)layers.size(); n++)
@@ -662,6 +674,15 @@ void editor::MainEditor::ShowLevelObject(bool* p_open)
                     ImGui::SameLine();
                     {
                         auto tags = GameObjectManager::GetInstance().GetTags();
+
+                        bool isTagExistNow = false;
+                        for (auto& tag : tags)
+                        {
+                            if (obj.second->GetTag() == tag)
+                                isTagExistNow = true;
+                        }
+                        if (!isTagExistNow)
+                            obj.second->SetTag(*GameObjectManager::GetInstance().DefaultTag.begin());
 
                         if (ImGui::BeginCombo("##Tag##", obj.second->GetTag().c_str()))
                         {

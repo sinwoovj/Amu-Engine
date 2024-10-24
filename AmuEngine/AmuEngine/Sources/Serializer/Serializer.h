@@ -29,4 +29,6 @@ public:
 	bool LoadLevel(const std::string& str);
 	bool ExistChangePoint(const std::string& str);
 	bool SaveLevel(const std::string& str);
+	void LoadEditorSetting();
+	void SaveEditorSetting();
 };

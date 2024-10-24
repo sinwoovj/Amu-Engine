@@ -7,6 +7,7 @@
 #include <Utils.h>
 #include <EasyImgui.h>
 #include "../Editor/MainEditor.h"
+#include "../Serializer/Serializer.h"
 #include <iostream>
 #include <Windows.h>
 #include <crtdbg.h> // To check for memory leaks
@@ -136,6 +137,8 @@ int main(void)
     GSM::GameStateManager& gsm = GSM::GameStateManager::GetInstance();
 
     gsm.ChangeLevel(new level::Menu);
+
+    Serializer::GetInstance().LoadEditorSetting();
 
     int LastFrameFullscreenKey = GLFW_RELEASE;
 

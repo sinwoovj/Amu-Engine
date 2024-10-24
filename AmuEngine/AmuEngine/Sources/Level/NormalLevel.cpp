@@ -26,6 +26,7 @@ level::NormalLevel::~NormalLevel()
 void level::NormalLevel::Init()
 {
 	Serializer::GetInstance().LoadLevel(levelName);
+	Serializer::GetInstance().LoadEditorSetting();
 
 #ifdef _DEBUG
 	//std::cout << "Current Level : " << levelName << std::endl;

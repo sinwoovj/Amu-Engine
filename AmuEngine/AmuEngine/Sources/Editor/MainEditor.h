@@ -69,6 +69,9 @@ namespace editor
 
 			// Normal State Variable
 			bool DeleteObject = false;
+
+			// Constant Variable
+			const std::string editorFileName = "./Sources/Editor/editor.json";
 		};
 		static EDITOR_DATA editor_data;
 
