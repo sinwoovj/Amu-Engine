@@ -92,6 +92,34 @@ bool LevelManager::UndoLevel(const std::string& str)
     return true;
 }
 
+void LevelManager::ChangeLevel(const std::string& oldstr, const std::string& newstr)
+{
+    //실제 파일 이름 변경
+    std::string oldName = directory + oldstr + filenameExtension;
+    std::string newName = directory + newstr + filenameExtension;
+    int result = rename(oldName.c_str(), newName.c_str());
+    if (result != 0)
+        std::cout << "Could not rename " << oldName.c_str() << std::endl;
+    else
+        std::cout << "File " << oldName.c_str() << " renamed to " << newName.c_str() << std::endl;
+    //string vector levels 내부 값 변경
+    auto first = levels.begin();
+    auto last = levels.end();
+    while (first != last)
+    {
+        if (*first == oldstr)
+        {
+            *first = oldstr;
+            break;
+        }
+        ++first;
+    }
+    if (first != last)
+        std::cout << "rename vector levels succeeded" << std::endl;
+    else
+        std::cout << "renmae vector levels failed" << std::endl;
+}
+
 bool LevelManager::AddLevel(const std::string& str)
 {
     // str에 해당하는 레벨이 있는지 확인

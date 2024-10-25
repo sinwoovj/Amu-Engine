@@ -108,6 +108,7 @@ std::string GameObjectManager::GetObjectLayer(std::string obj)
 {
 	if (objects.find(obj) != objects.end())
 		return objects.find(obj)->second->GetLayer();
+	return "";
 }
 
 bool GameObjectManager::AddObjectTag(std::string str)
@@ -158,6 +159,7 @@ std::string GameObjectManager::GetObjectTag(std::string obj)
 {
 	if (objects.find(obj) != objects.end())
 		return objects.find(obj)->second->GetTag();
+	return "";
 }
 
 void GameObjectManager::InsertObject(const std::string& id, GameObject* obj)

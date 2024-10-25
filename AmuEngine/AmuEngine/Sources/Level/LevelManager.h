@@ -31,6 +31,7 @@ public:
 	bool LoadLevel(const std::string& str);
 	bool SaveLevel(const std::string& str);
 	bool UndoLevel(const std::string& str);
+	void ChangeLevel(const std::string& oldstr, const std::string& newstr);
 	bool AddLevel(const std::string& str);
 	bool DeleteLevel(const std::string& str);
 };

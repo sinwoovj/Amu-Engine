@@ -43,10 +43,6 @@ public:
 	void SetTag(std::string str) { tag = str; }
 	std::string GetTag() { return tag; }
 
-	void LoadLayer();
-
-	void LoadTag();
-
 	//Components in the GO container are ALLOCATED IN THE HEAP, 
 	//so. When to GO is destroyed, the GO must be as well
 	~GameObject();

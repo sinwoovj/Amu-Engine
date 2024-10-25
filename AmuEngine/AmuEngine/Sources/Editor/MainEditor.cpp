@@ -362,16 +362,19 @@ void editor::MainEditor::PopUp()
     {
         if (ImGui::InputText("New Level Name", &editor_data.changeLvlName, ImGuiInputTextFlags_EnterReturnsTrue))
         {
-            //if (GameObjectManager::GetInstance().AddObjectTag(editor_data.changeLvlName))
-            //{
-            //    // 성공
-            //    std::cout << "성공" << std::endl;
-            //}
-            //else
-            //{
-            //    // 실패
-            //    std::cout << "실패" << std::endl;
-            //}
+            //해당 이름이 중복되는 검사 후 적용
+            if (LevelManager::GetInstance().ExistLevel(editor_data.changeLvlName))
+            {
+                // 중복 (이미 있는 거라고 띄움)
+                std::cout << "실패" << std::endl;
+                editor_data.showAlreadyHaveSameNameLevelPopup = true;
+            }
+            else
+            {
+                // 진행
+                std::cout << "성공" << std::endl;
+                LevelManager::GetInstance().ChangeLevel(editor_data.selectLevelName, editor_data.changeLvlName);
+            }
             ImGui::CloseCurrentPopup();
         }
         ImGui::EndPopup();
