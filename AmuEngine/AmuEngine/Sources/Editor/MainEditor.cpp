@@ -100,14 +100,8 @@ void editor::MainEditor::PopUp()
 
     if (ImGui::BeginPopup("##Object List Right Click##"))
     {
-        if (ImGui::MenuItem("Delete Object", NULL))
-        {
-            GameObjectManager::GetInstance().RemoveObject(editor_data.selectObjectName);
-            if (GameObjectManager::GetInstance().GetObj(editor_data.selectObjectName) != nullptr)
-                std::cout << "실패" << std::endl;
-            else
-                std::cout << "성공" << std::endl;
-            ImGui::CloseCurrentPopup();
+        if (ImGui::MenuItem("Change Name")) {
+            editor_data.showChangeObjectPopup = true;
         }
         if (ImGui::BeginMenu("Add Component"))
         {
@@ -121,6 +115,16 @@ void editor::MainEditor::PopUp()
                 }
             }
             ImGui::EndMenu();
+        }
+        ImGui::Separator();
+        if (ImGui::MenuItem("Delete Object", NULL))
+        {
+            GameObjectManager::GetInstance().RemoveObject(editor_data.selectObjectName);
+            if (GameObjectManager::GetInstance().GetObj(editor_data.selectObjectName) != nullptr)
+                std::cout << "실패" << std::endl;
+            else
+                std::cout << "성공" << std::endl;
+            ImGui::CloseCurrentPopup();
         }
         ImGui::EndPopup();
     }
@@ -388,17 +392,20 @@ void editor::MainEditor::PopUp()
     }
     if (ImGui::BeginPopup("##Change Object##"))
     {
-        if (ImGui::InputText("New Object Name", &editor_data.addObjName, ImGuiInputTextFlags_EnterReturnsTrue))
+        if (ImGui::InputText("New Object Name", &editor_data.changeObjName, ImGuiInputTextFlags_EnterReturnsTrue))
         {
-            if (GameObjectManager::GetInstance().AddObjectTag(editor_data.addObjName))
+            //해당 이름이 중복되는 검사 후 적용
+            if (GameObjectManager::GetInstance().ExistObject(editor_data.changeObjName))
             {
-                // 성공
-                std::cout << "성공" << std::endl;
+                // 중복 (이미 있는 거라고 띄움)
+                std::cout << "실패" << std::endl;
+                editor_data.showAlreadyHaveSameNameObjectPopup = true;
             }
             else
             {
-                // 실패
-                std::cout << "실패" << std::endl;
+                // 진행
+                std::cout << "성공" << std::endl;
+                GameObjectManager::GetInstance().ChangeNameObject(editor_data.selectObjectName, editor_data.changeObjName);
             }
             ImGui::CloseCurrentPopup();
         }
@@ -658,13 +665,20 @@ void editor::MainEditor::ShowLevelObject(bool* p_open)
                         {
                             for (int n = 0; n < (int)layers.size(); n++)
                             {
+                                if (ImGui::IsItemHovered())
+                                {
+                                    if (ImGui::IsMouseClicked(ImGuiMouseButton_Right))
+                                    {
+                                        editor_data.selectLayerName = obj.first;
+                                        editor_data.showLayerComboRightClickPopup = true;
+                                    }
+                                }
                                 bool is_selected = (editor_data.layer_item_selected_idx == n);
                                 if (ImGui::Selectable(layers.at(n).c_str(), is_selected))
                                 {
                                     obj.second->SetLayer(layers.at(n));
                                     editor_data.layer_item_selected_idx = n;
                                 }
-
                                 // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
                                 if (is_selected)
                                     ImGui::SetItemDefaultFocus();
@@ -691,6 +705,14 @@ void editor::MainEditor::ShowLevelObject(bool* p_open)
                         {
                             for (int n = 0; n < (int)tags.size(); n++)
                             {
+                                if (ImGui::IsItemHovered())
+                                {
+                                    if (ImGui::IsMouseClicked(ImGuiMouseButton_Right))
+                                    {
+                                        editor_data.selectTagName = obj.first;
+                                        editor_data.showTagComboRightClickPopup = true;
+                                    }
+                                }
                                 bool is_selected = (editor_data.tag_item_selected_idx == n);
                                 if (ImGui::Selectable(tags.at(n).c_str(), is_selected))
                                 {

@@ -111,6 +111,10 @@ std::string GameObjectManager::GetObjectLayer(std::string obj)
 	return "";
 }
 
+void GameObjectManager::ChangeNameLayer(const std::string& oldstr, const std::string& newstr)
+{
+}
+
 bool GameObjectManager::AddObjectTag(std::string str)
 {
 	for (auto& it : DefaultTag)
@@ -160,6 +164,10 @@ std::string GameObjectManager::GetObjectTag(std::string obj)
 	if (objects.find(obj) != objects.end())
 		return objects.find(obj)->second->GetTag();
 	return "";
+}
+
+void GameObjectManager::ChangeNameTag(const std::string& oldstr, const std::string& newstr)
+{
 }
 
 void GameObjectManager::InsertObject(const std::string& id, GameObject* obj)
@@ -219,4 +227,31 @@ void GameObjectManager::RemoveAllObject()
 	}
 
 	objects.clear();
+}
+
+bool GameObjectManager::ExistObject(const std::string& id)
+{
+	for (auto it = objects.begin(); it != objects.end(); it++)
+	{
+		if (it->second->GetName() == id)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+void GameObjectManager::ChangeNameObject(const std::string& oldstr, const std::string& newstr)
+{
+	for(auto& it : objects)
+	{
+		if (it.second->GetName() == oldstr)
+		{
+			it.second->SetName(newstr);
+			InsertObject(newstr, it.second);
+		}
+	}
+	auto it = objects.find(oldstr);
+	if (it != objects.end())
+		objects.erase(it);
 }

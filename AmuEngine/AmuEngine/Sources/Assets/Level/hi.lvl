@@ -1,8 +1,8 @@
 {
   "objects": [
     {
-      "object": "Backgrouhnd",
-      "layer": "UI",
+      "object": "Back",
+      "layer": "Default",
       "tag": "Untagged",
       "components": [
         {

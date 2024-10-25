@@ -27,6 +27,8 @@ namespace editor
 			std::string selectLevelName = "";
 			std::string selectObjectName = "";
 			std::string selectCompName = "";
+			std::string selectLayerName = "";
+			std::string selectTagName = "";
 
 			std::string modifySpritePath = "";
 
@@ -53,6 +55,8 @@ namespace editor
 			bool showAddObjectPopup = false;
 			bool showObjectListRightClickPopup = false;
 			bool showCompListRightClickPopup = false;
+			bool showLayerComboRightClickPopup = false;
+			bool showTagComboRightClickPopup = false;
 			bool showAlreadyHaveSameNameLevelPopup = false;
 			bool showAlreadyHaveSameNameObjectPopup = false;
 			bool showAddLevelPopup = false;
