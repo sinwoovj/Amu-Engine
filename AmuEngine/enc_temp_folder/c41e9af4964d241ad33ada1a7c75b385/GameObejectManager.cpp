@@ -88,11 +88,6 @@ bool GameObjectManager::RemoveObjectLayer(std::string str)
 	return false;
 }
 
-bool GameObjectManager::ExistDefaultLayer(std::string str)
-{
-	return false;
-}
-
 bool GameObjectManager::ExistObjectLayer(std::string str)
 {
 	for (auto& it : Layer)
@@ -118,7 +113,6 @@ std::string GameObjectManager::GetObjectLayer(std::string obj)
 
 void GameObjectManager::ChangeNameLayer(const std::string& oldstr, const std::string& newstr)
 {
-
 }
 
 bool GameObjectManager::AddObjectTag(std::string str)
@@ -146,11 +140,6 @@ bool GameObjectManager::RemoveObjectTag(std::string str)
 		Tag.erase(remove(Tag.begin(), Tag.end(), str), Tag.end());
 		return true;
 	}
-	return false;
-}
-
-bool GameObjectManager::ExistDefaultTag(std::string str)
-{
 	return false;
 }
 

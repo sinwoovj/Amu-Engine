@@ -59,8 +59,6 @@ namespace editor
 			bool showTagComboRightClickPopup = false;
 			bool showAlreadyHaveSameNameLevelPopup = false;
 			bool showAlreadyHaveSameNameObjectPopup = false;
-			bool showAlreadyHaveSameNameLayerPopup = false;
-			bool showAlreadyHaveSameNameTagPopup = false;
 			bool showAddLevelPopup = false;
 
 			bool showAddLayerPopup = false;

@@ -58,7 +58,6 @@ public:
 
 	bool AddObjectLayer(std::string str);
 	bool RemoveObjectLayer(std::string str);
-	bool ExistDefaultLayer(std::string str);
 	bool ExistObjectLayer(std::string str);
 	void SetObjectLayer(std::string obj, std::string layer);
 	std::string GetObjectLayer(std::string obj);
@@ -66,7 +65,6 @@ public:
 
 	bool AddObjectTag(std::string str);
 	bool RemoveObjectTag(std::string str);
-	bool ExistDefaultTag(std::string str);
 	bool ExistObjectTag(std::string str);
 	void SetObjectTag(std::string obj, std::string tag);
 	std::string GetObjectTag(std::string obj);

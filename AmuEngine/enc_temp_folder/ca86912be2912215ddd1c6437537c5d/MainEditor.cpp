@@ -420,23 +420,7 @@ void editor::MainEditor::PopUp()
     }
     if (ImGui::BeginPopup("##Change Layer##"))
     {
-        if (ImGui::InputText("New Layer Name", &editor_data.changeLayerName, ImGuiInputTextFlags_EnterReturnsTrue))
-        {
-            //해당 이름이 중복되는 검사 후 적용
-            if (GameObjectManager::GetInstance().ExistObjectLayer(editor_data.changeObjName))
-            {
-                // 중복 (이미 있는 거라고 띄움)
-                std::cout << "실패" << std::endl;
-                editor_data.showAlreadyHaveSameNameLayerPopup = true;
-            }
-            else
-            {
-                // 진행
-                std::cout << "성공" << std::endl;
-                GameObjectManager::GetInstance().ChangeNameLayer(editor_data.selectLayerName, editor_data.changeLayerName);
-            }
-            ImGui::CloseCurrentPopup();
-        }
+
         ImGui::EndPopup();
     }
 
@@ -448,23 +432,7 @@ void editor::MainEditor::PopUp()
     }
     if (ImGui::BeginPopup("##Change Tag##"))
     {
-        if (ImGui::InputText("New Tag Name", &editor_data.changeTagName, ImGuiInputTextFlags_EnterReturnsTrue))
-        {
-            //해당 이름이 중복되는 검사 후 적용
-            if (GameObjectManager::GetInstance().ExistObjectTag(editor_data.changeTagName))
-            {
-                // 중복 (이미 있는 거라고 띄움)
-                std::cout << "실패" << std::endl;
-                editor_data.showAlreadyHaveSameNameTagPopup = true;
-            }
-            else
-            {
-                // 진행
-                std::cout << "성공" << std::endl;
-                GameObjectManager::GetInstance().ChangeNameTag(editor_data.selectTagName, editor_data.changeTagName);
-            }
-            ImGui::CloseCurrentPopup();
-        }
+
         ImGui::EndPopup();
     }
 }
