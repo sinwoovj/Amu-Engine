@@ -75,7 +75,6 @@ void editor::MainEditor::PopUp()
         ImGui::OpenPopup("##Add Object##"); // 팝업 열기
         editor_data.showAddObjectPopup = false; // 플래그 리셋
     }
-
     if (ImGui::BeginPopup("##Add Object##"))
     {
         if (ImGui::InputText("Object Name", &editor_data.addObjName, ImGuiInputTextFlags_EnterReturnsTrue))
@@ -97,7 +96,6 @@ void editor::MainEditor::PopUp()
         ImGui::OpenPopup("##Object List Right Click##"); // 팝업 열기
         editor_data.showObjectListRightClickPopup = false;
     }
-
     if (ImGui::BeginPopup("##Object List Right Click##"))
     {
         if (ImGui::MenuItem("Change Name")) {
@@ -135,7 +133,6 @@ void editor::MainEditor::PopUp()
         ImGui::OpenPopup("     Warning : Delete Level     ");
         editor_data.showAlreadyHaveSameNameLevelPopup = false;
     }
-
     if (ImGui::BeginPopup("     Warning : Delete Level     "))
     {
         ImGui::Text("This level name is already exist.\n Please type another level name.");
@@ -153,7 +150,6 @@ void editor::MainEditor::PopUp()
         ImGui::OpenPopup("     Warning : Delete Object     ");
         editor_data.showAlreadyHaveSameNameObjectPopup = false;
     }
-
     if (ImGui::BeginPopup("     Warning : Delete Object     "))
     {
         ImGui::Text("This Object name is already exist.\n Please type another Object name.");
@@ -240,51 +236,7 @@ void editor::MainEditor::PopUp()
         }
         ImGui::EndPopup();
     }
-    //레이어 제거 팝업
-    if (editor_data.showRemoveLayerPopup)
-    {
-        ImGui::OpenPopup("##Remove Layer##");
-        editor_data.showRemoveLayerPopup = false;
-    }
-    if (ImGui::BeginPopup("##Remove Layer##"))
-    {
-        auto layers = GameObjectManager::GetInstance().GetLayers();
-        if (ImGui::BeginListBox("##Remove Layer##"))
-        {
-            for (int n = 0; n < (int)layers.size(); n++)
-            {
-                const bool is_selected = (editor_data.remove_layer_item_selected_idx == n);
-                bool is_layer_default = false;
-                for (auto& it : GameObjectManager::GetInstance().DefaultLayer)
-                {
-                    if (it == layers.at(n))
-                        is_layer_default = true;
-                }
-                if (is_layer_default) continue;
-                if (ImGui::Selectable(layers.at(n).c_str(), is_selected))
-                {
-                    editor_data.remove_layer_item_selected_idx = n;
-                    if (GameObjectManager::GetInstance().RemoveObjectLayer(layers.at(n)))
-                    {
-                        // 성공
-                        std::cout << "성공" << std::endl;
-                    }
-                    else
-                    {
-                        // 실패
-                        std::cout << "실패" << std::endl;
-                    }
-                    ImGui::CloseCurrentPopup();
-                }
 
-                // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
-                if (is_selected)
-                    ImGui::SetItemDefaultFocus();
-            }
-            ImGui::EndListBox();
-        }
-        ImGui::EndPopup();
-    }
     //태그 추가 팝업
     if (editor_data.showAddTagPopup)
     {
@@ -306,52 +258,6 @@ void editor::MainEditor::PopUp()
                 std::cout << "실패" << std::endl;
             }
             ImGui::CloseCurrentPopup();
-        }
-        ImGui::EndPopup();
-    }
-    //태그 제거 팝업
-    if (editor_data.showRemoveTagPopup)
-    {
-        ImGui::OpenPopup("##Remove Tag##");
-        editor_data.showRemoveTagPopup = false;
-    }
-    if (ImGui::BeginPopup("##Remove Tag##"))
-    {
-        auto tags = GameObjectManager::GetInstance().GetTags();
-
-        if (ImGui::BeginListBox("##Remove Tag##"))
-        {
-            for (int n = 0; n < (int)tags.size(); n++)
-            {
-                const bool is_selected = (editor_data.remove_tag_item_selected_idx == n);
-                bool is_tag_default = false;
-                for (auto& it : GameObjectManager::GetInstance().DefaultTag)
-                {
-                    if (it == tags.at(n))
-                        is_tag_default = true;
-                }
-                if (is_tag_default) continue;
-                if (ImGui::Selectable(tags.at(n).c_str(), is_selected))
-                {
-                    editor_data.remove_tag_item_selected_idx = n;
-                    if (GameObjectManager::GetInstance().RemoveObjectTag(tags.at(n)))
-                    {
-                        // 성공
-                        std::cout << "성공" << std::endl;
-                    }
-                    else
-                    {
-                        // 실패
-                        std::cout << "실패" << std::endl;
-                    }
-                    ImGui::CloseCurrentPopup();
-                }
-
-                // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
-                if (is_selected)
-                    ImGui::SetItemDefaultFocus();
-            }
-            ImGui::EndListBox();
         }
         ImGui::EndPopup();
     }
@@ -462,6 +368,78 @@ void editor::MainEditor::PopUp()
                 // 진행
                 std::cout << "성공" << std::endl;
                 GameObjectManager::GetInstance().ChangeNameTag(editor_data.selectTagName, editor_data.changeTagName);
+            }
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
+    }
+
+    //레이어 콤보 우클릭 팝업
+    if (editor_data.showLayerComboRightClickPopup)
+    {
+        ImGui::OpenPopup("##Layer Combo Right Click Popup##");
+        editor_data.showLayerComboRightClickPopup = false;
+    }
+    if (ImGui::BeginPopup("##Layer Combo Right Click Popup##"))
+    {
+        bool selected = false;
+        bool enabled = true;
+        if (!GameObjectManager::GetInstance().ExistDefaultLayer(editor_data.selectLayerName))
+        {
+            enabled = false;
+        }
+        if (ImGui::MenuItem("Change Name", 0, selected, enabled))
+        {
+            editor_data.showChangeLayerPopup = true;
+            ImGui::CloseCurrentPopup();
+        }
+        if (ImGui::MenuItem("Remove Layer", 0, selected, enabled))
+        {
+            if (GameObjectManager::GetInstance().RemoveObjectLayer(editor_data.selectLayerName))
+            {
+                // 성공
+                std::cout << "성공" << std::endl;
+            }
+            else
+            {
+                // 실패
+                std::cout << "실패" << std::endl;
+            }
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
+    }
+
+    //태그 콤보 우클릭 팝업
+    if (editor_data.showTagComboRightClickPopup)
+    {
+        ImGui::OpenPopup("##Tag Combo Right Click Popup##");
+        editor_data.showTagComboRightClickPopup = false;
+    }
+    if (ImGui::BeginPopup("##Tag Combo Right Click Popup##"))
+    {
+        bool selected = false;
+        bool enabled = true;
+        if (GameObjectManager::GetInstance().ExistDefaultTag(editor_data.selectTagName))
+        {
+            enabled = false;
+        }
+        if (ImGui::MenuItem("Change Name", 0, selected, enabled))
+        {
+            editor_data.showChangeTagPopup = true;
+            ImGui::CloseCurrentPopup();
+        }
+        if (ImGui::MenuItem("Remove Tag", 0, selected, enabled))
+        {
+            if (GameObjectManager::GetInstance().RemoveObjectTag(editor_data.selectTagName))
+            {
+                // 성공
+                std::cout << "성공" << std::endl;
+            }
+            else
+            {
+                // 실패
+                std::cout << "실패" << std::endl;
             }
             ImGui::CloseCurrentPopup();
         }
@@ -635,7 +613,6 @@ void editor::MainEditor::ShowLevelObject(bool* p_open)
             GetCurrentLevel())->GetName().c_str(), p_open))
         {
             ImGui::SeparatorText("Object List");
-            int id = 0;
             for (auto& obj : GameObjectManager::GetInstance().GetAllObjects())
             {
                 if (ImGui::TreeNode(obj.first.c_str()))
@@ -688,13 +665,17 @@ void editor::MainEditor::ShowLevelObject(bool* p_open)
                         for (auto& layer : layers)
                         {
                             if (obj.second->GetLayer() == layer)
+                            {
                                 isLayerExistNow = true;
+                                break;
+                            }
                         }
                         if (!isLayerExistNow)
                             obj.second->SetLayer(*GameObjectManager::GetInstance().DefaultLayer.begin());
 
                         if (ImGui::BeginCombo("##Layer##", obj.second->GetLayer().c_str()))
                         {
+                            bool is_selected;
                             for (int n = 0; n < (int)layers.size(); n++)
                             {
                                 if (ImGui::IsItemHovered())
@@ -705,7 +686,7 @@ void editor::MainEditor::ShowLevelObject(bool* p_open)
                                         editor_data.showLayerComboRightClickPopup = true;
                                     }
                                 }
-                                bool is_selected = (editor_data.layer_item_selected_idx == n);
+                                is_selected = (editor_data.layer_item_selected_idx == n);
                                 if (ImGui::Selectable(layers.at(n).c_str(), is_selected))
                                 {
                                     obj.second->SetLayer(layers.at(n));
@@ -714,6 +695,12 @@ void editor::MainEditor::ShowLevelObject(bool* p_open)
                                 // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
                                 if (is_selected)
                                     ImGui::SetItemDefaultFocus();
+                            }
+                            //Add List
+                            ImGui::Separator();
+                            if (ImGui::Selectable("Add Layer"))
+                            {
+                                editor_data.showAddLayerPopup = true;
                             }
                             ImGui::EndCombo();
                         }
@@ -735,6 +722,7 @@ void editor::MainEditor::ShowLevelObject(bool* p_open)
 
                         if (ImGui::BeginCombo("##Tag##", obj.second->GetTag().c_str()))
                         {
+                            bool is_selected;
                             for (int n = 0; n < (int)tags.size(); n++)
                             {
                                 if (ImGui::IsItemHovered())
@@ -745,7 +733,7 @@ void editor::MainEditor::ShowLevelObject(bool* p_open)
                                         editor_data.showTagComboRightClickPopup = true;
                                     }
                                 }
-                                bool is_selected = (editor_data.tag_item_selected_idx == n);
+                                is_selected = (editor_data.tag_item_selected_idx == n);
                                 if (ImGui::Selectable(tags.at(n).c_str(), is_selected))
                                 {
                                     obj.second->SetTag(tags.at(n));
@@ -756,39 +744,18 @@ void editor::MainEditor::ShowLevelObject(bool* p_open)
                                 if (is_selected)
                                     ImGui::SetItemDefaultFocus();
                             }
+                            //Add Tag
+                            ImGui::Separator();
+                            is_selected = (editor_data.tag_item_selected_idx == (int)tags.size());
+                            if (ImGui::Selectable("Add Tag", is_selected))
+                            {
+                                editor_data.showAddTagPopup = true;
+                                editor_data.tag_item_selected_idx = (int)tags.size();
+                            }
                             ImGui::EndCombo();
                         }
                     }
                     ImGui::EndColumns();
-                    //Buttons
-                    ImGui::PushID(id);
-                    ImGui::Columns(2);
-                    {
-                        if (ImGui::Button("Add Layer"))
-                        {
-                            editor_data.showAddLayerPopup = true;
-                        }
-                        ImGui::SameLine();
-                        if (ImGui::Button("Remove Layer"))
-                        {
-                            editor_data.showRemoveLayerPopup = true;
-                        }
-                    }
-                    ImGui::NextColumn();
-                    {
-                        if (ImGui::Button("Add Tag"))
-                        {
-                            editor_data.showAddTagPopup = true;
-                        }
-                        ImGui::SameLine();
-                        if (ImGui::Button("Remove Tag"))
-                        {
-                            editor_data.showRemoveTagPopup = true;
-                        }
-                    }
-                    ImGui::EndColumns();
-                    ImGui::PopID();
-                    id++;
                     ImGui::TreePop();
                 }
                 else

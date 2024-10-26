@@ -65,8 +65,6 @@ namespace editor
 
 			bool showAddLayerPopup = false;
 			bool showAddTagPopup = false;
-			bool showRemoveLayerPopup = false;
-			bool showRemoveTagPopup = false;
 
 			bool showChangeLevelPopup = false;
 			bool showChangeObjectPopup = false;
