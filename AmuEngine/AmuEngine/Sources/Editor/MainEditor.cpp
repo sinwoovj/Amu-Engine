@@ -382,18 +382,17 @@ void editor::MainEditor::PopUp()
     }
     if (ImGui::BeginPopup("##Layer Combo Right Click Popup##"))
     {
-        bool selected = false;
         bool enabled = true;
-        if (!GameObjectManager::GetInstance().ExistDefaultLayer(editor_data.selectLayerName))
+        if (GameObjectManager::GetInstance().ExistDefaultLayer(editor_data.selectLayerName))
         {
             enabled = false;
         }
-        if (ImGui::MenuItem("Change Name", 0, selected, enabled))
+        if (ImGui::MenuItem("Change Name", 0, nullptr, enabled))
         {
             editor_data.showChangeLayerPopup = true;
             ImGui::CloseCurrentPopup();
         }
-        if (ImGui::MenuItem("Remove Layer", 0, selected, enabled))
+        if (ImGui::MenuItem("Remove Layer", 0, nullptr, enabled))
         {
             if (GameObjectManager::GetInstance().RemoveObjectLayer(editor_data.selectLayerName))
             {
@@ -678,19 +677,19 @@ void editor::MainEditor::ShowLevelObject(bool* p_open)
                             bool is_selected;
                             for (int n = 0; n < (int)layers.size(); n++)
                             {
-                                if (ImGui::IsItemHovered())
-                                {
-                                    if (ImGui::IsMouseClicked(ImGuiMouseButton_Right))
-                                    {
-                                        editor_data.selectLayerName = obj.first;
-                                        editor_data.showLayerComboRightClickPopup = true;
-                                    }
-                                }
                                 is_selected = (editor_data.layer_item_selected_idx == n);
                                 if (ImGui::Selectable(layers.at(n).c_str(), is_selected))
                                 {
                                     obj.second->SetLayer(layers.at(n));
                                     editor_data.layer_item_selected_idx = n;
+                                }
+                                if (ImGui::IsItemHovered()) //IsItemHoverd는 해당 코드의 상단의 아이템을 기준으로 작동된다.
+                                {
+                                    if (ImGui::IsMouseClicked(ImGuiMouseButton_Right))
+                                    {
+                                        editor_data.selectLayerName = layers.at(n);
+                                        editor_data.showLayerComboRightClickPopup = true;
+                                    }
                                 }
                                 // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
                                 if (is_selected)
@@ -729,7 +728,7 @@ void editor::MainEditor::ShowLevelObject(bool* p_open)
                                 {
                                     if (ImGui::IsMouseClicked(ImGuiMouseButton_Right))
                                     {
-                                        editor_data.selectTagName = obj.first;
+                                        editor_data.selectTagName = tags.at(n);
                                         editor_data.showTagComboRightClickPopup = true;
                                     }
                                 }
