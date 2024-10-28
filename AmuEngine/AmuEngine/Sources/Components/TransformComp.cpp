@@ -3,6 +3,7 @@
 #include "SpriteComp.h"
 #include <Size.h>
 #include <EasyImgui.h>
+#include <EasyOpengl.h>
 
 void TransformComp::CalculateMatrix()
 {

@@ -3,6 +3,7 @@
 #include "../ResourceManager/ResourceManager.h"
 #include <EasyImgui.h>
 #include <EasyOpengl.h>
+#include <Utils.h>
 #include "../Editor/MainEditor.h"
 // ¡§¡° Ω¶¿Ã¥ı Vertex Shader
 const char* spriteVShader = R"(
@@ -434,11 +435,16 @@ void SpriteComp::Edit()
 	ImGui::SeparatorText("Texture Path");
 	{
 		editor::MainEditor::editor_data.modifySpritePath = texturePath;
+
 		if (ImGui::InputText("Path", &editor::MainEditor::editor_data.modifySpritePath, ImGuiInputTextFlags_EnterReturnsTrue))
 		{
 			std::cout << this->owner->GetName() << std::endl;
 			SetTexture(editor::MainEditor::editor_data.modifySpritePath);
-			
+		}
+		if (ImGui::Button("Select Path"))
+		{
+			editor::MainEditor::editor_data.modifySpritePath = Utility::FileDialog();
+			SetTexture(editor::MainEditor::editor_data.modifySpritePath);
 		}
 	}
 	//OrderInLayer

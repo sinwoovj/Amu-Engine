@@ -61,7 +61,7 @@ public:
 	bool ExistDefaultLayer(const std::string& str);
 	bool ExistObjectLayer(const std::string& str);
 	void SetObjectLayer(const std::string& obj, const std::string& layer);
-	const std::string& GetObjectLayer(const std::string& obj);
+	std::string GetObjectLayer(const std::string& obj);
 	void ChangeNameLayer(const std::string& oldstr, const std::string& newstr);
 	void OrderUpLayer(const std::string& str);
 	void OrderDownLayer(const std::string& str);
@@ -71,7 +71,7 @@ public:
 	bool ExistDefaultTag(const std::string& str);
 	bool ExistObjectTag(const std::string& str);
 	void SetObjectTag(const std::string& obj, const std::string& tag);
-	const std::string& GetObjectTag(const std::string& obj);
+	std::string GetObjectTag(const std::string& obj);
 	void ChangeNameTag(const std::string& oldstr, const std::string& newstr);
 
 	void InsertObject(const std::string& id, GameObject* obj);

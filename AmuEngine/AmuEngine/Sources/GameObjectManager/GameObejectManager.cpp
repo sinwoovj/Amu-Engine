@@ -114,7 +114,7 @@ void GameObjectManager::SetObjectLayer(const std::string& obj, const std::string
 		objects.find(obj)->second->SetLayer(layer);
 }
 
-const std::string& GameObjectManager::GetObjectLayer(const std::string& obj)
+std::string GameObjectManager::GetObjectLayer(const std::string& obj)
 {
 	if (objects.find(obj) != objects.end())
 		return objects.find(obj)->second->GetLayer();
@@ -208,7 +208,7 @@ void GameObjectManager::SetObjectTag(const std::string& obj, const std::string& 
 		objects.find(obj)->second->SetTag(tag);
 }
 
-const std::string& GameObjectManager::GetObjectTag(const std::string& obj)
+std::string GameObjectManager::GetObjectTag(const std::string& obj)
 {
 	if (objects.find(obj) != objects.end())
 		return objects.find(obj)->second->GetTag();

@@ -3,7 +3,7 @@
 #include <chrono>
 #include <thread>
 #include "../Camera/Camera.h"
-#include <opengl.h>
+#include <EasyOpengl.h>
 
 void AESleep(long long t)
 {
@@ -67,4 +67,9 @@ float MapToPosY(float ind)
 float GetSqDistance(float ax, float ay, float bx, float by)
 {
     return ((ax - bx) * (ax - bx)) + ((ay - by) * (ay - by));
+}
+
+std::string Utility::FileDialog()
+{
+    return "";
 }

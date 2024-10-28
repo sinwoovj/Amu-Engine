@@ -29,5 +29,3 @@
 #include <glm/mat4x2.hpp>
 #include <glm/mat4x3.hpp>
 #include <glm/mat4x4.hpp>
-
-#include <EasyOpengl.h>
