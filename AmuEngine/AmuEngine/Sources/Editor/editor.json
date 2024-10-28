@@ -2,7 +2,9 @@
   "layers": [
     "Default",
     "UI",
-    "Particle"
+    "Particle",
+    "Wall",
+    "Tank"
   ],
   "tags": [
     "Untagged"

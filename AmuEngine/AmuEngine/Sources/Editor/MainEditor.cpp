@@ -674,11 +674,10 @@ void editor::MainEditor::ShowLevelObject(bool* p_open)
 
                         if (ImGui::BeginCombo("##Layer##", obj.second->GetLayer().c_str()))
                         {
-                            bool is_selected;
                             for (int n = 0; n < (int)layers.size(); n++)
                             {
-                                is_selected = (editor_data.layer_item_selected_idx == n);
-                                if (ImGui::Selectable(layers.at(n).c_str(), is_selected))
+                                ImGui::PushID(n);
+                                if (ImGui::Selectable(layers.at(n).c_str(), false, ImGuiSelectableFlags_NoAutoClosePopups | ImGuiSelectableFlags_AllowOverlap))
                                 {
                                     obj.second->SetLayer(layers.at(n));
                                     editor_data.layer_item_selected_idx = n;
@@ -691,9 +690,27 @@ void editor::MainEditor::ShowLevelObject(bool* p_open)
                                         editor_data.showLayerComboRightClickPopup = true;
                                     }
                                 }
+                                ImVec2 rs = ImGui::GetItemRectSize();
+                                if (!GameObjectManager::GetInstance().ExistDefaultLayer(layers.at(n)))
+                                {
+
+                                    ImGui::BeginDisabled(GameObjectManager::GetInstance().GetLayers().front() == layers.at(n));
+                                    ImGui::SameLine(rs.x - 60);
+                                    if (ImGui::ArrowButton("##Layer Up##", ImGuiDir_Up))
+                                    {
+                                        GameObjectManager::GetInstance().OrderUpLayer(layers.at(n));
+                                    }
+                                    ImGui::EndDisabled();
+                                    ImGui::BeginDisabled(GameObjectManager::GetInstance().GetLayers().back() == layers.at(n));
+                                    ImGui::SameLine();
+                                    if (ImGui::ArrowButton("##Layer Down##", ImGuiDir_Down))
+                                    {
+                                        GameObjectManager::GetInstance().OrderDownLayer(layers.at(n));
+                                    }
+                                    ImGui::EndDisabled();
+                                }
                                 // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
-                                if (is_selected)
-                                    ImGui::SetItemDefaultFocus();
+                                ImGui::PopID();
                             }
                             //Add List
                             ImGui::Separator();

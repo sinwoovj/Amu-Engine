@@ -56,20 +56,22 @@ public:
 	std::vector <std::string> GetLayers();
 	std::vector <std::string> GetTags();
 
-	bool AddObjectLayer(std::string str);
-	bool RemoveObjectLayer(std::string str);
-	bool ExistDefaultLayer(std::string str);
-	bool ExistObjectLayer(std::string str);
-	void SetObjectLayer(std::string obj, std::string layer);
-	std::string GetObjectLayer(std::string obj);
+	bool AddObjectLayer(const std::string& str);
+	bool RemoveObjectLayer(const std::string& str);
+	bool ExistDefaultLayer(const std::string& str);
+	bool ExistObjectLayer(const std::string& str);
+	void SetObjectLayer(const std::string& obj, const std::string& layer);
+	const std::string& GetObjectLayer(const std::string& obj);
 	void ChangeNameLayer(const std::string& oldstr, const std::string& newstr);
+	void OrderUpLayer(const std::string& str);
+	void OrderDownLayer(const std::string& str);
 
-	bool AddObjectTag(std::string str);
-	bool RemoveObjectTag(std::string str);
-	bool ExistDefaultTag(std::string str);
-	bool ExistObjectTag(std::string str);
-	void SetObjectTag(std::string obj, std::string tag);
-	std::string GetObjectTag(std::string obj);
+	bool AddObjectTag(const std::string& str);
+	bool RemoveObjectTag(const std::string& str);
+	bool ExistDefaultTag(const std::string& str);
+	bool ExistObjectTag(const std::string& str);
+	void SetObjectTag(const std::string& obj, const std::string& tag);
+	const std::string& GetObjectTag(const std::string& obj);
 	void ChangeNameTag(const std::string& oldstr, const std::string& newstr);
 
 	void InsertObject(const std::string& id, GameObject* obj);

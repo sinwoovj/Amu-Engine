@@ -60,7 +60,7 @@ std::vector<std::string> GameObjectManager::GetTags()
 	return Tag;
 }
 
-bool GameObjectManager::AddObjectLayer(std::string str)
+bool GameObjectManager::AddObjectLayer(const std::string& str)
 {
 	for (auto& it : DefaultLayer)
 	{
@@ -74,7 +74,7 @@ bool GameObjectManager::AddObjectLayer(std::string str)
 	return false;
 }
 
-bool GameObjectManager::RemoveObjectLayer(std::string str)
+bool GameObjectManager::RemoveObjectLayer(const std::string& str)
 {
 	for (auto& it : DefaultLayer)
 	{
@@ -88,7 +88,7 @@ bool GameObjectManager::RemoveObjectLayer(std::string str)
 	return false;
 }
 
-bool GameObjectManager::ExistDefaultLayer(std::string str)
+bool GameObjectManager::ExistDefaultLayer(const std::string& str)
 {
 	for (auto& it : DefaultLayer)
 	{
@@ -98,7 +98,7 @@ bool GameObjectManager::ExistDefaultLayer(std::string str)
 	return false;
 }
 
-bool GameObjectManager::ExistObjectLayer(std::string str)
+bool GameObjectManager::ExistObjectLayer(const std::string& str)
 {
 	for (auto& it : Layer)
 	{
@@ -108,13 +108,13 @@ bool GameObjectManager::ExistObjectLayer(std::string str)
 	return false;
 }
 
-void GameObjectManager::SetObjectLayer(std::string obj, std::string layer)
+void GameObjectManager::SetObjectLayer(const std::string& obj, const std::string& layer)
 {
 	if(objects.find(obj) != objects.end())
 		objects.find(obj)->second->SetLayer(layer);
 }
 
-std::string GameObjectManager::GetObjectLayer(std::string obj)
+const std::string& GameObjectManager::GetObjectLayer(const std::string& obj)
 {
 	if (objects.find(obj) != objects.end())
 		return objects.find(obj)->second->GetLayer();
@@ -130,7 +130,31 @@ void GameObjectManager::ChangeNameLayer(const std::string& oldstr, const std::st
 	}
 }
 
-bool GameObjectManager::AddObjectTag(std::string str)
+void GameObjectManager::OrderUpLayer(const std::string& str)
+{
+	for (auto it = Layer.begin(); it != Layer.end(); it++)
+	{
+		if (*it == str)
+		{
+			std::iter_swap(it - 1, it);
+			return;
+		}
+	}
+}
+
+void GameObjectManager::OrderDownLayer(const std::string& str)
+{
+	for (auto it = Layer.begin(); it != Layer.end(); it++)
+	{
+		if (*it == str)
+		{
+			std::iter_swap(it + 1, it);
+			return;
+		}
+	}
+}
+
+bool GameObjectManager::AddObjectTag(const std::string& str)
 {
 	for (auto& it : DefaultTag)
 	{
@@ -144,7 +168,7 @@ bool GameObjectManager::AddObjectTag(std::string str)
 	return false;
 }
 
-bool GameObjectManager::RemoveObjectTag(std::string str)
+bool GameObjectManager::RemoveObjectTag(const std::string& str)
 {
 	for (auto& it : DefaultTag)
 	{
@@ -158,7 +182,7 @@ bool GameObjectManager::RemoveObjectTag(std::string str)
 	return false;
 }
 
-bool GameObjectManager::ExistDefaultTag(std::string str)
+bool GameObjectManager::ExistDefaultTag(const std::string& str)
 {
 	for (auto& it : DefaultTag)
 	{
@@ -168,7 +192,7 @@ bool GameObjectManager::ExistDefaultTag(std::string str)
 	return false;
 }
 
-bool GameObjectManager::ExistObjectTag(std::string str)
+bool GameObjectManager::ExistObjectTag(const std::string& str)
 {
 	for (auto& it : Tag)
 	{
@@ -178,13 +202,13 @@ bool GameObjectManager::ExistObjectTag(std::string str)
 	return false;
 }
 
-void GameObjectManager::SetObjectTag(std::string obj, std::string tag)
+void GameObjectManager::SetObjectTag(const std::string& obj, const std::string& tag)
 {
 	if (objects.find(obj) != objects.end())
 		objects.find(obj)->second->SetTag(tag);
 }
 
-std::string GameObjectManager::GetObjectTag(std::string obj)
+const std::string& GameObjectManager::GetObjectTag(const std::string& obj)
 {
 	if (objects.find(obj) != objects.end())
 		return objects.find(obj)->second->GetTag();
