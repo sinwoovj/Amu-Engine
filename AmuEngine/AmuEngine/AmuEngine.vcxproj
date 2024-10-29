@@ -165,8 +165,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(ProjectDir)Dependencies\GLFW\lib-vc2022\x64s;$(ProjectDir)Dependencies\GLEW\lib-vc2022\x64s;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;glew32s.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <IgnoreSpecificDefaultLibraries>
-      </IgnoreSpecificDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib;</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -504,9 +503,6 @@
     <ClInclude Include="Sources\Event\CollisionEvent.h" />
     <ClInclude Include="Sources\Event\Entity.h" />
     <ClInclude Include="Sources\Event\Event.h" />
-    <ClInclude Include="Sources\Example\Rect.h" />
-    <ClInclude Include="Sources\Example\Sprite.h" />
-    <ClInclude Include="Sources\Example\Triangle.h" />
     <ClInclude Include="Sources\GameObjectManager\GameObjectManager.h" />
     <ClInclude Include="Sources\GameObject\GameObject.h" />
     <ClInclude Include="Sources\GSM\GameStateManager.h" />
@@ -548,9 +544,6 @@
     <ClCompile Include="Sources\EventManager\EventManager.cpp" />
     <ClCompile Include="Sources\Event\ButtonClickEvent.cpp" />
     <ClCompile Include="Sources\Event\Event.cpp" />
-    <ClCompile Include="Sources\Example\Rect.cpp" />
-    <ClCompile Include="Sources\Example\Sprite.cpp" />
-    <ClCompile Include="Sources\Example\Triangle.cpp" />
     <ClCompile Include="Sources\GameObjectManager\GameObejectManager.cpp" />
     <ClCompile Include="Sources\GameObject\GameObject.cpp" />
     <ClCompile Include="Sources\GSM\GameStateManager.cpp" />

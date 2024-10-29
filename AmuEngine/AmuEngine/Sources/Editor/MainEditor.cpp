@@ -548,7 +548,7 @@ void editor::MainEditor::TopBar()
         ImGui::PopItemFlag();
         if (ImGui::BeginMenu("Window"))
         {
-            if (ImGui::MenuItem("Show Objects", "Ctrl+O", &editor_data.showAllObjects)) {
+            if (ImGui::MenuItem("Object Manager", "Ctrl+O", &editor_data.showAllObjects)) {
 
             }
 

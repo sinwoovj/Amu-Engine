@@ -14,5 +14,14 @@ float MapToPosY(float ind);
 float GetSqDistance(float ax, float ay, float bx, float by);
 
 namespace Utility {
-	std::string FileDialog();
+	enum FileDialogFilter {
+		Image,
+		Text,
+		Video,
+		Texture,
+		Code
+	};
+	std::string OpenFileDialog();
+	std::string SaveFileDialog();
+	std::string WstrTostr(const std::wstring& in);
 }

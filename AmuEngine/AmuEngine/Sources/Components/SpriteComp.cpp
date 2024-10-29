@@ -160,7 +160,7 @@ void SpriteComp::SpriteAddShader(GLuint theProgram, const char* shaderCode, GLen
 
 	// 쉐이더 코드 길이를 저장할 배열 생성
 	GLint codeLength[1];
-	codeLength[0] = strlen(shaderCode);
+	codeLength[0] = (GLint)strlen(shaderCode);
 
 	// 쉐이더에 우리가 작성한 쉐이더 코드를 저장한다.
 	glShaderSource(theShader, 1, theCode, codeLength);
@@ -285,13 +285,11 @@ bool SpriteComp::SetTexture(std::string path)
 
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)textureSize.x, (GLsizei)textureSize.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture);
 		glGenerateMipmap(GL_TEXTURE_2D);
-		
 
 		unsigned char loc = glGetUniformLocation(sprite_shader, "ortho");
 
 		glm::mat4 ortho = glm::ortho((float)-windowWidthHalf, (float)windowWidthHalf, (float)-windowHeightHalf, (float)windowHeightHalf);
 		glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(ortho));
-
 		glUseProgram(0);
 
 		glBindTexture(GL_TEXTURE_2D, 0);
@@ -443,7 +441,7 @@ void SpriteComp::Edit()
 		}
 		if (ImGui::Button("Select Path"))
 		{
-			editor::MainEditor::editor_data.modifySpritePath = Utility::FileDialog();
+			editor::MainEditor::editor_data.modifySpritePath = Utility::OpenFileDialog();
 			SetTexture(editor::MainEditor::editor_data.modifySpritePath);
 		}
 	}
