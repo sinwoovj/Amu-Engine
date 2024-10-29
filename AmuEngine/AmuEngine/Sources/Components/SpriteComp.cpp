@@ -50,10 +50,14 @@ SpriteComp::SpriteComp(GameObject* _owner) : GraphicComponent(_owner)
 	owner = _owner;
 	color = { 1.f,1.f,1.f };
 	alpha = 1;
+	selected = false;
 	sprite_EBO = 0;
 	sprite_VAO = 0;
 	sprite_VBO = 0;
-	sprite_shader = 0;
+	collider_edge_VAO = 0;
+	collider_edge_VBO = 0;
+	collider_edge_EBO = 0;
+	_shader = 0;
 	sprite_texture = 0;
 	texturePath = "";
 	textureSize = { 400, 400 };
@@ -77,15 +81,82 @@ void SpriteComp::SpriteSetSprite()
 	SpriteCompileShader();
 }
 
+void SpriteComp::SpriteCreateRect(GLuint& vao, GLuint& vbo, GLuint& ebo)
+{
+	// 정점 좌표 & 사각형 색상 & 텍스처 좌표 (좌표계가 stbi 라이브러리와 opengl라이브러리의 서로 달라서 y축만 -를 달아서 반전시킴)
+	float vertices[] = {
+		// positions         // colors
+		-0.5f, -0.5f, 1.0f,  color.r / 255.f, color.g / 255.f, color.b / 255.f, // top right
+		 0.5f, -0.5f, 1.0f,  color.r / 255.f, color.g / 255.f, color.b / 255.f, // bottom right
+		 0.5f,  0.5f, 1.0f,  color.r / 255.f, color.g / 255.f, color.b / 255.f, // bottom left
+		-0.5f,  0.5f, 1.0f,  color.r / 255.f, color.g / 255.f, color.b / 255.f  // top left 
+	};
+	// 정점 인덱스
+	GLint vertexIndeces[] = {
+		0, 1, 2, // first triangle
+		2, 3, 0  // second triangle
+	};
+
+	// OpenGL 정점 배열 생성기를 사용해서 VAO를 생성
+	glGenVertexArrays(1, &sprite_VAO);
+	// OpenGL 정점 배열 생성기를 사용해서 VBO를 생성
+	glGenBuffers(1, &sprite_VBO);
+
+	glBindVertexArray(sprite_VAO);// 우리가 생성한 VAO를 현재 수정 가능하도록 연결한다.
+
+	glBindBuffer(GL_ARRAY_BUFFER, sprite_VBO);// 우리가 생성한 VBO를 현재 수정 가능하도록 연결한다.
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);// 우리가 만든 삼각형 정점 좌표를 VBO에 저장한다.
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, sprite_EBO);// 우리가 생성한 VBO를 현재 수정 가능하도록 연결한다.
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(vertexIndeces), vertexIndeces, GL_STATIC_DRAW);// 우리가 만든 삼각형 정점 좌표를 VBO에 저장한다.
+
+	// VAO에 이 VAO를 어떻게 해석해야 할 지 알려줍니다. 
+	// 함수 인자 (vertex attribute, 타입 크기, 타입, 정규화 여부, 메모리 크기, 메모리 오프셋)
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*)0);
+	glEnableVertexAttribArray(0); // sprite_VAO 사용 허용
+
+	// 사각형 색상 버퍼 바인드
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+}
+void SpriteComp::SpriteDrawRect(GLuint& vao, glm::vec3 color)
+{
+	// Shader 적용
+	glUseProgram(_shader);
+	float lineWidth[2];
+	glGetFloatv(GL_LINE_WIDTH_RANGE, lineWidth);
+
+	//change the matrix to have size + Offset
+
+
+	glBindVertexArray(vao);
+	glBindTexture(GL_TEXTURE_2D, sprite_texture);
+	unsigned int loc = glGetUniformLocation(_shader, "ucolor");
+	if (loc >= 0)
+	{
+		glUniform4f(loc, color.r / 255.f, color.g / 255.f, color.b / 255.f, 1);
+	}
+
+	SpriteApplyTransform(500);
+	glUseProgram(_shader);
+
+	glDrawArrays(GL_LINE_LOOP, 0, 4);
+	//glDrawElements(GL_LINE_LOOP, 6, GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	// Shader 해제
+	glUseProgram(0);
+}
+
 void SpriteComp::SpriteCreateSprite()
 {
 	// 정점 좌표 & 사각형 색상 & 텍스처 좌표 (좌표계가 stbi 라이브러리와 opengl라이브러리의 서로 달라서 y축만 -를 달아서 반전시킴)
 	float vertices[] = {
-		// positions   // colors           // sprite_texture coords
-		 -0.5f,  -0.5f, 1.0f,  1.0f, 1.0f, 1.0f,   0.0f,  0.0f, // top right
+		// positions         // colors           // sprite_texture coords
+		-0.5f, -0.5f, 1.0f,  1.0f, 1.0f, 1.0f,   0.0f,  0.0f, // top right
 		 0.5f, -0.5f, 1.0f,  1.0f, 1.0f, 1.0f,   1.0f,  0.0f, // bottom right
 		 0.5f,  0.5f, 1.0f,  1.0f, 1.0f, 1.0f,   1.0f,  1.0f, // bottom left
-		-0.5f,  0.5f, 1.0f,  0.0f, 1.0f, 1.0f,   0.0f,  1.0f  // top left 
+		-0.5f,  0.5f, 1.0f,  1.0f, 1.0f, 1.0f,   0.0f,  1.0f  // top left 
 	};
 	// 2D를 표현할 때 정점좌표의 z값은 1이여야 transform할 때 mat랑 연산 할 때 정상적인 값이 도출된다.
 
@@ -187,36 +258,36 @@ void SpriteComp::SpriteAddShader(GLuint theProgram, const char* shaderCode, GLen
 
 void SpriteComp::SpriteCompileShader()
 {
-	sprite_shader = glCreateProgram();
+	_shader = glCreateProgram();
 
-	if (sprite_shader == NULL)
+	if (_shader == NULL)
 	{
 		printf("Error Creating Shader Program!\n");
 		return;
 	}
 
-	SpriteAddShader(sprite_shader, spriteVShader, GL_VERTEX_SHADER);
-	SpriteAddShader(sprite_shader, spriteFShader, GL_FRAGMENT_SHADER);
+	SpriteAddShader(_shader, spriteVShader, GL_VERTEX_SHADER);
+	SpriteAddShader(_shader, spriteFShader, GL_FRAGMENT_SHADER);
 
 	GLint result = 0;
 	GLchar eLog[1024] = { 0 };
 
 	// 쉐이더 프로그램 연결
-	glLinkProgram(sprite_shader);
-	glGetProgramiv(sprite_shader, GL_LINK_STATUS, &result); // sprite_shader 추가함수와 연결함수의 차이 glGetShaderiv-> glGetProgramiv
+	glLinkProgram(_shader);
+	glGetProgramiv(_shader, GL_LINK_STATUS, &result); // _shader 추가함수와 연결함수의 차이 glGetShaderiv-> glGetProgramiv
 	if (!result)
 	{
-		glGetProgramInfoLog(sprite_shader, sizeof(eLog), NULL, eLog);
+		glGetProgramInfoLog(_shader, sizeof(eLog), NULL, eLog);
 		printf("Error Linking Program: '%s'\n", eLog);
 		return;
 	}
 
 	// 쉐이더 프로그램 검증
-	glValidateProgram(sprite_shader);
-	glGetProgramiv(sprite_shader, GL_VALIDATE_STATUS, &result);
+	glValidateProgram(_shader);
+	glGetProgramiv(_shader, GL_VALIDATE_STATUS, &result);
 	if (!result)
 	{
-		glGetProgramInfoLog(sprite_shader, sizeof(eLog), NULL, eLog);
+		glGetProgramInfoLog(_shader, sizeof(eLog), NULL, eLog);
 		printf("Error Validating Program: '%s'\n", eLog);
 		return;
 	}
@@ -224,36 +295,36 @@ void SpriteComp::SpriteCompileShader()
 
 void SpriteComp::SpriteDrawSprite()
 {
-
 	// Shader 적용
-	glUseProgram(sprite_shader);
+	glUseProgram(_shader);
 
 	glBindVertexArray(sprite_VAO);
 
 	glBindTexture(GL_TEXTURE_2D, sprite_texture);
+
 	// 데이터를 바탕으로 그리기
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	// 데이터 바인딩 해제
 	glBindVertexArray(0);
 	glBindTexture(GL_TEXTURE_2D, 0);
-
 	// Shader 해제
 	glUseProgram(0);
+	
 }
 
-void SpriteComp::SpriteApplyTransform()
+void SpriteComp::SpriteApplyTransform(float offset)
 {
 	if(!trans)
 		trans = owner->GetComponent<TransformComp>();
 
 	// Shader 적용
-	glUseProgram(sprite_shader);
+	glUseProgram(_shader);
 
-	unsigned int transformLoc = glGetUniformLocation(sprite_shader, "transform");
+	unsigned int transformLoc = glGetUniformLocation(_shader, "transform");
 
 	glm::mat3 transform = trans->GetMatrix();
 
-	Mtx33Scale(&transform, textureSize.x, textureSize.y);
+	Mtx33Scale(&transform, textureSize.x + offset, textureSize.y + offset);
 
 	glUniformMatrix3fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
 
@@ -281,12 +352,12 @@ bool SpriteComp::SetTexture(std::string path)
 		textureSize = nativeSize.find(path)->second;
 
 		glBindTexture(GL_TEXTURE_2D, sprite_texture);
-		glUseProgram(sprite_shader);
+		glUseProgram(_shader);
 
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)textureSize.x, (GLsizei)textureSize.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture);
 		glGenerateMipmap(GL_TEXTURE_2D);
 
-		unsigned char loc = glGetUniformLocation(sprite_shader, "ortho");
+		unsigned char loc = glGetUniformLocation(_shader, "ortho");
 
 		glm::mat4 ortho = glm::ortho((float)-windowWidthHalf, (float)windowWidthHalf, (float)-windowHeightHalf, (float)windowHeightHalf);
 		glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(ortho));
@@ -308,7 +379,7 @@ void SpriteComp::SetTransparency()
 	쉐이더 관련 수정 (example. uniform)
 	은 전부 무조건 제발 shader 프로그램을 켜고 수정을 하도록 하자!!!!!
 	*/
-	glUseProgram(sprite_shader);
+	glUseProgram(_shader);
 
 	// Enable blending
 	glEnable(GL_BLEND);
@@ -316,7 +387,7 @@ void SpriteComp::SetTransparency()
 	
 	//Set transparency
 	// 알파 값 조절 (1.0은 불투명, 0.0은 완전 투명);
-	unsigned char loc = glGetUniformLocation(sprite_shader, "ucolor");
+	unsigned char loc = glGetUniformLocation(_shader, "ucolor");
 	
 	glUniform4f(loc, color.r, color.g, color.b, alpha);
 
@@ -331,13 +402,17 @@ void SpriteComp::Update()
 	//Set transform
 	//Get the transform from my owner transfrom comp
 	SpriteApplyTransform();
-	// Set Texture
-	
+
 	//Set color 
 	SetTransparency();
 
 	// Draw
 	SpriteDrawSprite();
+
+	selected = true;
+	if (selected)
+		SpriteDrawRect(sprite_VAO, { 255, 0, 0 });
+
 }
 
 void SpriteComp::SetColor(glm::vec3 Color)
@@ -455,7 +530,6 @@ void SpriteComp::Edit()
 		}
 	}
 }
-
 
 BaseRTTI* SpriteComp::CreateSpriteComponent(GameObject* owner)
 {
