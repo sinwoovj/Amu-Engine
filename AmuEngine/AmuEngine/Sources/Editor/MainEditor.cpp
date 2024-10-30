@@ -9,7 +9,9 @@
 #include "../GSM/GameStateManager.h"
 #include "../Components/Components.h"
 #include "../Level/NormalLevel.h"
+#include "../Profiler/Profiler.h"
 #include <vector>
+#include <map>
 #include <string>
 
 editor::MainEditor::EditorMode editor::MainEditor::editorMode = Edit;
@@ -552,6 +554,11 @@ void editor::MainEditor::TopBar()
 
             }
 
+            if (ImGui::MenuItem("Show Profiler", "Ctrl+P", &editor_data.showProfiler))
+            {
+
+            }
+            
             ImGui::Separator();
             if (ImGui::MenuItem("Close", "Ctrl+W")) { ImGui::CloseCurrentPopup(); }
             ImGui::EndMenu();
@@ -808,6 +815,140 @@ void editor::MainEditor::ShowLevelObject(bool* p_open)
     }
 }
 
+
+// utility structure for realtime plot
+struct ScrollingBuffer {
+    int MaxSize;
+    int Offset;
+    ImVector<ImVec2> Data;
+    ScrollingBuffer(int max_size = 2000) {
+        MaxSize = max_size;
+        Offset = 0;
+        Data.reserve(MaxSize);
+    }
+    void AddPoint(float x, float y) {
+        if (Data.size() < MaxSize)
+            Data.push_back(ImVec2(x, y));
+        else {
+            Data[Offset] = ImVec2(x, y);
+            Offset = (Offset + 1) % MaxSize;
+        }
+    }
+    void Erase() {
+        if (Data.size() > 0) {
+            Data.shrink(0);
+            Offset = 0;
+        }
+    }
+};
+
+// utility structure for realtime plot
+struct RollingBuffer {
+    float Span;
+    ImVector<ImVec2> Data;
+    RollingBuffer() {
+        Span = 10.0f;
+        Data.reserve(2000);
+    }
+    void AddPoint(float x, float y) {
+        float xmod = fmodf(x, Span);
+        if (!Data.empty() && xmod < Data.back().x)
+            Data.shrink(0);
+        Data.push_back(ImVec2(xmod, y));
+    }
+};
+
+static std::map<std::string, ScrollingBuffer*> sdata;
+static std::map<std::string, RollingBuffer*> rdata;
+
+void editor::MainEditor::ShowProfiler(bool* p_open)
+{
+    auto blocks = MyProfiler::Profiler::GetPtr()->GetBlocks();
+    if (ImGui::Begin("Profiler", p_open))
+    {
+        static float profilerTime = 0;
+        profilerTime += ImGui::GetIO().DeltaTime;
+        //Frame, Camera, Logic, Engine, Bomb, Collision, Event, Level, Grahpic, GameObject
+        double maxVal = 0;
+        //Find Max value
+        for (auto& block : blocks)
+        {
+            if (maxVal < block.second)
+                maxVal = block.second;
+        }
+        for (auto& block : blocks)
+        {
+            //Normalize (0~1)
+            float value = float(block.second / maxVal);
+
+            if (sdata.find(block.first) == sdata.end())
+            {
+                ScrollingBuffer* sb = new ScrollingBuffer();
+                sdata.insert({ block.first, sb });
+            }
+            sdata.find(block.first)->second->AddPoint(profilerTime, value);
+            if (rdata.find(block.first) == rdata.end())
+            {
+                RollingBuffer* rb = new RollingBuffer();
+                rdata.insert({ block.first, rb });
+            }
+            rdata.find(block.first)->second->AddPoint(profilerTime, value);
+        }
+
+        static float history = 10.0f;
+        ImGui::SliderFloat("History", &history, 1, 30, "%.1f s");
+
+        for (auto& data : rdata)
+        {
+            data.second->Span = history;
+        }
+
+        static ImPlotAxisFlags flags = ImPlotAxisFlags_NoTickLabels | ImPlotAxisFlags_Lock;
+        
+        if (ImPlot::BeginPlot("##Scrolling", ImVec2(-1, 150))) {
+            ImPlot::SetupAxes(nullptr, nullptr, flags, flags);
+            ImPlot::SetupAxisLimits(ImAxis_X1, profilerTime - history, profilerTime, ImGuiCond_Always);
+            ImPlot::SetupAxisLimits(ImAxis_Y1, 0, 1);
+            ImPlot::SetNextFillStyle(IMPLOT_AUTO_COL, 0.5f);
+            for (auto& data : sdata)
+            {
+                //ImPlot::PlotShaded(data.first.c_str(), &data.second->Data[0].x, &data.second->Data[0].y, data.second->Data.size(), -INFINITY, 0, data.second->Offset, 2 * sizeof(float));
+                ImPlot::PlotLine(data.first.c_str(), &data.second->Data[0].x, &data.second->Data[0].y, data.second->Data.size(), 0, data.second->Offset, 2 * sizeof(float));
+                //std::cout << data.first.c_str() << " | " << data.second->Data[0].x << " | " << data.second->Data[0].y << " | " << data.second->Data.size() << std::endl;
+            }
+            //ImPlot::PlotShaded("Mouse X", &sdata1.Data[0].x, &sdata1.Data[0].y, sdata1.Data.size(), -INFINITY, 0, sdata1.Offset, 2 * sizeof(float));
+            //ImPlot::PlotLine("Mouse Y", &sdata2.Data[0].x, &sdata2.Data[0].y, sdata2.Data.size(), 0, sdata2.Offset, 2 * sizeof(float));
+            ImPlot::EndPlot();
+        }
+        if (ImPlot::BeginPlot("##Rolling", ImVec2(-1, 150))) {
+            ImPlot::SetupAxes(nullptr, nullptr, flags, flags);
+            ImPlot::SetupAxisLimits(ImAxis_X1, 0, history, ImGuiCond_Always);
+            ImPlot::SetupAxisLimits(ImAxis_Y1, 0, 1);
+            for (auto& data : rdata)
+            {
+                ImPlot::PlotLine(data.first.c_str(), &data.second->Data[0].x, &data.second->Data[0].y, data.second->Data.size(), 0, 0, 2 * sizeof(float));
+            }
+            //ImPlot::PlotLine("Mouse X", &rdata1.Data[0].x, &rdata1.Data[0].y, rdata1.Data.size(), 0, 0, 2 * sizeof(float));
+            //ImPlot::PlotLine("Mouse Y", &rdata2.Data[0].x, &rdata2.Data[0].y, rdata2.Data.size(), 0, 0, 2 * sizeof(float));
+            ImPlot::EndPlot();
+        }
+    }
+    ImGui::End();
+    if (*p_open == false)
+    {
+        for (auto& data : sdata)
+        {
+            delete data.second;
+        }
+        sdata.clear();
+        for (auto& data : rdata)
+        {
+            delete data.second;
+        }
+        rdata.clear();
+    }
+}
+
 void editor::MainEditor::MainEditorInit(GLFWwindow* mainWindow)
 {
     // Set Korean Font
@@ -822,6 +963,7 @@ void editor::MainEditor::MainEditorUpdate()
     TopBar();
     // https://stackoverflow.com/questions/66955023/closing-an-imgui-window-this-seems-like-it-should-be-easy-how-does-one-do-it
     if (editor_data.showAllObjects) { ShowLevelObject(&editor_data.showAllObjects); }
+    if (editor_data.showProfiler) { ShowProfiler(&editor_data.showProfiler); }
 }
 
 void editor::MainEditor::MainEditorExit()

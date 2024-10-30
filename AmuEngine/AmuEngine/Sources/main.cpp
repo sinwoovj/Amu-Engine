@@ -11,6 +11,7 @@
 #include <iostream>
 #include <Windows.h>
 #include <crtdbg.h> // To check for memory leaks
+#include "../Profiler/Profiler.h"
 
 
 GLboolean fullScreen = GL_FALSE;
@@ -68,6 +69,7 @@ int AMSysInit(GLint width, GLint height, const char* title)
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
+    ImPlot::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
@@ -145,7 +147,7 @@ int main(void)
     /* Loop until the user closes the window */
     while (gsm.ShouldExit() == false && !glfwWindowShouldClose(mainWindow))
     {
-
+        DEBUG_PROFILER_START("Frame");
         //frame setting
 
         /* Poll for and process events */
@@ -172,6 +174,9 @@ int main(void)
         fullscreenInput(LastFrameFullscreenKey);
 
         glfwSwapBuffers(mainWindow);
+        DEBUG_PROFILER_END;
+        DEBUG_PROFILER_DUMP;
+        DEBUG_PROFILER_CLEAR;
     }
 
     gsm.Exit();
@@ -181,9 +186,13 @@ int main(void)
 
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
+
+    ImPlot::DestroyContext();
     ImGui::DestroyContext();
     delete mainEditor;
 
     glfwTerminate();
+    DEBUG_PROFILER_DELETE;
+
     return 0;
 }

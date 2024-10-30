@@ -3,7 +3,45 @@
     {
       "object": "Back",
       "layer": "Wall",
-      "tag": "Untagged",
+      "tag": "Player",
+      "components": [
+        {
+          "type": "TransformComp",
+          "compData": {
+            "position": [
+              0.0,
+              0.0
+            ],
+            "scale": [
+              1.0,
+              1.0
+            ],
+            "rotation": 0.0
+          }
+        },
+        {
+          "type": "SpriteComp",
+          "compData": {
+            "color": [
+              1.0,
+              0.45098039507865906,
+              1.0
+            ],
+            "alpha": 1.0,
+            "texturePath": "./Sources/Assets/Sprite/Example/Icon3.png",
+            "textureSize": [
+              200.0,
+              200.0
+            ],
+            "orderinLayer": 0
+          }
+        }
+      ]
+    },
+    {
+      "object": "Player",
+      "layer": "Default",
+      "tag": "Player",
       "components": [
         {
           "type": "TransformComp",
@@ -34,6 +72,41 @@
               400.0
             ],
             "orderinLayer": 0
+          }
+        },
+        {
+          "type": "RigidbodyComp",
+          "compData": {
+            "velocity": [
+              0.0,
+              0.0
+            ],
+            "maxVelocity": [
+              500.0,
+              500.0
+            ],
+            "useGravity": false
+          }
+        },
+        {
+          "type": "ColliderComp",
+          "compData": {
+            "position": [
+              0.0,
+              0.0
+            ],
+            "scale": [
+              1.0,
+              1.0
+            ],
+            "rotation": 0.0
+          }
+        },
+        {
+          "type": "PlayerComp",
+          "compData": {
+            "speed": 100.0,
+            "focusMe": false
           }
         }
       ]

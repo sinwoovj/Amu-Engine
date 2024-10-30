@@ -480,6 +480,8 @@
     <ClInclude Include="Sources\imgui\imstb_rectpack.h" />
     <ClInclude Include="Sources\imgui\imstb_textedit.h" />
     <ClInclude Include="Sources\imgui\imstb_truetype.h" />
+    <ClInclude Include="Sources\imgui\implot.h" />
+    <ClInclude Include="Sources\imgui\implot_internal.h" />
     <ClInclude Include="Sources\Level\LevelManager.h" />
     <ClInclude Include="Sources\Level\NormalLevel.h" />
     <ClInclude Include="Sources\Background\Background.h" />
@@ -510,6 +512,7 @@
     <ClInclude Include="Sources\Level\Menu.h" />
     <ClInclude Include="Sources\Player\player.h" />
     <ClInclude Include="Sources\Prefab\Prefab.h" />
+    <ClInclude Include="Sources\Profiler\Profiler.h" />
     <ClInclude Include="Sources\ResourceManager\ResourceManager.h" />
     <ClInclude Include="Sources\Resource\Resource.h" />
     <ClInclude Include="Sources\Resource\TextureResource.h" />
@@ -555,12 +558,16 @@
     <ClCompile Include="Sources\imgui\imgui_stdlib.cpp" />
     <ClCompile Include="Sources\imgui\imgui_tables.cpp" />
     <ClCompile Include="Sources\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="Sources\imgui\implot.cpp" />
+    <ClCompile Include="Sources\imgui\implot_demo.cpp" />
+    <ClCompile Include="Sources\imgui\implot_items.cpp" />
     <ClCompile Include="Sources\Level\LevelManager.cpp" />
     <ClCompile Include="Sources\Level\Menu.cpp" />
     <ClCompile Include="Sources\Level\NormalLevel.cpp" />
     <ClCompile Include="Sources\main.cpp" />
     <ClCompile Include="Sources\Player\player.cpp" />
     <ClCompile Include="Sources\Prefab\Prefab.cpp" />
+    <ClCompile Include="Sources\Profiler\Profiler.cpp" />
     <ClCompile Include="Sources\ResourceManager\ResourceManager.cpp" />
     <ClCompile Include="Sources\Resource\Resource.cpp" />
     <ClCompile Include="Sources\Resource\TextureResource.cpp" />
@@ -720,9 +727,6 @@
     <None Include="Sources\Assets\Level\test0.lvl" />
     <None Include="Sources\Assets\Level\test1.lvl" />
     <None Include="Sources\Assets\Level\test2.lvl" />
-    <None Include="Sources\Assets\Prefab\Background.prefab" />
-    <None Include="Sources\Assets\Prefab\Player.prefab" />
-    <None Include="Sources\Assets\Prefab\Square.prefab" />
     <None Include="Sources\ComponentManager\ComponentManager.inl" />
     <None Include="Sources\default.lvl" />
     <None Include="Sources\Editor\editor.json" />

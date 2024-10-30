@@ -12,6 +12,7 @@
 #include "../Editor/MainEditor.h"
 #include "../RTTI/Registry.h"
 #include "../Camera/Camera.h"
+#include "../Profiler/Profiler.h"
 
 GSM::GameStateManager::GameStateManager() : previousLevel(nullptr), currentLevel(nullptr) {}
 
@@ -38,21 +39,39 @@ void GSM::GameStateManager::Update()
     {
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
+        DEBUG_PROFILER_START("Camera");
         Camera::GetInstance().Update();
+        DEBUG_PROFILER_END;
 
+        DEBUG_PROFILER_START("Logic");
         ComponentManager<LogicComponent>::GetInstance().Update();
+        DEBUG_PROFILER_END;
         if (editor::MainEditor::editorMode == editor::MainEditor::EditorMode::Play)
         {
+            DEBUG_PROFILER_START("Engine");
             ComponentManager<EngineComponent>::GetInstance().Update();
+            DEBUG_PROFILER_END;
+            DEBUG_PROFILER_START("Bomb");
             BOMB::BombManager::GetInstance().Update();
+            DEBUG_PROFILER_END;
+            DEBUG_PROFILER_START("Collision");
             CollisionManager::GetInstance().Update();
+            DEBUG_PROFILER_END;
+            DEBUG_PROFILER_START("Event");
             EventManager::GetInstance().DispatchAllEvents();
+            DEBUG_PROFILER_END;
+            DEBUG_PROFILER_START("Level");
             currentLevel->Update();
+            DEBUG_PROFILER_END;
         }
 
 
+        DEBUG_PROFILER_START("Graphic");
         ComponentManager<GraphicComponent>::GetInstance().Update();
+        DEBUG_PROFILER_END;
+        DEBUG_PROFILER_START("GameObject");
         GameObjectManager::GetInstance().Update();
+        DEBUG_PROFILER_END;
     }
 }
 

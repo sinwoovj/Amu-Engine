@@ -49,6 +49,7 @@ namespace editor
 
 			// Show State Variable
 			bool showAllObjects = false;
+			bool showProfiler = false;
 
 			// Show Popup
 			bool showNewObjectPopup = false;
@@ -85,6 +86,7 @@ namespace editor
 		void PopUp();
 		void TopBar();
 		void ShowLevelObject(bool* p_open);
+		void ShowProfiler(bool* p_open);
 
 		void MainEditorInit(GLFWwindow* mainWindow);
 		void MainEditorUpdate();

@@ -357,7 +357,10 @@ void Serializer::SaveEditorSetting()
 	std::ofstream editorFile(editorFileName);
 
 	if (!editorFile.is_open())
+	{
+		std::cout << "editor file open fail" << std::endl;
 		throw std::invalid_argument("defaultLvlFile Invalid filename " + editorFileName);
+	}
 
 	allData["layers"] = GameObjectManager::GetInstance().GetLayers();
 	allData["tags"] = GameObjectManager::GetInstance().GetTags();
