@@ -73,8 +73,18 @@ float GetSqDistance(float ax, float ay, float bx, float by)
 #include <windows.h>
 #include <commdlg.h>  // For GetOpenFileName
 #include <atlconv.h>
+#include <string>
+#include <filesystem>
+#include <Windows.h>
+#include <codecvt>
 
-std::string Utility::OpenFileDialog()
+void Utility::InitUtility()
+{
+    Utility::projectDirectory = GetCurrentPath();
+}
+
+//result << 절대경로
+std::string Utility::OpenFileDialog() 
 {
     OPENFILENAME ofn;       // 공통 대화 상자 구조체
     wchar_t szFile[260];       // 파일 경로를 저장할 버퍼
@@ -87,7 +97,7 @@ std::string Utility::OpenFileDialog()
     ofn.lpstrFile = szFile;
     ofn.lpstrFile[0] = '\0';
     ofn.nMaxFile = sizeof(szFile);
-    ofn.lpstrFilter = L"All\0*.*\0Text\0*.TXT\0";
+    ofn.lpstrFilter = L"All\0*.*\0Image\0*.PNG\0";
     ofn.nFilterIndex = 1;
     ofn.lpstrFileTitle = NULL;
     ofn.nMaxFileTitle = 0;
@@ -96,7 +106,9 @@ std::string Utility::OpenFileDialog()
 
     if (GetOpenFileName(&ofn) == TRUE)
     {
-        return WstrTostr(ofn.lpstrFile);  // 선택된 파일 경로를 반환
+        std::string res = WstrTostr(ofn.lpstrFile);
+        res = AbsToRelPath(projectDirectory, res);
+        return res;  // 선택된 파일 경로를 반환
     }
 
     return std::string();  // 아무것도 선택되지 않으면 빈 문자열 반환
@@ -123,14 +135,76 @@ std::string Utility::SaveFileDialog()
 
     if (GetSaveFileNameW(&ofn) == TRUE)  // 유니코드 버전 사용
     {
-        return WstrTostr(ofn.lpstrFile);  // 선택된 파일 경로를 반환
+        std::string res = WstrTostr(ofn.lpstrFile);
+        return res;  // 선택된 파일 경로를 반환
     }
 
     return std::string();  // 아무것도 선택되지 않으면 빈 문자열 반환
 }
 
+std::string Utility::GetCurrentPath()
+{
+    // 충분한 크기의 버퍼를 할당합니다.
+    char buffer[MAX_PATH];
+
+    // 현재 작업 디렉토리를 가져옵니다.
+    if (GetCurrentDirectoryA(MAX_PATH, buffer)) {
+        return std::string(buffer); // std::string으로 변환하여 반환
+    }
+    else {
+        return ""; // 오류가 발생한 경우 빈 문자열 반환
+    }
+}
+
 std::string Utility::WstrTostr(const std::wstring& in)
 {
-    USES_CONVERSION;
-    return std::string(W2A(in.c_str()));
+    std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+    return converter.to_bytes(in);
 }
+
+std::vector<std::string> Utility::splitPath(const std::string& path)
+{
+    std::vector<std::string> parts;
+    std::string current;
+    for (size_t i = 0; i < path.size(); ++i) {
+        if (path[i] == '\\' || path[i] == '/') {
+            if (!current.empty()) {
+                parts.push_back(current);
+                current.clear();
+            }
+        }
+        else {
+            current += path[i];
+        }
+    }
+    if (!current.empty()) {
+        parts.push_back(current);
+    }
+    return parts;
+}
+
+std::string Utility::AbsToRelPath(const std::string& base, const std::string& target)
+{
+    std::vector<std::string> baseParts = splitPath(base);
+    std::vector<std::string> targetParts = splitPath(target);
+
+    size_t commonIndex = 0;
+    while (commonIndex < baseParts.size() && commonIndex < targetParts.size() &&
+        baseParts[commonIndex] == targetParts[commonIndex]) {
+        ++commonIndex;
+    }
+
+    std::string result;
+    for (size_t i = commonIndex; i < baseParts.size(); ++i) {
+        result += "../";
+    }
+    for (size_t i = commonIndex; i < targetParts.size(); ++i) {
+        result += targetParts[i];
+        if (i < targetParts.size() - 1) {
+            result += "/";
+        }
+    }
+
+    return "./" + result;
+}
+

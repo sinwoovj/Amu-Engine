@@ -131,7 +131,7 @@ int main(void)
     //_CrtSetBreakAlloc(515);
     if (AMSysInit(windowWidth, windowHeight, "Amu Engine") )
         return 1;
-
+    Utility::InitUtility();
     // Editor Init
     editor::MainEditor* mainEditor = new editor::MainEditor();
     mainEditor->MainEditorInit(mainWindow);
