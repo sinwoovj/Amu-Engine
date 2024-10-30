@@ -23,6 +23,7 @@ void TextureResource::LoadData(const std::string& filename)
 	stbi_set_flip_vertically_on_load(1);
 
 	data = stbi_load(filename.c_str(), &width, &height, &nrChannels, 0);
+	SpriteComp::SetFileExt(filename, fileExtension);
 	SpriteComp::SetNativeSize(filename, { width, height });
 }
 

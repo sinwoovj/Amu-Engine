@@ -69,6 +69,9 @@ public:
 
 	static glm::vec2 GetNativeSize(std::string str);
 	static void SetNativeSize(std::string str, glm::vec2 size);
+
+	static std::string GetFileExt(std::string str);
+	static void SetFileExt(std::string str, std::string str2);
 	
 	void SetScale();
 	

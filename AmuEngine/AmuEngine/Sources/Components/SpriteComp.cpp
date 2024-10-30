@@ -43,7 +43,7 @@ void main()
 })";
 
 std::map<std::string, glm::vec2> SpriteComp::nativeSize;
-std::map<std::string, glm::vec2> SpriteComp::fileExt;
+std::map<std::string, std::string> SpriteComp::fileExt;
 
 SpriteComp::SpriteComp(GameObject* _owner) : GraphicComponent(_owner)
 {
@@ -354,8 +354,16 @@ bool SpriteComp::SetTexture(std::string path)
 
 		glBindTexture(GL_TEXTURE_2D, sprite_texture);
 		glUseProgram(_shader);
-
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)textureSize.x, (GLsizei)textureSize.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture);
+		int channel = 0;
+		if (owner->GetComponent<SpriteComp>() != nullptr)
+		{
+			if (GetFileExt(owner->GetComponent<SpriteComp>()->GetTexturePath()) == "png")
+				channel = GL_RGBA;
+			else if (GetFileExt(owner->GetComponent<SpriteComp>()->GetTexturePath()) == "jpg")
+				channel = GL_RGB;
+		}
+		
+		glTexImage2D(GL_TEXTURE_2D, 0, channel, (GLsizei)textureSize.x, (GLsizei)textureSize.y, 0, channel, GL_UNSIGNED_BYTE, texture);
 		glGenerateMipmap(GL_TEXTURE_2D);
 
 		unsigned char loc = glGetUniformLocation(_shader, "ortho");
@@ -436,6 +444,24 @@ void SpriteComp::SetNativeSize(std::string str, glm::vec2 size)
 	if (nativeSize.find(str) == nativeSize.end())
 	{
 		nativeSize.insert({ str, size });
+	}
+}
+
+std::string SpriteComp::GetFileExt(std::string str)
+{
+	if (fileExt.find(str) != fileExt.end())
+	{
+		return fileExt.find(str)->second;
+	}
+	std::cout << "Invaild fileName" << std::endl;
+	return "";
+}
+
+void SpriteComp::SetFileExt(std::string str, std::string str2)
+{
+	if (fileExt.find(str) == fileExt.end())
+	{
+		fileExt.insert({ str, str2 });
 	}
 }
 
