@@ -19,9 +19,13 @@ inline T* ResourceManager::GetResource(const std::string& filename)
 		switch (e)
 		{
 		case png:
+		{
+			res = new TextureResource("png");
+			break;
+		}
 		case jpg:
 		{
-			res = new TextureResource;
+			res = new TextureResource("jpg");
 			break;
 		}
 		//case mp3:

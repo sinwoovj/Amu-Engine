@@ -43,6 +43,7 @@ void main()
 })";
 
 std::map<std::string, glm::vec2> SpriteComp::nativeSize;
+std::map<std::string, glm::vec2> SpriteComp::fileExt;
 
 SpriteComp::SpriteComp(GameObject* _owner) : GraphicComponent(_owner)
 {

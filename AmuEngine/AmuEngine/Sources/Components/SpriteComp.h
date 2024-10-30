@@ -16,6 +16,7 @@ private:
 	//texture 
 	glm::vec2 textureSize;
 	static std::map<std::string, glm::vec2> nativeSize;
+	static std::map<std::string, std::string> fileExt;
 
 	unsigned char* texture = nullptr;
 
