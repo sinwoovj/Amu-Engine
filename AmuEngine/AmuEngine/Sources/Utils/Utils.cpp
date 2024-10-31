@@ -5,6 +5,11 @@
 #include "../Camera/Camera.h"
 #include <EasyOpengl.h>
 
+
+
+std::string Utility::projectDirectory;
+std::string Utility::projectName;
+
 void AESleep(long long t)
 {
     if (t <= 0)
@@ -71,12 +76,10 @@ float GetSqDistance(float ax, float ay, float bx, float by)
 
 
 #include <windows.h>
-#include <commdlg.h>  // For GetOpenFileName
-#include <atlconv.h>
 #include <string>
 #include <filesystem>
-#include <Windows.h>
 #include <codecvt>
+
 
 void Utility::InitUtility()
 {
@@ -89,7 +92,6 @@ std::string Utility::OpenFileDialog()
     OPENFILENAME ofn;       // 공통 대화 상자 구조체
     wchar_t szFile[260];       // 파일 경로를 저장할 버퍼
     HWND hwnd = NULL;       // 소유자 윈도우 핸들 (NULL일 경우 기본 윈도우 사용)
-    HANDLE hf = NULL;              // 파일 핸들
 
     ZeroMemory(&ofn, sizeof(ofn));
     ofn.lStructSize = sizeof(ofn);
@@ -108,6 +110,7 @@ std::string Utility::OpenFileDialog()
     {
         std::string res = WstrTostr(ofn.lpstrFile);
         res = AbsToRelPath(projectDirectory, res);
+
         return res;  // 선택된 파일 경로를 반환
     }
 
@@ -133,6 +136,7 @@ std::string Utility::SaveFileDialog()
     ofn.lpstrInitialDir = NULL;
     ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
 
+
     if (GetSaveFileNameW(&ofn) == TRUE)  // 유니코드 버전 사용
     {
         std::string res = WstrTostr(ofn.lpstrFile);
@@ -156,10 +160,29 @@ std::string Utility::GetCurrentPath()
     }
 }
 
+
 std::string Utility::WstrTostr(const std::wstring& in)
 {
-    std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
-    return converter.to_bytes(in);
+    /*std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+    return converter.to_bytes(in);*/
+    /*setlocale(LC_ALL, "");
+
+    wchar_t* org = in;
+    char buffer[300] = "";
+    char* ptr = buffer;
+
+    while (*org) {
+        int sz = wctomb(ptr, *org);
+        org++; ptr += sz;
+    }
+    std::string result(buffer);
+    return result;*/
+    int bufferSize = WideCharToMultiByte(CP_UTF8, 0, in.c_str(), -1, nullptr, 0, nullptr, nullptr);
+    std::string result(bufferSize, 0);
+    WideCharToMultiByte(CP_UTF8, 0, in.c_str(), -1, &result[0], bufferSize, nullptr, nullptr);
+    if (!result.back())
+        result.pop_back();
+    return result;
 }
 
 std::vector<std::string> Utility::splitPath(const std::string& path)
@@ -206,5 +229,14 @@ std::string Utility::AbsToRelPath(const std::string& base, const std::string& ta
     }
 
     return "./" + result;
+}
+
+bool Utility::isMultibyte(std::string str)
+{
+    // 로케일 설정 (시스템 기본 로케일을 사용)
+    setlocale(LC_ALL, "");
+    
+    // 멀티바이트인지 아닌지 확인
+    return mblen(str.c_str(), MB_CUR_MAX) > 1;
 }
 

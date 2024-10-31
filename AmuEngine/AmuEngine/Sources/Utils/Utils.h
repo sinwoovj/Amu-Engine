@@ -15,8 +15,8 @@ float MapToPosY(float ind);
 float GetSqDistance(float ax, float ay, float bx, float by);
 
 namespace Utility {
-	static std::string projectDirectory; 
-	static std::string projectName;
+	extern std::string projectDirectory;
+	extern std::string projectName;
 	enum FileDialogFilter {
 		Image,
 		Text,
@@ -31,4 +31,6 @@ namespace Utility {
 	std::string WstrTostr(const std::wstring& in);
 	std::vector<std::string> splitPath(const std::string& path);
 	std::string AbsToRelPath(const std::string& base, const std::string& target);
+
+	bool isMultibyte(std::string str);
 }
