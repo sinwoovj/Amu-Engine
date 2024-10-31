@@ -22,7 +22,7 @@ void TextureResource::LoadData(const std::string& filename)
 	// 텍스처 로드 및 생성
 	int width, height, nrChannels;
 	stbi_set_flip_vertically_on_load(1);
-	bool isMultibyte = Utility::isMultibyte(filename);
+	//bool isMultibyte = Utility::isMultibyte(filename);
 	data = stbi_load(filename.c_str(), &width, &height, &nrChannels, 0);
 	if (stbi_failure_reason())
 		std::cout << stbi_failure_reason() << std::endl;

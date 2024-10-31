@@ -4,6 +4,7 @@
 #include <thread>
 #include "../Camera/Camera.h"
 #include <EasyOpengl.h>
+#include <direct.h>
 
 
 
@@ -109,8 +110,14 @@ std::string Utility::OpenFileDialog()
     if (GetOpenFileName(&ofn) == TRUE)
     {
         std::string res = WstrTostr(ofn.lpstrFile);
-        //res = AbsToRelPath(projectDirectory, res);
+        res = AbsToRelPath(projectDirectory, res);
 
+        if (_chdir(projectDirectory.c_str()) == 0) { // 성공 시 0 반환
+            std::cout << "작업 디렉토리가 프로젝트 디렉터리로 변경되었습니다.\n";
+        }
+        else {
+            std::cerr << "디렉토리 변경에 실패했습니다.\n";
+        }
         return res;
     }
 
@@ -140,6 +147,7 @@ std::string Utility::SaveFileDialog()
     if (GetSaveFileNameW(&ofn) == TRUE)  // 유니코드 버전 사용
     {
         std::string res = WstrTostr(ofn.lpstrFile);
+        res = AbsToRelPath(projectDirectory, res);
         return res;  // 선택된 파일 경로를 반환
     }
 

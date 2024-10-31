@@ -1,8 +1,5 @@
 #include "GSM/GameStateManager.h"
 #include "Level/Menu.h"
-#include "Example/Rect.h"
-#include "Example/Sprite.h"
-#include "Example/Triangle.h"
 #include <opengl.h>
 #include <Utils.h>
 #include <EasyImgui.h>
