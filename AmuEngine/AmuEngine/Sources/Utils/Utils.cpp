@@ -109,9 +109,9 @@ std::string Utility::OpenFileDialog()
     if (GetOpenFileName(&ofn) == TRUE)
     {
         std::string res = WstrTostr(ofn.lpstrFile);
-        res = AbsToRelPath(projectDirectory, res);
+        //res = AbsToRelPath(projectDirectory, res);
 
-        return res;  // 선택된 파일 경로를 반환
+        return res;
     }
 
     return std::string();  // 아무것도 선택되지 않으면 빈 문자열 반환
