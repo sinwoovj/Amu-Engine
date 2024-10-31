@@ -33,6 +33,11 @@ private:
 	GLuint sprite_texture;
 	std::string texturePath;
 
+	//select edge
+	GLuint select_edge_VAO;
+	GLuint select_edge_VBO;
+	GLuint select_edge_EBO;
+
 	//collider edge
 	GLuint collider_edge_VAO;
 	GLuint collider_edge_VBO;
@@ -52,7 +57,7 @@ public:
 	void SpriteSetSprite();
 	void SpriteCreateSprite();
 	void SpriteDrawSprite();
-	void SpriteCreateRect(GLuint& vao, GLuint& vbo, GLuint& ebo);
+	void SpriteCreateRect(GLuint& vao, GLuint& vbo, GLuint& ebo, GLfloat lineWidth);
 	void SpriteDrawRect(GLuint& vao, glm::vec3 color);
 	void SpriteApplyTransform(float offset = 0.0f);
 	
@@ -83,6 +88,8 @@ public:
 	void SetAlpha(float Alpha) { alpha = Alpha; }
 	
 	void SetTransparency();
+
+	void SetBool(const std::string& name, bool value) const;
 
 	int GetOrderInlayer() { return orderinLayer; }
 	void GetOrderInlayer(int num) { orderinLayer = num; }

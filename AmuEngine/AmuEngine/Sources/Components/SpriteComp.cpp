@@ -34,12 +34,23 @@ in vec3 ourColor;
 in vec2 TexCoord;
 
 uniform vec4 ucolor;
+uniform vec4 ecolor;
 // texture sampler
 uniform sampler2D texture1;
+uniform bool useTexture;
+
 
 void main()
 {
-	FragColor = texture2D(texture1, TexCoord) * ucolor;
+	if(useTexture)
+    {
+        FragColor = texture2D(texture1, TexCoord) * ucolor;
+    }
+    else
+    {
+        // 콜리전 박스 렌더링
+        FragColor = ecolor;
+    }
 })";
 
 std::map<std::string, glm::vec2> SpriteComp::nativeSize;
@@ -55,6 +66,9 @@ SpriteComp::SpriteComp(GameObject* _owner) : GraphicComponent(_owner)
 	sprite_EBO = 0;
 	sprite_VAO = 0;
 	sprite_VBO = 0;
+	select_edge_VAO = 0;
+	select_edge_VBO = 0;
+	select_edge_EBO = 0;
 	collider_edge_VAO = 0;
 	collider_edge_VBO = 0;
 	collider_edge_EBO = 0;
@@ -64,6 +78,10 @@ SpriteComp::SpriteComp(GameObject* _owner) : GraphicComponent(_owner)
 	textureSize = { 400, 400 };
 	trans = nullptr;
 	SpriteSetSprite();
+	SpriteCreateRect(select_edge_VAO, select_edge_VBO, select_edge_EBO, 0.05);
+	glUseProgram(_shader);
+	SetBool("useTexture", true);
+	glUseProgram(0);
 }
 
 SpriteComp::~SpriteComp()
@@ -73,6 +91,12 @@ SpriteComp::~SpriteComp()
 	glDeleteVertexArrays(1, &sprite_VAO);
 	glDeleteBuffers(1, &sprite_VBO);
 	glDeleteBuffers(1, &sprite_EBO);
+	glDeleteVertexArrays(1, &select_edge_VAO);
+	glDeleteBuffers(1, &select_edge_VBO);
+	glDeleteBuffers(1, &select_edge_EBO);
+	/*glDeleteVertexArrays(1, &collider_edge_VAO);
+	glDeleteBuffers(1, &collider_edge_VBO);
+	glDeleteBuffers(1, &collider_edge_EBO);*/
 
 }
 
@@ -82,33 +106,45 @@ void SpriteComp::SpriteSetSprite()
 	SpriteCompileShader();
 }
 
-void SpriteComp::SpriteCreateRect(GLuint& vao, GLuint& vbo, GLuint& ebo)
+void SpriteComp::SpriteCreateRect(GLuint& vao, GLuint& vbo, GLuint& ebo, GLfloat lineWidth)
 {
 	// 정점 좌표 & 사각형 색상 & 텍스처 좌표 (좌표계가 stbi 라이브러리와 opengl라이브러리의 서로 달라서 y축만 -를 달아서 반전시킴)
 	float vertices[] = {
 		// positions         // colors
-		-0.5f, -0.5f, 1.0f,  color.r / 255.f, color.g / 255.f, color.b / 255.f, // top right
-		 0.5f, -0.5f, 1.0f,  color.r / 255.f, color.g / 255.f, color.b / 255.f, // bottom right
-		 0.5f,  0.5f, 1.0f,  color.r / 255.f, color.g / 255.f, color.b / 255.f, // bottom left
-		-0.5f,  0.5f, 1.0f,  color.r / 255.f, color.g / 255.f, color.b / 255.f  // top left 
+		-0.5f, -0.5f, 1.0f,  1, 1, 1, // top right
+		 0.5f, -0.5f, 1.0f,  1, 1, 1, // bottom right
+		 0.5f,  0.5f, 1.0f,  1, 1, 1, // bottom left
+		-0.5f,  0.5f, 1.0f,  1, 1, 1,  // top left 
+		-0.5f - lineWidth, -0.5f - lineWidth, 1.0f,  1, 1, 1,
+		 0.5f + lineWidth, -0.5f - lineWidth, 1.0f,  1, 1, 1,
+		 0.5f + lineWidth,  0.5f + lineWidth, 1.0f,  1, 1, 1,
+		-0.5f - lineWidth,  0.5f + lineWidth, 1.0f,  1, 1, 1
 	};
 	// 정점 인덱스
 	GLint vertexIndeces[] = {
-		0, 1, 2, // first triangle
-		2, 3, 0  // second triangle
+		0, 4, 5,
+		0, 1, 5,
+		1, 6, 5,
+		1, 2, 6,
+		2, 6, 7,
+		2, 3, 7,
+		3, 7, 4,
+		3, 0, 4
 	};
 
 	// OpenGL 정점 배열 생성기를 사용해서 VAO를 생성
-	glGenVertexArrays(1, &sprite_VAO);
+	glGenVertexArrays(1, &vao);
 	// OpenGL 정점 배열 생성기를 사용해서 VBO를 생성
-	glGenBuffers(1, &sprite_VBO);
+	glGenBuffers(1, &vbo);
+	// OpenGL 정점 배열 생성기를 사용해서 EBO를 생성
+	glGenBuffers(1, &ebo);
 
-	glBindVertexArray(sprite_VAO);// 우리가 생성한 VAO를 현재 수정 가능하도록 연결한다.
+	glBindVertexArray(vao);// 우리가 생성한 VAO를 현재 수정 가능하도록 연결한다.
 
-	glBindBuffer(GL_ARRAY_BUFFER, sprite_VBO);// 우리가 생성한 VBO를 현재 수정 가능하도록 연결한다.
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);// 우리가 생성한 VBO를 현재 수정 가능하도록 연결한다.
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);// 우리가 만든 삼각형 정점 좌표를 VBO에 저장한다.
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, sprite_EBO);// 우리가 생성한 VBO를 현재 수정 가능하도록 연결한다.
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);// 우리가 생성한 VBO를 현재 수정 가능하도록 연결한다.
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(vertexIndeces), vertexIndeces, GL_STATIC_DRAW);// 우리가 만든 삼각형 정점 좌표를 VBO에 저장한다.
 
 	// VAO에 이 VAO를 어떻게 해석해야 할 지 알려줍니다. 
@@ -124,28 +160,20 @@ void SpriteComp::SpriteDrawRect(GLuint& vao, glm::vec3 color)
 {
 	// Shader 적용
 	glUseProgram(_shader);
-	float lineWidth[2];
-	glGetFloatv(GL_LINE_WIDTH_RANGE, lineWidth);
-
-	//change the matrix to have size + Offset
-
+	SetBool("useTexture", false);
 
 	glBindVertexArray(vao);
-	glBindTexture(GL_TEXTURE_2D, sprite_texture);
-	unsigned int loc = glGetUniformLocation(_shader, "ucolor");
+	unsigned int loc = glGetUniformLocation(_shader, "ecolor");
 	if (loc >= 0)
 	{
 		glUniform4f(loc, color.r / 255.f, color.g / 255.f, color.b / 255.f, 1);
 	}
 
-	SpriteApplyTransform(500);
-	glUseProgram(_shader);
+	glDrawElements(GL_TRIANGLES, 24, GL_UNSIGNED_INT, 0);
 
-	glDrawArrays(GL_LINE_LOOP, 0, 4);
-	//glDrawElements(GL_LINE_LOOP, 6, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
-	glBindTexture(GL_TEXTURE_2D, 0);
 	// Shader 해제
+	SetBool("useTexture", true);
 	glUseProgram(0);
 }
 
@@ -403,6 +431,11 @@ void SpriteComp::SetTransparency()
 	glUseProgram(0);
 }
 
+void SpriteComp::SetBool(const std::string& name, bool value) const
+{
+	glUniform1i(glGetUniformLocation(_shader, name.c_str()), (int)value);
+}
+
 void SpriteComp::Update()
 {
 	//Set render mode
@@ -419,8 +452,8 @@ void SpriteComp::Update()
 	SpriteDrawSprite();
 
 	selected = true;
-	if (selected)
-		SpriteDrawRect(sprite_VAO, { 255, 0, 0 });
+	if (selected || editor::MainEditor::editor_data.ShowCollision)
+		SpriteDrawRect(select_edge_VAO, { 255, 0, 0 });
 
 }
 

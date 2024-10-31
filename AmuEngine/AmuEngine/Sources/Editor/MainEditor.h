@@ -74,6 +74,7 @@ namespace editor
 
 			// Normal State Variable
 			bool DeleteObject = false;
+			bool ShowCollision = false;
 
 			// Constant Variable
 			const std::string editorFileName = "./Sources/Editor/editor.json";
