@@ -1,6 +1,7 @@
 #pragma once
 #include "../GameObject/GameObject.h"
 #include "../GameObjectManager/GameObjectManager.h"
+#include "../Components/SpriteComp.h"
 #include <EasyImgui.h>
 #include <opengl.h>
 
@@ -82,9 +83,14 @@ namespace editor
 		};
 		static EDITOR_DATA editor_data;
 
+		//check state var
+		SpriteComp* psc = nullptr;
+		SpriteComp* sc = nullptr;
+
 		MainEditor() {}
 		MainEditor(const MainEditor&) {}
 
+		void TraceObject();
 		void PopUp();
 		void TopBar();
 		void ShowLevelObject(bool* p_open);

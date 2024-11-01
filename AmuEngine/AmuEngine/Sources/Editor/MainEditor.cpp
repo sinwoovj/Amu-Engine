@@ -22,6 +22,35 @@ editor::MainEditor::~MainEditor()
 {
 }
 
+void editor::MainEditor::TraceObject()
+{
+    if (!editor::MainEditor::editor_data.selectObjectName.empty())
+    {
+        if (GameObjectManager::GetInstance().
+            GetObj(editor::MainEditor::editor_data.selectObjectName))
+        {
+            sc = GameObjectManager::GetInstance().
+                GetObj(editor::MainEditor::editor_data.selectObjectName)->
+                GetComponent<SpriteComp>();
+        }
+        else
+            sc = nullptr;
+    }
+
+    if (editor::MainEditor::editor_data.IsTraceObject)
+    {
+        if (sc)
+            sc->SetSelected(true);
+        if (sc != psc)
+        {
+            if(psc)
+                psc->SetSelected(false);
+            if(sc)
+                psc = sc;
+        }
+    }
+}
+
 void editor::MainEditor::PopUp()
 {
     // PopUp
@@ -596,6 +625,7 @@ void editor::MainEditor::TopBar()
         ImGui::PopItemFlag();
     };
 
+    TraceObject();
     PopUp();
 
     // End Main Menu Bar
@@ -618,12 +648,17 @@ void editor::MainEditor::ShowLevelObject(bool* p_open)
         if (ImGui::Begin(dynamic_cast<level::NormalLevel*>(GSM::GameStateManager::GetInstance().
             GetCurrentLevel())->GetName().c_str(), p_open))
         {
-
+            
             ImGui::SeparatorText("Object List");
+            static bool psc = false;
             for (auto& obj : GameObjectManager::GetInstance().GetAllObjects())
             {
+                psc = (editor_data.selectObjectName == obj.first);
+                if (psc)
+                    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.0f, 0.0f, 1.0f));
                 if (ImGui::TreeNodeEx(obj.first.c_str(), ImGuiTreeNodeFlags_OpenOnArrow))
                 {
+                    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
                     if (ImGui::IsItemHovered())
                     {
                         if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
@@ -784,6 +819,7 @@ void editor::MainEditor::ShowLevelObject(bool* p_open)
                         }
                     }
                     ImGui::EndColumns();
+                    ImGui::PopStyleColor();
                     ImGui::TreePop();
                 }
                 else
@@ -800,6 +836,11 @@ void editor::MainEditor::ShowLevelObject(bool* p_open)
                             editor_data.showObjectListRightClickPopup = true;
                         }
                     }
+                }
+                if (psc)
+                {
+                    ImGui::PopStyleColor();
+                    psc = false;
                 }
             }
 
@@ -821,31 +862,9 @@ void editor::MainEditor::ShowLevelObject(bool* p_open)
             }
 
             ImGui::NextColumn();
-            static SpriteComp* psc = nullptr;
-            static SpriteComp* sc = nullptr;
-            
-            if (!editor::MainEditor::editor_data.selectObjectName.empty())
-            {
-                if (sc)
-                {
-                    if (sc != psc)
-                        psc = sc;
-                }
-                sc = GameObjectManager::GetInstance().
-                    GetObj(editor::MainEditor::editor_data.selectObjectName)->
-                    GetComponent<SpriteComp>();
-            }
 
             ImGui::Checkbox("Trace Object", &editor::MainEditor::editor_data.IsTraceObject);
-            if(editor::MainEditor::editor_data.IsTraceObject)
-            {
-                if (sc)
-                {
-                    if (psc)
-                        psc->SetSelected(false);
-                    sc->SetSelected(true);
-                }
-            }
+            
         }
         ImGui::End(); 
     }
