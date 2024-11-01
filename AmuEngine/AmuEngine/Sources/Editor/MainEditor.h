@@ -75,7 +75,7 @@ namespace editor
 			// Normal State Variable
 			bool DeleteObject = false;
 			bool ShowCollider = false;
-			bool IsTraceObject = false;
+			bool IsTraceObject = true; //Defualt
 
 			// Constant Variable
 			const std::string editorFileName = "./Sources/Editor/editor.json";

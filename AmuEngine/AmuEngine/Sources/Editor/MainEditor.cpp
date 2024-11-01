@@ -622,7 +622,7 @@ void editor::MainEditor::ShowLevelObject(bool* p_open)
             ImGui::SeparatorText("Object List");
             for (auto& obj : GameObjectManager::GetInstance().GetAllObjects())
             {
-                if (ImGui::TreeNode(obj.first.c_str()))
+                if (ImGui::TreeNodeEx(obj.first.c_str(), ImGuiTreeNodeFlags_OpenOnArrow))
                 {
                     if (ImGui::IsItemHovered())
                     {
@@ -638,7 +638,7 @@ void editor::MainEditor::ShowLevelObject(bool* p_open)
                     }
                     for (auto& comp : obj.second->GetComponents())
                     {
-                        if (ImGui::TreeNode(comp.first.c_str()))
+                        if (ImGui::TreeNodeEx(comp.first.c_str(), ImGuiTreeNodeFlags_OpenOnArrow))
                         {
                             if (ImGui::IsItemHovered())
                             {
@@ -836,7 +836,7 @@ void editor::MainEditor::ShowLevelObject(bool* p_open)
                     GetComponent<SpriteComp>();
             }
 
-            if (ImGui::Checkbox("Trace Object", &editor::MainEditor::editor_data.IsTraceObject));
+            ImGui::Checkbox("Trace Object", &editor::MainEditor::editor_data.IsTraceObject);
             if(editor::MainEditor::editor_data.IsTraceObject)
             {
                 if (sc)

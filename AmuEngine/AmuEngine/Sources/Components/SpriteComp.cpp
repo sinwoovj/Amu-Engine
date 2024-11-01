@@ -530,7 +530,7 @@ void SpriteComp::Update()
 	// Draw
 	SpriteDrawSprite();
 
-	
+	DEBUG_EDITOR_MODE_IN
 	if (selected)
 		SetBoolShader("useBorder", true);
 		SpriteDrawRectBorder(select_edge_VAO, 3, { 255, 0, 0 });
@@ -544,6 +544,7 @@ void SpriteComp::Update()
 		SetBoolShader("useCollider", false);
 		SetBoolShader("useBorder", false);
 	}
+	DEBUG_EDITOR_MODE_OUT
 }
 
 void SpriteComp::SetColor(glm::vec3 Color)
