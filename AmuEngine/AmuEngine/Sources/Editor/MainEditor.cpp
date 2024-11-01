@@ -618,6 +618,7 @@ void editor::MainEditor::ShowLevelObject(bool* p_open)
         if (ImGui::Begin(dynamic_cast<level::NormalLevel*>(GSM::GameStateManager::GetInstance().
             GetCurrentLevel())->GetName().c_str(), p_open))
         {
+
             ImGui::SeparatorText("Object List");
             for (auto& obj : GameObjectManager::GetInstance().GetAllObjects())
             {
@@ -625,6 +626,10 @@ void editor::MainEditor::ShowLevelObject(bool* p_open)
                 {
                     if (ImGui::IsItemHovered())
                     {
+                        if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+                        {
+                            editor_data.selectObjectName = obj.first;
+                        }
                         if (ImGui::IsMouseClicked(ImGuiMouseButton_Right))
                         {
                             editor_data.selectObjectName = obj.first;
@@ -785,6 +790,10 @@ void editor::MainEditor::ShowLevelObject(bool* p_open)
                 {
                     if (ImGui::IsItemHovered())
                     {
+                        if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+                        {
+                            editor_data.selectObjectName = obj.first;
+                        }
                         if (ImGui::IsMouseClicked(ImGuiMouseButton_Right))
                         {
                             editor_data.selectObjectName = obj.first;
@@ -795,7 +804,7 @@ void editor::MainEditor::ShowLevelObject(bool* p_open)
             }
 
             ImGui::SeparatorText("Object Option");
-            ImGui::Columns(2, NULL, false);
+            ImGui::Columns(3, NULL, false);
             if (ImGui::Button("Add Object"))
             {
                 editor_data.showAddObjectPopup = true;
@@ -809,6 +818,33 @@ void editor::MainEditor::ShowLevelObject(bool* p_open)
                     std::cout << "실패" << std::endl;
                 else
                     std::cout << "성공" << std::endl;
+            }
+
+            ImGui::NextColumn();
+            static SpriteComp* psc = nullptr;
+            static SpriteComp* sc = nullptr;
+            
+            if (!editor::MainEditor::editor_data.selectObjectName.empty())
+            {
+                if (sc)
+                {
+                    if (sc != psc)
+                        psc = sc;
+                }
+                sc = GameObjectManager::GetInstance().
+                    GetObj(editor::MainEditor::editor_data.selectObjectName)->
+                    GetComponent<SpriteComp>();
+            }
+
+            if (ImGui::Checkbox("Trace Object", &editor::MainEditor::editor_data.IsTraceObject));
+            if(editor::MainEditor::editor_data.IsTraceObject)
+            {
+                if (sc)
+                {
+                    if (psc)
+                        psc->SetSelected(false);
+                    sc->SetSelected(true);
+                }
             }
         }
         ImGui::End(); 

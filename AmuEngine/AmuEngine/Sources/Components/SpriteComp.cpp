@@ -530,6 +530,7 @@ void SpriteComp::Update()
 	// Draw
 	SpriteDrawSprite();
 
+	
 	if (selected)
 		SetBoolShader("useBorder", true);
 		SpriteDrawRectBorder(select_edge_VAO, 3, { 255, 0, 0 });

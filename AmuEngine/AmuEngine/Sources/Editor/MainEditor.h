@@ -48,7 +48,7 @@ namespace editor
 			int tag_item_selected_idx = 0;
 
 			// Show State Variable
-			bool showAllObjects = false;
+			bool showAllObjects = true; // Default
 			bool showProfiler = false;
 
 			// Show Popup
@@ -75,6 +75,7 @@ namespace editor
 			// Normal State Variable
 			bool DeleteObject = false;
 			bool ShowCollider = false;
+			bool IsTraceObject = false;
 
 			// Constant Variable
 			const std::string editorFileName = "./Sources/Editor/editor.json";
@@ -94,3 +95,7 @@ namespace editor
 		void MainEditorExit();
 	};
 }
+
+#define DEBUG_EDITOR_MODE_IN if(editor::MainEditor::editorMode == editor::MainEditor::EditorMode::Edit) {
+
+#define DEBUG_EDITOR_MODE_OUT }
