@@ -18,12 +18,18 @@ out vec2 TexCoord;
 
 uniform mat4 ortho;
 uniform mat3 transform;
+uniform mat3 collider;
 uniform vec2 offset;
 uniform bool useBorder;
+uniform bool useCollider;
 
 void main()
 {
-	vec3 pos = transform * aPos;
+	vec3 pos = aPos;
+	if(useCollider)
+		pos = collider * pos;
+	else
+		pos = transform * pos;
 	if(useBorder)
 	{
 		if(isBorder == 1)
@@ -59,11 +65,16 @@ void main()
 {
 	if(useTexture)
     {
-        FragColor = texture2D(texture1, TexCoord) * ucolor;
+		// 알파값이 0보다 크면 색상을 곱해서 적용하고, 그렇지 않으면 텍스처 그대로 사용
+		vec4 texColor = texture2D(texture1, TexCoord);
+		if (texColor.a > 0.0)
+			FragColor = texColor * ucolor;
+		else
+			FragColor = texColor; // 텍스처의 빈 부분은 그대로 출력
     }
     else
     {
-        // 콜리전 박스 렌더링
+        // 보더 렌더링
         FragColor = ecolor;
     }
 })";
@@ -78,6 +89,7 @@ SpriteComp::SpriteComp(GameObject* _owner) : GraphicComponent(_owner)
 	color = { 1.f,1.f,1.f };
 	alpha = 1;
 	selected = false;
+	isCollision = false;
 	sprite_EBO = 0;
 	sprite_VAO = 0;
 	sprite_VBO = 0;
@@ -94,8 +106,10 @@ SpriteComp::SpriteComp(GameObject* _owner) : GraphicComponent(_owner)
 	trans = nullptr;
 	SpriteSetSprite();
 	SpriteCreateRect(select_edge_VAO, select_edge_VBO, select_edge_EBO);
-	//SpriteCreateRect(collider_edge_VAO, collider_edge_VBO, collider_edge_EBO);
+	SpriteCreateRect(collider_edge_VAO, collider_edge_VBO, collider_edge_EBO);
 	SetBoolShader("useTexture", true);
+	SetBoolShader("useBorder", false);
+	SetBoolShader("useCollider", false);
 }
 
 SpriteComp::~SpriteComp()
@@ -124,15 +138,15 @@ void SpriteComp::SpriteCreateRect(GLuint& vao, GLuint& vbo, GLuint& ebo)
 {
 	// 정점 좌표 & 사각형 색상 & 텍스처 좌표 (좌표계가 stbi 라이브러리와 opengl라이브러리의 서로 달라서 y축만 -를 달아서 반전시킴)
 	float vertices[] = {
-		// positions         // colors	// isBorder
-		-0.5f, -0.5f, 1.0f,  1.0f, 1.0f, 1.0f,	0,	// top right
-		 0.5f, -0.5f, 1.0f,  1.0f, 1.0f, 1.0f,	0,	// bottom right
-		 0.5f,  0.5f, 1.0f,  1.0f, 1.0f, 1.0f,	0,	// bottom left
-		-0.5f,  0.5f, 1.0f,  1.0f, 1.0f, 1.0f,	0,	// top left 
-		-0.5f, -0.5f, 1.0f,  1.0f, 1.0f, 1.0f,	1,	// top right
-		 0.5f, -0.5f, 1.0f,  1.0f, 1.0f, 1.0f,	2,	// bottom right
-		 0.5f,  0.5f, 1.0f,  1.0f, 1.0f, 1.0f,	3,	// bottom left
-		-0.5f,  0.5f, 1.0f,  1.0f, 1.0f, 1.0f,	4	// top left 
+		// positions          // colors	// isBorder
+		-0.5f, -0.5f, 1.0f,  1.0f, 0.0f, 1.0f,	0,	// top right
+		 0.5f, -0.5f, 1.0f,  1.0f, 0.0f, 1.0f,	0,	// bottom right
+		 0.5f,  0.5f, 1.0f,  1.0f, 0.0f, 1.0f,	0,	// bottom left
+		-0.5f,  0.5f, 1.0f,  1.0f, 0.0f, 1.0f,	0,	// top left 
+		-0.5f, -0.5f, 1.0f,  1.0f, 0.0f, 1.0f,	1,	// top right
+		 0.5f, -0.5f, 1.0f,  1.0f, 0.0f, 1.0f,	2,	// bottom right
+		 0.5f,  0.5f, 1.0f,  1.0f, 0.0f, 1.0f,	3,	// bottom left
+		-0.5f,  0.5f, 1.0f,  1.0f, 0.0f, 1.0f,	4	// top left 
 	};
 	// 정점 인덱스
 	GLint vertexIndeces[] = {
@@ -178,21 +192,20 @@ void SpriteComp::SpriteCreateRect(GLuint& vao, GLuint& vbo, GLuint& ebo)
 void SpriteComp::SpriteDrawRectBorder(GLuint& vao, GLfloat lineWidth, glm::vec3 color)
 {
 	SetBoolShader("useTexture", false);
-	SetBoolShader("useBorder", true);
 	SetVector2Shader("offset", { lineWidth, lineWidth });
 	SetVector4Shader("ecolor", { color.r / 255.f, color.g / 255.f, color.b / 255.f, 1 });
 	// Shader 적용
 	glUseProgram(_shader);
-
+	glDisable(GL_DEPTH_TEST);
 	glBindVertexArray(vao);
 
 	glDrawElements(GL_TRIANGLES, 24, GL_UNSIGNED_INT, 0);
 
 	glBindVertexArray(0);
+	glEnable(GL_DEPTH_TEST);
 	// Shader 해제
 	glUseProgram(0);
 	SetBoolShader("useTexture", true);
-	SetBoolShader("useBorder", false);
 }
 
 void SpriteComp::SpriteCreateSprite()
@@ -364,6 +377,9 @@ void SpriteComp::SpriteApplyTransform(float offset)
 	if(!trans)
 		trans = owner->GetComponent<TransformComp>();
 
+	if (!col)
+		col = owner->GetComponent<ColliderComp>();
+
 	// Shader 적용
 	glUseProgram(_shader);
 
@@ -374,6 +390,17 @@ void SpriteComp::SpriteApplyTransform(float offset)
 	Mtx33Scale(&transform, textureSize.x + offset, textureSize.y + offset);
 
 	glUniformMatrix3fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
+
+	if (col)
+	{
+		unsigned int colliderLoc = glGetUniformLocation(_shader, "collider");
+
+		glm::mat3 collider = col->GetMatrix();
+
+		Mtx33Scale(&collider, textureSize.x + offset, textureSize.y + offset);
+
+		glUniformMatrix3fv(colliderLoc, 1, GL_FALSE, glm::value_ptr(collider));
+	}
 
 	glUseProgram(0);
 }
@@ -439,6 +466,7 @@ void SpriteComp::SetTransparency()
 	// Enable blending
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);;
+	glDepthMask(GL_FALSE);  // 깊이 버퍼 업데이트 비활성화
 	
 	//Set transparency
 	// 알파 값 조절 (1.0은 불투명, 0.0은 완전 투명);
@@ -446,13 +474,16 @@ void SpriteComp::SetTransparency()
 	
 	glUniform4f(loc, color.r, color.g, color.b, alpha);
 
+	glDepthMask(GL_TRUE);   // 깊이 버퍼 업데이트 다시 활성화
+	glDisable(GL_BLEND);    // 블렌딩 비활성화
+
 	glUseProgram(0);
 }
 
 void SpriteComp::SetBoolShader(const std::string& name, bool value) const
 {
 	glUseProgram(_shader);
-	glUniform1i(glGetUniformLocation(_shader, name.c_str()), (int)value);
+	glUniform1i(glGetUniformLocation(_shader, name.c_str()), value);
 	glUseProgram(0);
 }
 
@@ -499,10 +530,19 @@ void SpriteComp::Update()
 	// Draw
 	SpriteDrawSprite();
 
-	selected = true;
-	if (selected || editor::MainEditor::editor_data.ShowCollision)
-		SpriteDrawRectBorder(select_edge_VAO, 5, { 255, 0, 0 });
+	if (selected)
+		SetBoolShader("useBorder", true);
+		SpriteDrawRectBorder(select_edge_VAO, 3, { 255, 0, 0 });
+		SetBoolShader("useBorder", false);
 
+	if (isCollision || editor::MainEditor::editor_data.ShowCollider)
+	{
+		SetBoolShader("useBorder", true);
+		SetBoolShader("useCollider", true);
+		SpriteDrawRectBorder(collider_edge_VAO, 3, { 0, 255, 0 });
+		SetBoolShader("useCollider", false);
+		SetBoolShader("useBorder", false);
+	}
 }
 
 void SpriteComp::SetColor(glm::vec3 Color)

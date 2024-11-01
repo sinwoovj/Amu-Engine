@@ -3,6 +3,7 @@
 #include "RigidbodyComp.h"
 #include "../CollisionManager/CollisionManager.h"
 #include "../EventManager/EventManager.h"
+#include "../Components/SpriteComp.h"
 #include <EasyImgui.h>
 
 ColliderComp::ColliderComp(GameObject* _owner) : EngineComponent(_owner), pos(), scale(), rot(0), vertices()
@@ -95,20 +96,44 @@ void ColliderComp::SetCollider(float posX, float posY, float scaleX, float scale
 	rot = _rot;
 }
 
+const glm::mat3x3& ColliderComp::GetMatrix() const
+{
+	glm::mat3 transformMatrix = glm::identity<glm::mat3x3>();
+	//Create a translate matrix
+	glm::mat3 translateMtx = glm::identity<glm::mat3x3>();
+	Mtx33Trans(&translateMtx, pos.x, pos.y);
+
+	//Create a rotation matrix
+	glm::mat3 rotationMtx = glm::identity<glm::mat3x3>();
+	Mtx33Rot(&rotationMtx, rot);
+
+	//Create a scale matrix
+	glm::mat3 scaleMtx = glm::identity<glm::mat3x3>();
+	Mtx33Scale(&scaleMtx, scale.x, scale.y);
+
+	//Concatenate them
+	Mtx33Concat(&transformMatrix, &scaleMtx, &rotationMtx);
+	Mtx33Concat(&transformMatrix, &translateMtx, &transformMatrix);
+	
+	return transformMatrix;
+}
+
 void ColliderComp::Edit()
 {
 	ImGui::LabelText("label", "Value");
 
 	//Show indicator line
-	static bool indicator = false;
-	ImGui::Checkbox("Show Indicator", &indicator);
-	if (indicator)
+	static bool colliderIndicator = false;
+	ImGui::Checkbox("Show Collider", &colliderIndicator);
+	if (colliderIndicator)
 	{
-		//º¸·ù
+		if (owner->GetComponent<SpriteComp>())
+			owner->GetComponent<SpriteComp>()->SetIsCollision(true);
 	}
 	else
 	{
-
+		if (owner->GetComponent<SpriteComp>())
+			owner->GetComponent<SpriteComp>()->SetIsCollision(false);
 	}
 
 	//Pos

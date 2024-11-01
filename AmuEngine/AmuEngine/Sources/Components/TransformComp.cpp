@@ -3,7 +3,6 @@
 #include "SpriteComp.h"
 #include <Size.h>
 #include <EasyImgui.h>
-#include <EasyOpengl.h>
 
 void TransformComp::CalculateMatrix()
 {
@@ -22,7 +21,6 @@ void TransformComp::CalculateMatrix()
 	//Concatenate them
 	Mtx33Concat(&transformMatrix , &scaleMtx, &rotationMtx);
 	Mtx33Concat(&transformMatrix , &translateMtx, &transformMatrix);
-
 }
 
 TransformComp::TransformComp(GameObject* _owner) : LogicComponent(_owner), pos({ 0,0 }), scale({ 1,1 }), rot(0), transformMatrix(glm::identity<glm::mat3>())

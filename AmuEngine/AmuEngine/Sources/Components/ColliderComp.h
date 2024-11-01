@@ -37,6 +37,8 @@ public:
 	void SetCollider();
 	void SetCollider(float posX, float posY, float scaleX, float scaleY, float _rot);
 
+	const glm::mat3x3& GetMatrix() const;
+
 	void Edit() override;
 
 	void LoadFromJson(const json&) override;

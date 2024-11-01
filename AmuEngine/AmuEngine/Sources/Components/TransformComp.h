@@ -3,7 +3,7 @@
 #include "../ComponentManager/LogicComponent.h"
 #include "../Event/Entity.h"
 
-#include <opengl.h>
+#include <EasyOpengl.h>
 
 class TransformComp : public LogicComponent
 {

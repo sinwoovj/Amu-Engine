@@ -2,6 +2,7 @@
 #include <string> 
 #include "../ComponentManager/GraphicComponent.h"
 #include "../Components/TransformComp.h"
+#include "../Components/ColliderComp.h"
 #include <opengl.h>
 #include <Size.h>
 
@@ -12,6 +13,7 @@ private:
 	glm::vec3 color;
 	float alpha;
 	bool selected;
+	bool isCollision;
 
 	//texture 
 	glm::vec2 textureSize;
@@ -22,6 +24,7 @@ private:
 
 	//trans
 	TransformComp* trans;
+	ColliderComp* col;
 	
 	//shader
 	GLuint _shader;
@@ -65,6 +68,9 @@ public:
 	void Update();
 
 	//Gettors/Settors
+
+	void SetSelected(bool value) { selected = value; }
+	void SetIsCollision(bool value) { isCollision = value; }
 
 	glm::vec3& GetColor() { return color; }
 	void SetColor(glm::vec3 Color);
