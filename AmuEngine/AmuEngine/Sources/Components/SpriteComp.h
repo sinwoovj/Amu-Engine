@@ -57,8 +57,8 @@ public:
 	void SpriteSetSprite();
 	void SpriteCreateSprite();
 	void SpriteDrawSprite();
-	void SpriteCreateRect(GLuint& vao, GLuint& vbo, GLuint& ebo, GLfloat lineWidth);
-	void SpriteDrawRect(GLuint& vao, glm::vec3 color);
+	void SpriteCreateRect(GLuint& vao, GLuint& vbo, GLuint& ebo);
+	void SpriteDrawRectBorder(GLuint& vao, GLfloat lineWidth, glm::vec3 color);
 	void SpriteApplyTransform(float offset = 0.0f);
 	
 	//Draw
@@ -89,7 +89,15 @@ public:
 	
 	void SetTransparency();
 
-	void SetBool(const std::string& name, bool value) const;
+	void SetBoolShader(const std::string& name, bool value) const;
+
+	void SetFloatShader(const std::string& name, float value) const;
+
+	void SetVector2Shader(const std::string& name, glm::vec2 value) const;
+
+	void SetVector3Shader(const std::string& name, glm::vec3 value) const;
+
+	void SetVector4Shader(const std::string& name, glm::vec4 value) const;
 
 	int GetOrderInlayer() { return orderinLayer; }
 	void GetOrderInlayer(int num) { orderinLayer = num; }

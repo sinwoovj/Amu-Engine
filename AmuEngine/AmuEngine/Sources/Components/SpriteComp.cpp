@@ -11,16 +11,31 @@ const char* spriteVShader = R"(
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec3 aColor;
 layout (location = 2) in vec2 aTexCoord;
+layout (location = 3) in float isBorder;
 
 out vec3 ourColor;
 out vec2 TexCoord;
 
 uniform mat4 ortho;
 uniform mat3 transform;
+uniform vec2 offset;
+uniform bool useBorder;
 
 void main()
 {
-	gl_Position = vec4(vec3(transform * aPos), 1.0f) * ortho;
+	vec3 pos = transform * aPos;
+	if(useBorder)
+	{
+		if(isBorder == 1)
+			pos = vec3(pos.x - offset.x, pos.y - offset.y, pos.z);
+		if(isBorder == 2)
+			pos = vec3(pos.x + offset.x, pos.y - offset.y, pos.z);
+		if(isBorder == 3)
+			pos = vec3(pos.x + offset.x, pos.y + offset.y, pos.z);
+		if(isBorder == 4)
+			pos = vec3(pos.x - offset.x, pos.y + offset.y, pos.z);
+	}
+	gl_Position = vec4(pos, 1.0f) * ortho;
 	ourColor = aColor;
 	TexCoord = vec2(aTexCoord.x, aTexCoord.y);
 })";
@@ -78,10 +93,9 @@ SpriteComp::SpriteComp(GameObject* _owner) : GraphicComponent(_owner)
 	textureSize = { 400, 400 };
 	trans = nullptr;
 	SpriteSetSprite();
-	SpriteCreateRect(select_edge_VAO, select_edge_VBO, select_edge_EBO, 0.05);
-	glUseProgram(_shader);
-	SetBool("useTexture", true);
-	glUseProgram(0);
+	SpriteCreateRect(select_edge_VAO, select_edge_VBO, select_edge_EBO);
+	//SpriteCreateRect(collider_edge_VAO, collider_edge_VBO, collider_edge_EBO);
+	SetBoolShader("useTexture", true);
 }
 
 SpriteComp::~SpriteComp()
@@ -106,19 +120,19 @@ void SpriteComp::SpriteSetSprite()
 	SpriteCompileShader();
 }
 
-void SpriteComp::SpriteCreateRect(GLuint& vao, GLuint& vbo, GLuint& ebo, GLfloat lineWidth)
+void SpriteComp::SpriteCreateRect(GLuint& vao, GLuint& vbo, GLuint& ebo)
 {
 	// 정점 좌표 & 사각형 색상 & 텍스처 좌표 (좌표계가 stbi 라이브러리와 opengl라이브러리의 서로 달라서 y축만 -를 달아서 반전시킴)
 	float vertices[] = {
-		// positions         // colors
-		-0.5f, -0.5f, 1.0f,  1, 1, 1, // top right
-		 0.5f, -0.5f, 1.0f,  1, 1, 1, // bottom right
-		 0.5f,  0.5f, 1.0f,  1, 1, 1, // bottom left
-		-0.5f,  0.5f, 1.0f,  1, 1, 1,  // top left 
-		-0.5f - lineWidth, -0.5f - lineWidth, 1.0f,  1, 1, 1,
-		 0.5f + lineWidth, -0.5f - lineWidth, 1.0f,  1, 1, 1,
-		 0.5f + lineWidth,  0.5f + lineWidth, 1.0f,  1, 1, 1,
-		-0.5f - lineWidth,  0.5f + lineWidth, 1.0f,  1, 1, 1
+		// positions         // colors	// isBorder
+		-0.5f, -0.5f, 1.0f,  1.0f, 1.0f, 1.0f,	0,	// top right
+		 0.5f, -0.5f, 1.0f,  1.0f, 1.0f, 1.0f,	0,	// bottom right
+		 0.5f,  0.5f, 1.0f,  1.0f, 1.0f, 1.0f,	0,	// bottom left
+		-0.5f,  0.5f, 1.0f,  1.0f, 1.0f, 1.0f,	0,	// top left 
+		-0.5f, -0.5f, 1.0f,  1.0f, 1.0f, 1.0f,	1,	// top right
+		 0.5f, -0.5f, 1.0f,  1.0f, 1.0f, 1.0f,	2,	// bottom right
+		 0.5f,  0.5f, 1.0f,  1.0f, 1.0f, 1.0f,	3,	// bottom left
+		-0.5f,  0.5f, 1.0f,  1.0f, 1.0f, 1.0f,	4	// top left 
 	};
 	// 정점 인덱스
 	GLint vertexIndeces[] = {
@@ -146,35 +160,39 @@ void SpriteComp::SpriteCreateRect(GLuint& vao, GLuint& vbo, GLuint& ebo, GLfloat
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);// 우리가 생성한 VBO를 현재 수정 가능하도록 연결한다.
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(vertexIndeces), vertexIndeces, GL_STATIC_DRAW);// 우리가 만든 삼각형 정점 좌표를 VBO에 저장한다.
-
+	
 	// VAO에 이 VAO를 어떻게 해석해야 할 지 알려줍니다. 
 	// 함수 인자 (vertex attribute, 타입 크기, 타입, 정규화 여부, 메모리 크기, 메모리 오프셋)
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*)0);
-	glEnableVertexAttribArray(0); // sprite_VAO 사용 허용
+	// GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const void *pointer
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), (void*)0);
+	glEnableVertexAttribArray(0); // VAO 사용 허용 // layout 주소 할당
 
 	// 사각형 색상 버퍼 바인드
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*)(3 * sizeof(float)));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
+
+	// 테두리 id 버퍼 바인드
+	glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), (void*)(6 * sizeof(float)));
+	glEnableVertexAttribArray(3);
 }
-void SpriteComp::SpriteDrawRect(GLuint& vao, glm::vec3 color)
+void SpriteComp::SpriteDrawRectBorder(GLuint& vao, GLfloat lineWidth, glm::vec3 color)
 {
+	SetBoolShader("useTexture", false);
+	SetBoolShader("useBorder", true);
+	SetVector2Shader("offset", { lineWidth, lineWidth });
+	SetVector4Shader("ecolor", { color.r / 255.f, color.g / 255.f, color.b / 255.f, 1 });
 	// Shader 적용
 	glUseProgram(_shader);
-	SetBool("useTexture", false);
 
 	glBindVertexArray(vao);
-	unsigned int loc = glGetUniformLocation(_shader, "ecolor");
-	if (loc >= 0)
-	{
-		glUniform4f(loc, color.r / 255.f, color.g / 255.f, color.b / 255.f, 1);
-	}
 
 	glDrawElements(GL_TRIANGLES, 24, GL_UNSIGNED_INT, 0);
 
 	glBindVertexArray(0);
 	// Shader 해제
-	SetBool("useTexture", true);
 	glUseProgram(0);
+	SetBoolShader("useTexture", true);
+	SetBoolShader("useBorder", false);
 }
 
 void SpriteComp::SpriteCreateSprite()
@@ -394,7 +412,7 @@ bool SpriteComp::SetTexture(std::string path)
 		glTexImage2D(GL_TEXTURE_2D, 0, channel, (GLsizei)textureSize.x, (GLsizei)textureSize.y, 0, channel, GL_UNSIGNED_BYTE, texture);
 		glGenerateMipmap(GL_TEXTURE_2D);
 
-		unsigned char loc = glGetUniformLocation(_shader, "ortho");
+		GLint loc = glGetUniformLocation(_shader, "ortho");
 
 		glm::mat4 ortho = glm::ortho((float)-windowWidthHalf, (float)windowWidthHalf, (float)-windowHeightHalf, (float)windowHeightHalf);
 		glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(ortho));
@@ -431,9 +449,39 @@ void SpriteComp::SetTransparency()
 	glUseProgram(0);
 }
 
-void SpriteComp::SetBool(const std::string& name, bool value) const
+void SpriteComp::SetBoolShader(const std::string& name, bool value) const
 {
+	glUseProgram(_shader);
 	glUniform1i(glGetUniformLocation(_shader, name.c_str()), (int)value);
+	glUseProgram(0);
+}
+
+void SpriteComp::SetFloatShader(const std::string& name, float value) const
+{
+	glUseProgram(_shader);
+	glUniform1f(glGetUniformLocation(_shader, name.c_str()), value);
+	glUseProgram(0);
+}
+
+void SpriteComp::SetVector2Shader(const std::string& name, glm::vec2 value) const
+{
+	glUseProgram(_shader);
+	glUniform2f(glGetUniformLocation(_shader, name.c_str()), value.x, value.y);
+	glUseProgram(0);
+}
+
+void SpriteComp::SetVector3Shader(const std::string& name, glm::vec3 value) const
+{
+	glUseProgram(_shader);
+	glUniform3f(glGetUniformLocation(_shader, name.c_str()), value.x, value.y, value.z);
+	glUseProgram(0);
+}
+
+void SpriteComp::SetVector4Shader(const std::string& name, glm::vec4 value) const
+{
+	glUseProgram(_shader);
+	glUniform4f(glGetUniformLocation(_shader, name.c_str()), value.x, value.y, value.z, value.w);
+	glUseProgram(0);
 }
 
 void SpriteComp::Update()
@@ -453,7 +501,7 @@ void SpriteComp::Update()
 
 	selected = true;
 	if (selected || editor::MainEditor::editor_data.ShowCollision)
-		SpriteDrawRect(select_edge_VAO, { 255, 0, 0 });
+		SpriteDrawRectBorder(select_edge_VAO, 5, { 255, 0, 0 });
 
 }
 
