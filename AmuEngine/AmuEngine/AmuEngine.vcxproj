@@ -471,6 +471,7 @@
     <ClInclude Include="Sources\Bomb\BombManager.h" />
     <ClInclude Include="Sources\Bomb\BombComp.h" />
     <ClInclude Include="Sources\Components\PlayerComp.h" />
+    <ClInclude Include="Sources\Data\Data.h" />
     <ClInclude Include="Sources\Editor\MainEditor.h" />
     <ClInclude Include="Sources\imgui\imconfig.h" />
     <ClInclude Include="Sources\imgui\imgui.h" />
@@ -545,6 +546,7 @@
     <ClCompile Include="Sources\Components\RigidbodyComp.cpp" />
     <ClCompile Include="Sources\Components\SpriteComp.cpp" />
     <ClCompile Include="Sources\Components\TransformComp.cpp" />
+    <ClCompile Include="Sources\Data\Data.cpp" />
     <ClCompile Include="Sources\Editor\MainEditor.cpp" />
     <ClCompile Include="Sources\EventManager\EventManager.cpp" />
     <ClCompile Include="Sources\Event\ButtonClickEvent.cpp" />

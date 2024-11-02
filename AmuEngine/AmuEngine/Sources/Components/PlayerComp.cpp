@@ -8,14 +8,18 @@
 #include "../GameObjectManager/GameObjectManager.h"
 #include <EasyImgui.h>
 
+int PlayerComp::_playerId = 0;
+
 PlayerComp::PlayerComp(GameObject* _owner) : LogicComponent(_owner)
 {
-	speed = 100;
+	id = GetPlayerId();
 	focusMe = false;
+	data = new Data::PlayerData(1, 1, 1, 10, Data::BombData::BombType::Default, 0);
 }
 
 PlayerComp::~PlayerComp()
 {
+	delete data;
 }	
 
 void PlayerComp::SetCamera(bool isfocus)
@@ -23,7 +27,7 @@ void PlayerComp::SetCamera(bool isfocus)
 
 }
 
-void PlayerComp::CreateBomb(BOMB::KindOfBomb kindofbomb)
+void PlayerComp::CreateBomb(Data::BombData::BombType type)
 {
 	std::string bombName = "Bomb" + std::to_string(BOMB::BombManager::GetInstance().GetAllBombs().size());
 	GameObjectManager::GetInstance().AddObject(bombName);
@@ -34,7 +38,7 @@ void PlayerComp::CreateBomb(BOMB::KindOfBomb kindofbomb)
 	bombObj->AddComponent<ColliderComp>();
 	bombObj->AddComponent<RigidbodyComp>();
 	bombObj->AddComponent<BOMB::BombComp>();
-	bombObj->GetComponent<BOMB::BombComp>()->SetBomb(kindofbomb);
+	bombObj->GetComponent<BOMB::BombComp>()->SetBomb(type);
 }
 
 void PlayerComp::Update()
@@ -84,7 +88,7 @@ void PlayerComp::Update()
 
 	if (currentFrameKey == GLFW_PRESS && currentFrameKey != LastFrameKey)
 	{
-		CreateBomb(BOMB::KindOfBomb::Default);
+		CreateBomb(Data::BombData::BombType::Default);
 	}
 
 	LastFrameKey = currentFrameKey;

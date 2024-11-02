@@ -10,6 +10,7 @@ Registry::Registry()
     rttiMap.insert({ RigidbodyComp::TypeName, &RigidbodyComp::CreateRigidBodyComponent });
     rttiMap.insert({ ColliderComp::TypeName, &ColliderComp::CreateColliderComponent });
     rttiMap.insert({ PlayerComp::TypeName, &PlayerComp::CreatePlayerComponent });
+    rttiMap.insert({ BOMB::BombComp::TypeName, &BOMB::BombComp::CreateBombComponent });
 }
 
 BaseRTTI* Registry::FindAndCreate(const std::string& type, GameObject* owner)

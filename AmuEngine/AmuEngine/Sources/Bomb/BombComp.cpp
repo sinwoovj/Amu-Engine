@@ -14,26 +14,12 @@ BOMB::BombComp::~BombComp()
 	BOMB::BombManager::GetInstance().RemoveBomb(owner);
 }
 
-void BOMB::BombComp::SetBomb(KindOfBomb kindofbomb)
+void BOMB::BombComp::SetBomb(Data::BombData::BombType type_)
 {
-	kindOfBomb = kindofbomb;
+	type = type_;
 	//Set Sprite, Audio, Animation, Effects ..
 	std::string bombTextureName = SpriteComp::DefaultSprite;
-	/*switch ((KindOfBomb)kindOfBomb)
-	{
-	case Default:
-		bombTextureName = "";
-		break;
-	case Poison:
-		bombTextureName = "";
-		break;
-	case Magma:
-		bombTextureName = "";
-		break;
-	case Ice:
-		bombTextureName = "";
-		break;
-	}*/
+
 	owner->GetComponent<SpriteComp>()->SetTexture(bombTextureName);
 	owner->GetComponent<SpriteComp>()->SetTextureSize({50,50});
 }
@@ -47,13 +33,12 @@ void BOMB::BombComp::Edit()
 {
 	ImGui::LabelText("label", "Value");
 
-	//Speed
 	ImGui::SeparatorText("Bomb");
 	{
 
 		if (ImGui::Button("Initialize"))
 		{
-			kindOfBomb = Default;
+			type = Data::BombData::BombType::Default;
 		}
 	}
 }
@@ -64,8 +49,8 @@ void BOMB::BombComp::LoadFromJson(const json& data)
 
 	if (compData != data.end())
 	{
-		auto it = compData->find("kindOfBomb");
-		kindOfBomb = it.value();
+		auto it = compData->find("type");
+		type = it.value();
 	}
 }
 
@@ -75,7 +60,7 @@ json BOMB::BombComp::SaveToJson()
 	data["type"] = TypeName;
 
 	json compData;
-	compData["kindOfBomb"] = kindOfBomb;
+	compData["type"] = type;
 	data["compData"] = compData;
 
 	return data;
