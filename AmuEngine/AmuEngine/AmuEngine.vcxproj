@@ -485,6 +485,7 @@
     <ClInclude Include="Sources\imgui\imstb_truetype.h" />
     <ClInclude Include="Sources\imgui\implot.h" />
     <ClInclude Include="Sources\imgui\implot_internal.h" />
+    <ClInclude Include="Sources\Item\Item.h" />
     <ClInclude Include="Sources\Level\LevelManager.h" />
     <ClInclude Include="Sources\Level\NormalLevel.h" />
     <ClInclude Include="Sources\Camera\Camera.h" />
@@ -512,6 +513,7 @@
     <ClInclude Include="Sources\GSM\GameStateManager.h" />
     <ClInclude Include="Sources\Level\BaseLevel.h" />
     <ClInclude Include="Sources\Level\Menu.h" />
+    <ClInclude Include="Sources\Map\Map.h" />
     <ClInclude Include="Sources\Prefab\Prefab.h" />
     <ClInclude Include="Sources\Profiler\Profiler.h" />
     <ClInclude Include="Sources\ResourceManager\ResourceManager.h" />
@@ -520,6 +522,7 @@
     <ClInclude Include="Sources\RTTI\BaseRTTI.h" />
     <ClInclude Include="Sources\RTTI\Registry.h" />
     <ClInclude Include="Sources\Serializer\Serializer.h" />
+    <ClInclude Include="Sources\Tile\Tile.h" />
     <ClInclude Include="Sources\Utils\Direction.h" />
     <ClInclude Include="Sources\Utils\EasyImgui.h" />
     <ClInclude Include="Sources\Utils\EasyOpengl.h" />
