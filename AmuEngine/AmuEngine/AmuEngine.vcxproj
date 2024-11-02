@@ -487,7 +487,6 @@
     <ClInclude Include="Sources\imgui\implot_internal.h" />
     <ClInclude Include="Sources\Level\LevelManager.h" />
     <ClInclude Include="Sources\Level\NormalLevel.h" />
-    <ClInclude Include="Sources\Background\Background.h" />
     <ClInclude Include="Sources\Camera\Camera.h" />
     <ClInclude Include="Sources\CollisionManager\CollisionManager.h" />
     <ClInclude Include="Sources\ComponentManager\BaseComponent.h" />
@@ -513,7 +512,6 @@
     <ClInclude Include="Sources\GSM\GameStateManager.h" />
     <ClInclude Include="Sources\Level\BaseLevel.h" />
     <ClInclude Include="Sources\Level\Menu.h" />
-    <ClInclude Include="Sources\Player\player.h" />
     <ClInclude Include="Sources\Prefab\Prefab.h" />
     <ClInclude Include="Sources\Profiler\Profiler.h" />
     <ClInclude Include="Sources\ResourceManager\ResourceManager.h" />
@@ -531,7 +529,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Dependencies\GLM\glm\detail\glm.cpp" />
-    <ClCompile Include="Sources\Background\Background.cpp" />
     <ClCompile Include="Sources\Bomb\BombManager.cpp" />
     <ClCompile Include="Sources\Camera\Camera.cpp" />
     <ClCompile Include="Sources\CollisionManager\CollisionManager.cpp" />
@@ -569,7 +566,6 @@
     <ClCompile Include="Sources\Level\Menu.cpp" />
     <ClCompile Include="Sources\Level\NormalLevel.cpp" />
     <ClCompile Include="Sources\main.cpp" />
-    <ClCompile Include="Sources\Player\player.cpp" />
     <ClCompile Include="Sources\Prefab\Prefab.cpp" />
     <ClCompile Include="Sources\Profiler\Profiler.cpp" />
     <ClCompile Include="Sources\ResourceManager\ResourceManager.cpp" />
@@ -581,7 +577,6 @@
     <ClCompile Include="Sources\Utils\Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="cpp.hint" />
     <None Include="Dependencies\GLEW\doc\advanced.html" />
     <None Include="Dependencies\GLEW\doc\basic.html" />
     <None Include="Dependencies\GLEW\doc\build.html" />

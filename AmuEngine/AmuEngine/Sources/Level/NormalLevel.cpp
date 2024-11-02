@@ -8,8 +8,6 @@
 #include "../Prefab/Prefab.h"
 #include "../Utils/Utils.h"
 #include "../Level/Menu.h"
-#include "../Background/Background.h"
-#include "../Player/player.h"
 #include "../Serializer/Serializer.h"
 #include "LevelManager.h"
 
@@ -29,7 +27,7 @@ void level::NormalLevel::Init()
 	Serializer::GetInstance().LoadEditorSetting();
 
 #ifdef _DEBUG
-	//std::cout << "Current Level : " << levelName << std::endl;
+	std::cout << "Current Level : " << levelName << std::endl;
 #endif
 
 }

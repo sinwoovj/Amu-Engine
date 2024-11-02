@@ -1,9 +1,0 @@
-diff a/AmuEngine/AmuEngine/Sources/main.cpp b/AmuEngine/AmuEngine/Sources/main.cpp	(rejected hunks)
-@@ -75,7 +75,6 @@
-     // Setup Platform/Renderer backends
-     ImGui_ImplGlfw_InitForOpenGL(mainWindow, true);          // Second param install_callback=true will install GLFW callbacks and chain to existing ones.
-     ImGui_ImplOpenGL3_Init();
--
-     // + GLEW �ʱ�ȭ
-     // GLEW�� ��� ��� Ȱ��ȭ
-     glewExperimental = GL_TRUE;
