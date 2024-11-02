@@ -2,8 +2,8 @@
   "objects": [
     {
       "object": "Back",
-      "layer": "Particle",
-      "tag": "Player",
+      "layer": "Tile",
+      "tag": "Untagged",
       "components": [
         {
           "type": "TransformComp",
@@ -28,163 +28,19 @@
               1.0
             ],
             "alpha": 1.0,
-            "texturePath": "./Sources/Assets/Sprite/Example/Icon2.png",
+            "texturePath": "./Sources/Assets/Sprite/Background/Exam.png",
             "textureSize": [
-              200.0,
-              200.0
+              1000.0,
+              563.0
             ],
             "orderinLayer": 0
-          }
-        }
-      ]
-    },
-    {
-      "object": "Bomb0",
-      "layer": "Default",
-      "tag": "Untagged",
-      "components": [
-        {
-          "type": "TransformComp",
-          "compData": {
-            "position": [
-              0.0,
-              0.0
-            ],
-            "scale": [
-              1.0,
-              1.0
-            ],
-            "rotation": 0.0
-          }
-        },
-        {
-          "type": "SpriteComp",
-          "compData": {
-            "color": [
-              1.0,
-              1.0,
-              1.0
-            ],
-            "alpha": 1.0,
-            "texturePath": "./Sources/Assets/Sprite/default.png",
-            "textureSize": [
-              50.0,
-              50.0
-            ],
-            "orderinLayer": 0
-          }
-        },
-        {
-          "type": "RigidbodyComp",
-          "compData": {
-            "velocity": [
-              0.0,
-              0.0
-            ],
-            "maxVelocity": [
-              500.0,
-              500.0
-            ],
-            "useGravity": false
-          }
-        },
-        {
-          "type": "ColliderComp",
-          "compData": {
-            "position": [
-              0.0,
-              0.0
-            ],
-            "scale": [
-              1.0,
-              1.0
-            ],
-            "rotation": 0.0
-          }
-        },
-        {
-          "type": "BombComp",
-          "compData": {
-            "type": 0
-          }
-        }
-      ]
-    },
-    {
-      "object": "Bomb1",
-      "layer": "Default",
-      "tag": "Untagged",
-      "components": [
-        {
-          "type": "TransformComp",
-          "compData": {
-            "position": [
-              0.0,
-              0.0
-            ],
-            "scale": [
-              1.0,
-              1.0
-            ],
-            "rotation": 0.0
-          }
-        },
-        {
-          "type": "SpriteComp",
-          "compData": {
-            "color": [
-              1.0,
-              1.0,
-              1.0
-            ],
-            "alpha": 1.0,
-            "texturePath": "./Sources/Assets/Sprite/default.png",
-            "textureSize": [
-              50.0,
-              50.0
-            ],
-            "orderinLayer": 0
-          }
-        },
-        {
-          "type": "RigidbodyComp",
-          "compData": {
-            "velocity": [
-              0.0,
-              0.0
-            ],
-            "maxVelocity": [
-              500.0,
-              500.0
-            ],
-            "useGravity": false
-          }
-        },
-        {
-          "type": "ColliderComp",
-          "compData": {
-            "position": [
-              0.0,
-              0.0
-            ],
-            "scale": [
-              1.0,
-              1.0
-            ],
-            "rotation": 0.0
-          }
-        },
-        {
-          "type": "BombComp",
-          "compData": {
-            "type": 0
           }
         }
       ]
     },
     {
       "object": "Player",
-      "layer": "Tank",
+      "layer": "Default",
       "tag": "Player",
       "components": [
         {
@@ -195,8 +51,8 @@
               0.0
             ],
             "scale": [
-              1.0,
-              1.0
+              2.1600000858306885,
+              2.1600000858306885
             ],
             "rotation": 0.0
           }
@@ -210,10 +66,10 @@
               1.0
             ],
             "alpha": 1.0,
-            "texturePath": "./Sources/Assets/Sprite/default.png",
+            "texturePath": "./Sources/Assets/Sprite/Object/bombs/icons/icons-and-abulites-stuff_0000s_0007_Calque-45.png",
             "textureSize": [
-              400.0,
-              400.0
+              18.0,
+              25.0
             ],
             "orderinLayer": 0
           }

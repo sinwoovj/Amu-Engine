@@ -1,9 +1,7 @@
 #include "Data.h"
 #include <iostream>
 
-
-
-void Data::PrintPlayerData(Data::PlayerData data)
+void Data::PlayerData::PrintPlayerData(Data::PlayerData data)
 {
 	std::cout << "Player BoubCount : "				<< data.bombCount				<< std::endl;
 	std::cout << "Player ExplosionRadius : "		<< data.explosionRadius			<< std::endl;

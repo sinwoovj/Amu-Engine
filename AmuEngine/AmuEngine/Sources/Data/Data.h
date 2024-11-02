@@ -139,6 +139,8 @@ namespace Data
 			currentBombType = currentBombTypeV;				// BombData::BombType::Default
 			itemVitalizationFlag = itemVitalizationFlagV;	// 0
 		};
+
+		void PrintPlayerData(Data::PlayerData data);
 	};
 
 	/* <summary>
@@ -238,6 +240,5 @@ namespace Data
 		}
 	};
 
-	static void PrintPlayerData(Data::PlayerData data);
 	static void PrintSeparator();
 };

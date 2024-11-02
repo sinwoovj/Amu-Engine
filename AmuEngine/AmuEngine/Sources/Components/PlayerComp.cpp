@@ -12,6 +12,8 @@ int PlayerComp::_playerId = 0;
 
 PlayerComp::PlayerComp(GameObject* _owner) : EngineComponent(_owner)
 {
+	owner = _owner;
+
 	id = GetPlayerId();
 	focusMe = false;
 	data = new Data::PlayerData(1, 1, 1, 10, Data::BombData::BombType::Default, 0);
