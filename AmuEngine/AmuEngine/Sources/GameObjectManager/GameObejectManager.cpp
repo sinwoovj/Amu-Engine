@@ -45,7 +45,7 @@ void GameObjectManager::Update()
 		orderinlayer.sort(Comp);
 		for (auto& obj : orderinlayer)
 		{
-			obj->Update();
+			obj->SpriteUpdate();
 		}
 	}
 }

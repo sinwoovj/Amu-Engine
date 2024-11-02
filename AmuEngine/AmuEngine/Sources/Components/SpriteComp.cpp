@@ -515,11 +515,8 @@ void SpriteComp::SetVector4Shader(const std::string& name, glm::vec4 value) cons
 	glUseProgram(0);
 }
 
-void SpriteComp::Update()
+void SpriteComp::SpriteUpdate()
 {
-	//Set render mode
-	//glRenderMode(GL_RENDER);
-
 	//Set transform
 	//Get the transform from my owner transfrom comp
 	SpriteApplyTransform();
@@ -630,6 +627,10 @@ json SpriteComp::SaveToJson()
 	data["compData"] = compData;
 
 	return data;
+}
+
+void SpriteComp::Update()
+{
 }
 
 void SpriteComp::Edit()

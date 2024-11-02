@@ -28,6 +28,7 @@ public:
 	const glm::vec2& GetPos() const { return pos; }
 	const glm::vec2& GetScale() const { return scale; }
 	const float& GetRot() const { return rot; }
+	const glm::mat3x3 GetMatrix() const;
 
 	//Mutators
 	void SetPos(const glm::vec2& otherPos);
@@ -37,7 +38,6 @@ public:
 	void SetCollider();
 	void SetCollider(float posX, float posY, float scaleX, float scaleY, float _rot);
 
-	const glm::mat3x3& GetMatrix() const;
 
 	void Edit() override;
 

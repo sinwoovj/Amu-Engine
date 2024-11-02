@@ -3,9 +3,11 @@
 #include "../Bomb/BombManager.h"
 #include "../Bomb/BombComp.h"
 #include "../Data/Data.h"
+#include "../ComponentManager/EngineComponent.h"
+#include "../GameObject/GameObject.h"
 #include <opengl.h>
 
-class PlayerComp : public LogicComponent
+class PlayerComp : public EngineComponent
 {
 private:
 	int id;
@@ -15,6 +17,7 @@ private:
 
 	int LastFrameKey = GLFW_RELEASE;
 public:
+	GameObject* owner;
 	PlayerComp(GameObject* _owner);
 	~PlayerComp();
 

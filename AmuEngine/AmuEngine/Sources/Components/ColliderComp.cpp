@@ -96,7 +96,7 @@ void ColliderComp::SetCollider(float posX, float posY, float scaleX, float scale
 	rot = _rot;
 }
 
-const glm::mat3x3& ColliderComp::GetMatrix() const
+const glm::mat3x3 ColliderComp::GetMatrix() const
 {
 	glm::mat3 transformMatrix = glm::identity<glm::mat3x3>();
 	//Create a translate matrix

@@ -65,7 +65,7 @@ public:
 	void SpriteApplyTransform(float offset = 0.0f);
 	
 	//Draw
-	void Update();
+	void SpriteUpdate();
 
 	//Gettors/Settors
 
@@ -111,6 +111,7 @@ public:
 	void LoadFromJson(const json&) override;
 	json SaveToJson() override;
 
+	void Update() override;
 	void Edit() override;
 
 	static BaseRTTI* CreateSpriteComponent(GameObject* owner);

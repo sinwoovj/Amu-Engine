@@ -488,10 +488,10 @@ void editor::MainEditor::TopBar()
     {
         if (ImGui::BeginMenu("File"))
         {
-            if (ImGui::MenuItem("Quit", "Ctrl+Q")) { glfwSetWindowShouldClose(glfwGetCurrentContext(), true); }
+            if (ImGui::MenuItem("Quit")) { glfwSetWindowShouldClose(glfwGetCurrentContext(), true); }
 
             ImGui::Separator();
-            if (ImGui::MenuItem("Close", "Ctrl+W")) { ImGui::CloseCurrentPopup(); }
+            if (ImGui::MenuItem("Close")) { ImGui::CloseCurrentPopup(); }
 
             ImGui::EndMenu();
         }
@@ -507,7 +507,7 @@ void editor::MainEditor::TopBar()
                     continue;
                 if (ImGui::BeginMenu(lvl.c_str(), lvl != editor_data.currLevelName))
                 {
-                    if (ImGui::MenuItem("Load Level", "Ctrl+L")) {
+                    if (ImGui::MenuItem("Load Level")) {
                         if (LevelManager::GetInstance().LoadLevel(lvl)) //Load
                         {
                             // 성공
@@ -520,12 +520,12 @@ void editor::MainEditor::TopBar()
                             std::cout << "실패" << std::endl;
                         }
                     }
-                    if (ImGui::MenuItem("Change Name", "Ctrl+C")) { //Change
+                    if (ImGui::MenuItem("Change Name")) { //Change
                         editor_data.selectLevelName = lvl;
                         editor_data.showChangeLevelPopup = true;
                     }
                     ImGui::Separator();
-                    if (ImGui::MenuItem("Delete Level", "Ctrl+D")) { 
+                    if (ImGui::MenuItem("Delete Level")) { 
                         if (LevelManager::GetInstance().DeleteLevel(lvl)) //Delete
                         {
                             // 성공
@@ -543,7 +543,7 @@ void editor::MainEditor::TopBar()
 
             ImGui::SeparatorText("Level Option");
 
-            if (ImGui::MenuItem("Save Level", "Ctrl+S")) {
+            if (ImGui::MenuItem("Save Level")) {
                 if (LevelManager::GetInstance().SaveLevel(editor_data.currLevelName))
                 {
                     // 성공
@@ -555,7 +555,7 @@ void editor::MainEditor::TopBar()
                     std::cout << "실패" << std::endl;
                 }
             }
-            if (ImGui::MenuItem("Undo Level", "Ctrl+U")) {
+            if (ImGui::MenuItem("Undo Level")) {
                 if (LevelManager::GetInstance().UndoLevel(editor_data.currLevelName))
                 {
                     // 성공
@@ -567,11 +567,11 @@ void editor::MainEditor::TopBar()
                     std::cout << "실패" << std::endl;
                 }
             }
-            if (ImGui::MenuItem("Add Level", "Ctrl+A")) {
+            if (ImGui::MenuItem("Add Level")) {
                 editor_data.showAddLevelPopup = true;
             }
             ImGui::Separator();
-            if (ImGui::MenuItem("Close", "Ctrl+W")) { 
+            if (ImGui::MenuItem("Close")) { 
                 ImGui::CloseCurrentPopup(); 
             }
             ImGui::EndMenu();
@@ -579,17 +579,43 @@ void editor::MainEditor::TopBar()
         ImGui::PopItemFlag();
         if (ImGui::BeginMenu("Window"))
         {
-            if (ImGui::MenuItem("Object Manager", "Ctrl+O", &editor_data.showAllObjects)) {
+            if (ImGui::MenuItem("Object Manager", 0, &editor_data.showAllObjects)) {
 
             }
 
-            if (ImGui::MenuItem("Show Profiler", "Ctrl+P", &editor_data.showProfiler))
+            if (ImGui::MenuItem("Show Profiler", 0, &editor_data.showProfiler))
+            {
+
+            }
+
+            if (ImGui::MenuItem("Show Map Editor", 0, &editor_data.showMapEditor))
             {
 
             }
             
             ImGui::Separator();
-            if (ImGui::MenuItem("Close", "Ctrl+W")) { ImGui::CloseCurrentPopup(); }
+            if (ImGui::MenuItem("Close")) { ImGui::CloseCurrentPopup(); }
+            ImGui::EndMenu();
+        }
+
+        if (ImGui::BeginMenu("View"))
+        {
+            if (ImGui::MenuItem("Show All Collider Border", 0, &editor_data.ShowCollider)) {
+
+            }
+
+            if (ImGui::MenuItem("Show Selected Object Border", 0, &editor_data.IsTraceObject))
+            {
+
+            }
+
+            if (ImGui::MenuItem("Show Grid", 0, &editor_data.ShowGrid))
+            {
+
+            }
+
+            ImGui::Separator();
+            if (ImGui::MenuItem("Close")) { ImGui::CloseCurrentPopup(); }
             ImGui::EndMenu();
         }
 

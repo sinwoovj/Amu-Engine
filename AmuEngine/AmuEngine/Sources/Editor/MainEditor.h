@@ -51,6 +51,7 @@ namespace editor
 			// Show State Variable
 			bool showAllObjects = true; // Default
 			bool showProfiler = false;
+			bool showMapEditor = false;
 
 			// Show Popup
 			bool showNewObjectPopup = false;
@@ -77,6 +78,7 @@ namespace editor
 			bool DeleteObject = false;
 			bool ShowCollider = false;
 			bool IsTraceObject = true; //Defualt
+			bool ShowGrid = false;
 
 			// Constant Variable
 			const std::string editorFileName = "./Sources/Editor/editor.json";

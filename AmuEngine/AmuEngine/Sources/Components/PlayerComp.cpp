@@ -10,7 +10,7 @@
 
 int PlayerComp::_playerId = 0;
 
-PlayerComp::PlayerComp(GameObject* _owner) : LogicComponent(_owner)
+PlayerComp::PlayerComp(GameObject* _owner) : EngineComponent(_owner)
 {
 	id = GetPlayerId();
 	focusMe = false;
