@@ -9,6 +9,7 @@
 #include <Windows.h>
 #include <crtdbg.h> // To check for memory leaks
 #include "../Profiler/Profiler.h"
+#include "FrameCounter/FrameCounter.h"
 
 
 GLboolean fullScreen = GL_FALSE;
@@ -131,7 +132,7 @@ int main(void)
     Utility::InitUtility();
     // Editor Init
     editor::MainEditor* mainEditor = new editor::MainEditor();
-    mainEditor->MainEditorInit(mainWindow);
+    mainEditor->MainEditorInit();
 
     GSM::GameStateManager& gsm = GSM::GameStateManager::GetInstance();
 
@@ -144,8 +145,11 @@ int main(void)
     /* Loop until the user closes the window */
     while (gsm.ShouldExit() == false && !glfwWindowShouldClose(mainWindow))
     {
+        // Frame Counter setting
+        FrameCounter::GetInstance().Update();
+
+        // Start Debuging
         DEBUG_PROFILER_START("Frame");
-        //frame setting
 
         /* Poll for and process events */
         glfwPollEvents();

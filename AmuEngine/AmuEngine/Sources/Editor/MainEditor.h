@@ -1,6 +1,7 @@
 #pragma once
 #include "../GameObject/GameObject.h"
 #include "../GameObjectManager/GameObjectManager.h"
+#include "../FrameCounter/FrameCounter.h"
 #include "../Components/SpriteComp.h"
 #include <EasyImgui.h>
 #include <opengl.h>
@@ -78,6 +79,7 @@ namespace editor
 			bool DeleteObject = false;
 			bool ShowCollider = false;
 			bool IsTraceObject = true; //Defualt
+			bool ShowFps = false;
 			bool ShowGrid = false;
 
 			// Constant Variable
@@ -92,13 +94,14 @@ namespace editor
 		MainEditor() {}
 		MainEditor(const MainEditor&) {}
 
+		void renderFPSOverlay();
 		void TraceObject();
 		void PopUp();
 		void TopBar();
 		void ShowLevelObject(bool* p_open);
 		void ShowProfiler(bool* p_open);
 
-		void MainEditorInit(GLFWwindow* mainWindow);
+		void MainEditorInit();
 		void MainEditorUpdate();
 		void MainEditorExit();
 	};

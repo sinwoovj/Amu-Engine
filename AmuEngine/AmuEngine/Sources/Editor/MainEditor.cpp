@@ -22,6 +22,20 @@ editor::MainEditor::~MainEditor()
 {
 }
 
+void editor::MainEditor::renderFPSOverlay()
+{
+    // ImGui 윈도우 생성 (투명하게 만들기)
+    ImGui::SetNextWindowBgAlpha(0.35f); // 배경 투명도 설정
+    ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x - 120, 20), ImGuiCond_Always); // 우측 상단에 위치
+    ImGui::Begin("FPS Overlay", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize |
+        ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav);
+
+    // FPS 텍스트 표시
+    ImGui::Text("FPS: %.1f", FrameCounter::GetInstance().getFPS());
+
+    ImGui::End();
+}
+
 void editor::MainEditor::TraceObject()
 {
     if (!editor::MainEditor::editor_data.selectObjectName.empty())
@@ -609,6 +623,11 @@ void editor::MainEditor::TopBar()
 
             }
 
+            if (ImGui::MenuItem("Show Fps", 0, &editor_data.ShowFps))
+            {
+
+            }
+
             if (ImGui::MenuItem("Show Grid", 0, &editor_data.ShowGrid))
             {
 
@@ -1030,7 +1049,7 @@ void editor::MainEditor::ShowProfiler(bool* p_open)
     }
 }
 
-void editor::MainEditor::MainEditorInit(GLFWwindow* mainWindow)
+void editor::MainEditor::MainEditorInit()
 {
     // Set Korean Font
     ImGui::StyleColorsDark();
@@ -1043,8 +1062,11 @@ void editor::MainEditor::MainEditorUpdate()
     //Top Bar
     TopBar();
     // https://stackoverflow.com/questions/66955023/closing-an-imgui-window-this-seems-like-it-should-be-easy-how-does-one-do-it
+    
+    //Tabs
     if (editor_data.showAllObjects) { ShowLevelObject(&editor_data.showAllObjects); }
     if (editor_data.showProfiler) { ShowProfiler(&editor_data.showProfiler); }
+    if (editor_data.ShowFps) { renderFPSOverlay(); }
 }
 
 void editor::MainEditor::MainEditorExit()

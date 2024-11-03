@@ -3,6 +3,10 @@
 #include "../ComponentManager/LogicComponent.h"
 #include "../Data/Data.h"
 
+/*
+	생성된 시점 이후로 u
+*/
+
 namespace BOMB
 {
 	class BombComp : public LogicComponent

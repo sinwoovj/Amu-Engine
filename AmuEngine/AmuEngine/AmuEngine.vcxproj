@@ -473,6 +473,7 @@
     <ClInclude Include="Sources\Components\PlayerComp.h" />
     <ClInclude Include="Sources\Data\Data.h" />
     <ClInclude Include="Sources\Editor\MainEditor.h" />
+    <ClInclude Include="Sources\FrameCounter\FrameCounter.h" />
     <ClInclude Include="Sources\imgui\imconfig.h" />
     <ClInclude Include="Sources\imgui\imgui.h" />
     <ClInclude Include="Sources\imgui\imgui_impl_glfw.h" />
@@ -551,6 +552,7 @@
     <ClCompile Include="Sources\EventManager\EventManager.cpp" />
     <ClCompile Include="Sources\Event\ButtonClickEvent.cpp" />
     <ClCompile Include="Sources\Event\Event.cpp" />
+    <ClCompile Include="Sources\FrameCounter\FrameCounter.cpp" />
     <ClCompile Include="Sources\GameObjectManager\GameObejectManager.cpp" />
     <ClCompile Include="Sources\GameObject\GameObject.cpp" />
     <ClCompile Include="Sources\GSM\GameStateManager.cpp" />
