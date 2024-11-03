@@ -4,7 +4,8 @@
 #include "../Data/Data.h"
 
 /*
-	생성된 시점 이후로 u
+	1. 생성된 시점 이후로 Update에서 currnetTime에 deltaTime을 계속 더해줌.
+	2. 
 */
 
 namespace BOMB

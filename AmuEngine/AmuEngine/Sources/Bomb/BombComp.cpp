@@ -1,6 +1,7 @@
 #include "BombComp.h"
 #include "../Bomb/BombManager.h"
 #include "../Components/SpriteComp.h"
+#include "../FrameCounter/FrameCounter.h"
 #include <EasyImgui.h>
 
 BOMB::BombComp::BombComp(GameObject* _owner) : LogicComponent(_owner)

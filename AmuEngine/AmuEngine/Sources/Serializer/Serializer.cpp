@@ -8,6 +8,8 @@
 #include "../Prefab/Prefab.h"
 #include "../Level/LevelManager.h"
 #include "../Editor/MainEditor.h"
+#include "../Data/Data.h"
+#include "../Data/DataManager.h"
 
 json Serializer::GetLevelData(const std::string& str)
 {
@@ -359,7 +361,7 @@ void Serializer::SaveEditorSetting()
 	if (!editorFile.is_open())
 	{
 		std::cout << "editor file open fail" << std::endl;
-		throw std::invalid_argument("defaultLvlFile Invalid filename " + editorFileName);
+		throw std::invalid_argument("defaultEditorFile Invalid filename " + editorFileName);
 	}
 
 	allData["layers"] = GameObjectManager::GetInstance().GetLayers();
@@ -368,4 +370,48 @@ void Serializer::SaveEditorSetting()
 	editorFile << std::setw(2) << allData;	// Separates in lines and each section
 
 	editorFile.close();
+}
+
+void Serializer::LoadGameDataSetting()
+{
+	// Open file
+	std::fstream file;
+	std::string gameDataFileName = Data::gameDataFileName;
+	file.open(gameDataFileName, std::fstream::in);
+
+	// Check the file is valid
+	if (!file.is_open())
+	{
+		file.close();
+		SaveGameDataSetting();
+		file.open(gameDataFileName, std::fstream::in);
+	}
+
+	json allData;
+	file >> allData;	// the json has all the file data
+
+	file.close();
+
+	Data::DataManager::GetInstance().LoadFromJson(allData);
+}
+
+void Serializer::SaveGameDataSetting()
+{
+	json allData;
+
+	std::string gameDataFileName = editor::MainEditor::editor_data.editorFileName;
+
+	std::ofstream gameDataFile(gameDataFileName);
+
+	if (!gameDataFile.is_open())
+	{
+		std::cout << "gameData file open fail" << std::endl;
+		throw std::invalid_argument("defaultGameDataFile Invalid filename " + gameDataFileName);
+	}
+	
+	allData = Data::DataManager::GetInstance().SaveToJson();
+
+	gameDataFile << std::setw(2) << allData;	// Separates in lines and each section
+
+	gameDataFile.close();
 }

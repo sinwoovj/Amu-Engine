@@ -1,5 +1,6 @@
 #pragma once
 #include "json.hpp"
+#include <map>
 
 using json = nlohmann::ordered_json;
 
@@ -56,9 +57,8 @@ namespace Data
 			Ice
 		};
 
-		struct Bomb
+		struct BombVar
 		{
-			BombType type;
 			float timeToExplode;
 			float effectDurationAfterExplosion;
 			float specialConditionDuration;
@@ -66,81 +66,15 @@ namespace Data
 			int damageCount;
 			float damageInterval;
 		};
-
-		BombData() {};
-
-		static Bomb GetBombData(BombType type)
-		{
-			switch (type)
-			{
-			case Default:
-				return { BombType::Default,		  3.0f, 1.0f, 0.0f, 2, 1, 0.0f };
-			case Radioactivity:
-				return { BombType::Radioactivity, 3.0f, 5.0f, 3.0f, 8, 1, 0.0f };
-			case Magma:
-				return { BombType::Magma,	      1.5f, 3.0f, 0.0f, 2, 3, 1.0f };
-			case Ice:
-				return { BombType::Ice,			  3.0f, 1.0f, 2.0f, 4, 1, 2.0f };
-			}
-		}
-	};
-
-	/* <summary>
-		플레이어 관련 데이터 {비상수 구조체} [
-			<변수 종류>
-				-폭탄 갯수
-				-폭발 반경 길이
-				-이동 속도 Move Speed
-				-체력 HP
-				-현재 폭탄 종류
-				-아이템 플래그 Item Flags
-				{
-					방어막 Shield = 1 << 0
-					투명망토 Invisibility Cape = 1 << 1
-					붕대 Bandage = 1 << 2
-				}
-			<변수명>
-				bombCount
-				explosionRadius
-				moveSpeed
-				hp
-				currentBombType
-				itemVitalizationFlag
-			<값>
-				초기 :	 1 / 1 / 1 / 10 / BombType::Default / 0
-		]
-	< / summary> */
-	class PlayerData
-	{
-	public:
-		PlayerData(int bombCountV, int explosionRadiusV, float moveSpeedV, int hpV, Data::BombData::BombType currentBombTypeV, int itemVitalizationFlagV)
-		{
-			bombCount = bombCountV;
-			explosionRadius = explosionRadiusV;
-			moveSpeed = moveSpeedV;
-			hp = hpV;
-			currentBombType = currentBombTypeV;
-			itemVitalizationFlag = itemVitalizationFlagV;
-		}
-
-		int bombCount;
-		int explosionRadius;
-		float moveSpeed;
-		int hp;
-		Data::BombData::BombType currentBombType;
-		int itemVitalizationFlag;
-		
-		void InitData(int bombCountV, int explosionRadiusV, float moveSpeedV, int hpV, Data::BombData::BombType currentBombTypeV, int itemVitalizationFlagV)
-		{
-			bombCount = bombCountV;							// 1
-			explosionRadius = explosionRadiusV;				// 1
-			moveSpeed = moveSpeedV;							// 1
-			hp = hpV;										// 10
-			currentBombType = currentBombTypeV;				// BombData::BombType::Default
-			itemVitalizationFlag = itemVitalizationFlagV;	// 0
-		};
-
-		void PrintPlayerData(Data::PlayerData data);
+		/*
+			{ BombType::Default,		3.0f, 1.0f, 0.0f, 2, 1, 0.0f };
+			{ BombType::Radioactivity,	3.0f, 5.0f, 3.0f, 8, 1, 0.0f };
+			{ BombType::Magma,			1.5f, 3.0f, 0.0f, 2, 3, 1.0f };
+			{ BombType::Ice,			3.0f, 1.0f, 2.0f, 4, 1, 2.0f };
+		*/
+		static void InitData(std::map <Data::BombData::BombType, Data::BombData::BombVar>& tar);
+		static void LoadFromJson(const json& data);
+		static json SaveToJson();
 	};
 
 	/* <summary>
@@ -207,38 +141,95 @@ namespace Data
 			Bandage
 		};
 
-		struct Item
+		struct ItemVar
 		{
-			ItemType type;
 			float duration;
 			int effectStrength;
 		};
-
-		ItemData() {};
-
-		static Item GetItemData(ItemType type)
-		{
-			switch (type)
-			{
-			case WaterBalloonIncrease:
-				return { ItemType::WaterBalloonIncrease,	0.0f,	 1};
-			case WaterStreamIncrease:
-				return { ItemType::WaterStreamIncrease,		0.0f,	 1};
-			case Shoes:
-				return { ItemType::Shoes,					0.0f,	 1};
-			case Medicine:
-				return { ItemType::Medicine,				0.0f,   10};
-			case BombItem:
-				return { ItemType::BombItem,				15.0f,	 0};
-			case Shield:
-				return { ItemType::Shield,					15.0f,	 0};
-			case InvisibilityCape:									 
-				return { ItemType::InvisibilityCape,		15.0f,	 0};
-			case Bandage:											 
-				return { ItemType::Bandage,					3.0f,	 5};
-			}
-		}
+		/*
+			{ ItemType::WaterBalloonIncrease,	0.0f,	 1};
+			{ ItemType::WaterStreamIncrease,	0.0f,	 1};
+			{ ItemType::Shoes,					0.0f,	 1};
+			{ ItemType::Medicine,				0.0f,   10};
+			{ ItemType::BombItem,				15.0f,	 0};
+			{ ItemType::Shield,					15.0f,	 0};
+			{ ItemType::InvisibilityCape,		15.0f,	 0};
+			{ ItemType::Bandage,				3.0f,	 5};
+		*/
+		static void InitData(std::map <Data::ItemData::ItemType, Data::ItemData::ItemVar>& tar);
+		static void LoadFromJson(const json& data);
+		static json SaveToJson();
 	};
 
+	/* <summary>
+		플레이어 관련 데이터 {비상수 구조체} [
+			<변수 종류>
+				-폭탄 갯수
+				-폭발 반경 길이
+				-이동 속도 Move Speed
+				-체력 HP
+				-현재 폭탄 종류
+				-아이템 플래그 Item Flags
+				{
+					방어막 Shield = 1 << 0
+					투명망토 Invisibility Cape = 1 << 1
+					붕대 Bandage = 1 << 2
+				}
+			<변수명>
+				bombCount
+				explosionRadius
+				moveSpeed
+				hp
+				currentBombType
+				itemVitalizationFlag
+			<값>
+				초기 :	 1 / 1 / 1 / 10 / BombType::Default / 0
+		]
+	< / summary> */
+	class PlayerData
+	{
+	public:
+		PlayerData(int bombCountV, int explosionRadiusV, float moveSpeedV, int hpV, Data::BombData::BombType currentBombTypeV, int itemVitalizationFlagV)
+		{
+			bombCount = bombCountV;
+			explosionRadius = explosionRadiusV;
+			moveSpeed = moveSpeedV;
+			hp = hpV;
+			currentBombType = currentBombTypeV;
+			itemVitalizationFlag = itemVitalizationFlagV;
+		}
+
+		int bombCount;
+		int explosionRadius;
+		float moveSpeed;
+		int hp;
+		Data::BombData::BombType currentBombType;
+		int itemVitalizationFlag;
+
+		void InitData(int bombCountV, int explosionRadiusV, float moveSpeedV, int hpV, Data::BombData::BombType currentBombTypeV, int itemVitalizationFlagV)
+		{
+			bombCount = bombCountV;							// 1
+			explosionRadius = explosionRadiusV;				// 1
+			moveSpeed = moveSpeedV;							// 1
+			hp = hpV;										// 10
+			currentBombType = currentBombTypeV;				// BombData::BombType::Default
+			itemVitalizationFlag = itemVitalizationFlagV;	// 0
+		};
+
+		void PrintPlayerData(Data::PlayerData data);
+		void LoadFromJson(const json& data);
+		json SaveToJson();
+	};
+
+	struct GameData {
+		//std::map<type, value>
+		std::map <Data::BombData::BombType, Data::BombData::BombVar> BombDatas;
+		std::map <Data::ItemData::ItemType, Data::ItemData::ItemVar> ItemDatas;
+		~GameData() { BombDatas.clear(); ItemDatas.clear(); }
+	};
+	
+	const static std::string gameDataFileName = "./Sources/Data/gameData.json";
+
+	// static function
 	static void PrintSeparator();
 };
