@@ -17,7 +17,7 @@ void Data::DataManager::LoadFromJson(const json& data)
 json Data::DataManager::SaveToJson()
 {
 	json data;
-	data.push_back(Data::BombData::SaveToJson());
-	data.push_back(Data::ItemData::SaveToJson());
+	data["bombData"] = Data::BombData::SaveToJson();
+	data["itemData"] = Data::ItemData::SaveToJson();
 	return data;
 }
