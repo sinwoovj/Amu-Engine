@@ -92,6 +92,7 @@ void editor::MainEditor::PopUp()
         {
             Serializer::GetInstance().SaveLevel(editor_data.currLevelName);
             Serializer::GetInstance().SaveEditorSetting();
+            Serializer::GetInstance().SaveGameDataSetting();
             GSM::GameStateManager::GetInstance().ChangeLevel(new level::NormalLevel(editor_data.selectLevelName));
             editorMode = Edit;
             ImGui::CloseCurrentPopup();
@@ -646,6 +647,7 @@ void editor::MainEditor::TopBar()
         {
             Serializer::GetInstance().SaveLevel(GSM::GameStateManager::GetInstance().GetCurrentLevel()->GetName());
             Serializer::GetInstance().SaveEditorSetting();
+            Serializer::GetInstance().SaveGameDataSetting();
             //save가 안되어 있을 시 팝업
             
             editorMode = Play;
@@ -659,6 +661,7 @@ void editor::MainEditor::TopBar()
             GameObjectManager::GetInstance().RemoveAllObject();
             Serializer::GetInstance().LoadLevel(GSM::GameStateManager::GetInstance().GetCurrentLevel()->GetName());
             Serializer::GetInstance().LoadEditorSetting();
+            Serializer::GetInstance().LoadGameDataSetting();
         }
         ImGui::PopItemFlag();
         ImGui::Spacing();

@@ -25,6 +25,7 @@ void level::NormalLevel::Init()
 {
 	Serializer::GetInstance().LoadLevel(levelName);
 	Serializer::GetInstance().LoadEditorSetting();
+	Serializer::GetInstance().LoadGameDataSetting();
 
 #ifdef _DEBUG
 	std::cout << "Current Level : " << levelName << std::endl;

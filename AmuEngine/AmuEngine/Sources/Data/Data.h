@@ -40,10 +40,10 @@ namespace Data
 					damageCount
 					damageInterval
 			<값>
-				기본 : 	  Defualt		    / 3s 	 / 1s	/ 0s / 2 / 1 / 0s
-				방사능 :	Radioactivity	/ 3s 	 / 5s	/ 3s / 8 / 1 / 0s
-				마그마 :	Magma		      / 1.5s / 3s	/ 0s / 2 / 3 / 1s
-				얼음 :		Ice			      / 3s	 / 1s	/ 2s / 4 / 1 / 2s
+				기본 : 	Defualt			/ 3s	/ 1s / 0s / 2 / 1 / 0s
+				방사능 :	Radioactivity	/ 3s	/ 5s / 3s / 8 / 1 / 0s
+				마그마 :	Magma			/ 1.5s	/ 3s / 0s / 2 / 3 / 1s
+				얼음 :	Ice				/ 3s	/ 1s / 2s / 4 / 1 / 2s
 		]
 	< / summary> */
 	class BombData

@@ -5,7 +5,8 @@
 
 /*
 	1. 생성된 시점 이후로 Update에서 currnetTime에 deltaTime을 계속 더해줌.
-	2. 
+	2. 터지기 까지의 시간보다 currentTime값이 크면 bombExplode()를 실행함
+
 */
 
 namespace BOMB
@@ -23,6 +24,8 @@ namespace BOMB
 
 		void SetBomb(Data::BombData::BombType type_);
 		Data::BombData::BombType GetBomb() { return type; }
+
+		void BombExplode();
 
 		void Update() override;
 		void Edit() override;

@@ -139,6 +139,7 @@ int main(void)
     gsm.ChangeLevel(new level::Menu);
 
     Serializer::GetInstance().LoadEditorSetting();
+    Serializer::GetInstance().LoadGameDataSetting();
 
     int LastFrameFullscreenKey = GLFW_RELEASE;
 

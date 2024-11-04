@@ -1,0 +1,106 @@
+[
+  [
+    {
+      "type": 0,
+      "value": {
+        "timeToExplode": 3.0,
+        "effectDurationAfterExplosion": 1.0,
+        "specialConditionDuration": 0.0,
+        "damageAmount": 2,
+        "damageCount": 1,
+        "damageInterval": 0.0
+      }
+    },
+    {
+      "type": 1,
+      "value": {
+        "timeToExplode": 3.0,
+        "effectDurationAfterExplosion": 5.0,
+        "specialConditionDuration": 3.0,
+        "damageAmount": 8,
+        "damageCount": 1,
+        "damageInterval": 0.0
+      }
+    },
+    {
+      "type": 2,
+      "value": {
+        "timeToExplode": 1.5,
+        "effectDurationAfterExplosion": 3.0,
+        "specialConditionDuration": 0.0,
+        "damageAmount": 2,
+        "damageCount": 3,
+        "damageInterval": 1.0
+      }
+    },
+    {
+      "type": 3,
+      "value": {
+        "timeToExplode": 3.0,
+        "effectDurationAfterExplosion": 1.0,
+        "specialConditionDuration": 2.0,
+        "damageAmount": 4,
+        "damageCount": 1,
+        "damageInterval": 2.0
+      }
+    }
+  ],
+  [
+    {
+      "type": 0,
+      "value": {
+        "duration": 0.0,
+        "effectStrength": 1
+      }
+    },
+    {
+      "type": 1,
+      "value": {
+        "duration": 0.0,
+        "effectStrength": 1
+      }
+    },
+    {
+      "type": 2,
+      "value": {
+        "duration": 0.0,
+        "effectStrength": 1
+      }
+    },
+    {
+      "type": 3,
+      "value": {
+        "duration": 0.0,
+        "effectStrength": 10
+      }
+    },
+    {
+      "type": 4,
+      "value": {
+        "duration": 15.0,
+        "effectStrength": 0
+      }
+    },
+    {
+      "type": 5,
+      "value": {
+        "duration": 15.0,
+        "effectStrength": 0
+      }
+    },
+    {
+      "type": 6,
+      "value": {
+        "duration": 15.0,
+        "effectStrength": 0
+      }
+    },
+    {
+      "type": 7,
+      "value": {
+        "duration": 3.0,
+        "effectStrength": 5
+      }
+    }
+  ]
+]

@@ -10,6 +10,7 @@
 #include "../Editor/MainEditor.h"
 #include "../Data/Data.h"
 #include "../Data/DataManager.h"
+#include <Utils.h>
 
 json Serializer::GetLevelData(const std::string& str)
 {
@@ -399,7 +400,7 @@ void Serializer::SaveGameDataSetting()
 {
 	json allData;
 
-	std::string gameDataFileName = editor::MainEditor::editor_data.editorFileName;
+	std::string gameDataFileName = Data::gameDataFileName;
 
 	std::ofstream gameDataFile(gameDataFileName);
 

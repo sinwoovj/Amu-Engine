@@ -79,6 +79,7 @@ bool LevelManager::SaveLevel(const std::string& str)
         return false;
     Serializer::GetInstance().SaveLevel(str);
     Serializer::GetInstance().SaveEditorSetting();
+    Serializer::GetInstance().SaveGameDataSetting();
     return true;
 }
 
@@ -89,6 +90,7 @@ bool LevelManager::UndoLevel(const std::string& str)
     GameObjectManager::GetInstance().RemoveAllObject();
     Serializer::GetInstance().LoadLevel(str);
     Serializer::GetInstance().LoadEditorSetting();
+    Serializer::GetInstance().LoadGameDataSetting();
     return true;
 }
 

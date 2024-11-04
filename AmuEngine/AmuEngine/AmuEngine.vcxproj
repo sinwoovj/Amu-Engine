@@ -735,6 +735,7 @@
     <None Include="Sources\Assets\Level\test1.lvl" />
     <None Include="Sources\Assets\Level\test2.lvl" />
     <None Include="Sources\ComponentManager\ComponentManager.inl" />
+    <None Include="Sources\Data\gameData.json" />
     <None Include="Sources\default.lvl" />
     <None Include="Sources\Editor\editor.json" />
     <None Include="Sources\EventManager\EventManager.inl" />

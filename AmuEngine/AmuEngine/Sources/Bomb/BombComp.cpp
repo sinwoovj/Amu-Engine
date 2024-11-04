@@ -2,6 +2,7 @@
 #include "../Bomb/BombManager.h"
 #include "../Components/SpriteComp.h"
 #include "../FrameCounter/FrameCounter.h"
+#include "../Data/DataManager.h"
 #include <EasyImgui.h>
 
 BOMB::BombComp::BombComp(GameObject* _owner) : LogicComponent(_owner)
@@ -25,9 +26,20 @@ void BOMB::BombComp::SetBomb(Data::BombData::BombType type_)
 	owner->GetComponent<SpriteComp>()->SetTextureSize({50,50});
 }
 
+void BOMB::BombComp::BombExplode()
+{
+}
+
 void BOMB::BombComp::Update()
 {
-
+	auto& bombDatas = Data::DataManager::GetInstance().gameData.BombDatas;
+	if (bombDatas.find(type) != bombDatas.end())
+	{
+		if (currentTime >= bombDatas.find(type)->second.timeToExplode)
+		{
+			BombExplode();
+		}
+	}
 }
 
 void BOMB::BombComp::Edit()

@@ -150,7 +150,13 @@ json Data::ItemData::SaveToJson()
 {
 	json data;
 
-	for (auto& it : Data::DataManager::GetInstance().gameData.ItemDatas)
+	auto& ItemDatas = Data::DataManager::GetInstance().gameData.ItemDatas;
+
+	if (ItemDatas.empty())
+		Data::ItemData::InitData(ItemDatas);
+
+
+	for (auto& it : ItemDatas)
 	{
 		json itemData;
 
