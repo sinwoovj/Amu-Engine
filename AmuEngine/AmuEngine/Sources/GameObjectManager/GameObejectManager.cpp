@@ -33,14 +33,16 @@ void GameObjectManager::Update()
 		for (auto& obj : objects)
 		{
 			GameObject* o = obj.second;
-			objectList.push_back(o->GetComponent<SpriteComp>());
-			if (o->GetLayer() == layer)
+			if (o->GetComponent<SpriteComp>() != nullptr)
 			{
-				//other component update
-				
-				//sorting objects for orderinlayer of spriteComp
-				if (o->GetComponent<SpriteComp>() != nullptr)
+				objectList.push_back(o->GetComponent<SpriteComp>());
+				if (o->GetLayer() == layer)
+				{
+					//other component update
+
+					//sorting objects for orderinlayer of spriteComp
 					orderinlayer.push_back(o->GetComponent<SpriteComp>());
+				}
 			}
 		}
 		//order in layer update

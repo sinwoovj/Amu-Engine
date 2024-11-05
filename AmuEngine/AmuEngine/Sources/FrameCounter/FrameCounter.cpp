@@ -1,11 +1,14 @@
 #include "FrameCounter.h"
 
+#include <opengl.h>
+
 void FrameCounter::Update()
 {
     auto currentTime = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<float> frameDuration = currentTime - lastTime;
+    deltaTime = std::chrono::duration<float>(currentTime - previousTime).count();
+    previousTime = currentTime;
 
-    deltaTime = frameDuration.count();   // 프레임당 걸린 시간 (초 단위)
+    std::chrono::duration<float> frameDuration = currentTime - lastTime;
     frameCount++;
 
     // 1초마다 FPS를 갱신

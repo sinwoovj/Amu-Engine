@@ -2,7 +2,7 @@
   "objects": [
     {
       "object": "Back",
-      "layer": "Tile",
+      "layer": "Default",
       "tag": "Untagged",
       "components": [
         {
@@ -40,19 +40,19 @@
     },
     {
       "object": "Player",
-      "layer": "Default",
+      "layer": "Player",
       "tag": "Player",
       "components": [
         {
           "type": "TransformComp",
           "compData": {
             "position": [
-              0.0,
+              104.0,
               0.0
             ],
             "scale": [
-              2.1600000858306885,
-              2.1600000858306885
+              1.0,
+              1.0
             ],
             "rotation": 0.0
           }

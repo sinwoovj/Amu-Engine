@@ -17,21 +17,24 @@ namespace BOMB
 		Data::BombData::BombType type = Data::BombData::BombType::Default;
 
 	public:
+		Data::BombData::BombState state = Data::BombData::BombState::BombCreated;
+		GameObject* playerObj = nullptr;
 		GameObject* owner;
 
 		BombComp(GameObject* _owner);
-		~BombComp();
 
 		void SetBomb(Data::BombData::BombType type_);
 		Data::BombData::BombType GetBomb() { return type; }
 
-		void BombExplode();
+		void SetPlayer(GameObject* obj) { playerObj = obj; }
+		GameObject* GetPlayer() const { return playerObj; }
 
 		void Update() override;
 		void Edit() override;
 
 		//state
 		float currentTime = 0;
+		void ResetTime() { currentTime = 0; }
 
 		void LoadFromJson(const json&) override;
 		json SaveToJson() override;

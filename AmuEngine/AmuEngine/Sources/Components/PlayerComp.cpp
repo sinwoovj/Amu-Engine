@@ -31,16 +31,30 @@ void PlayerComp::SetCamera(bool isfocus)
 
 void PlayerComp::CreateBomb(Data::BombData::BombType type)
 {
-	std::string bombName = "Bomb" + std::to_string(BOMB::BombManager::GetInstance().GetAllBombs().size());
-	GameObjectManager::GetInstance().AddObject(bombName);
-	GameObject* bombObj = GameObjectManager::GetInstance().GetObj(bombName);
-	bombObj->AddComponent<TransformComp>();
-	bombObj->GetComponent<TransformComp>()->SetPos(owner->GetComponent<TransformComp>()->GetPos());
-	bombObj->AddComponent<SpriteComp>();
-	bombObj->AddComponent<ColliderComp>();
-	bombObj->AddComponent<RigidbodyComp>();
-	bombObj->AddComponent<BOMB::BombComp>();
-	bombObj->GetComponent<BOMB::BombComp>()->SetBomb(type);
+	if (currentBombCount < data->bombCount)
+	{
+		std::string bombName = "Bomb" + std::to_string(BOMB::BombManager::GetInstance().GetAllBombs().size());
+		GameObjectManager::GetInstance().AddObject(bombName);
+		GameObject* bombObj = GameObjectManager::GetInstance().GetObj(bombName);
+		bombObj->AddComponent<TransformComp>();
+		bombObj->GetComponent<TransformComp>()->SetPos(owner->GetComponent<TransformComp>()->GetPos());
+		bombObj->AddComponent<SpriteComp>();
+		bombObj->AddComponent<ColliderComp>();
+		bombObj->AddComponent<RigidbodyComp>();
+		bombObj->AddComponent<BOMB::BombComp>();
+		bombObj->GetComponent<BOMB::BombComp>()->SetBomb(type);
+		bombObj->GetComponent<BOMB::BombComp>()->SetPlayer(owner);
+		currentBombCount++;
+	}
+	
+}
+
+void PlayerComp::SubtractCurrentBombCount()
+{
+	if (currentBombCount > 0)
+	{
+		currentBombCount--;
+	}
 }
 
 void PlayerComp::Update()

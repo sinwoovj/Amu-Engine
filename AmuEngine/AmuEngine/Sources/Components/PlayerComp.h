@@ -12,6 +12,7 @@ class PlayerComp : public EngineComponent
 private:
 	int id;
 	float speed;
+	int currentBombCount = 0;
 	bool focusMe;
 	Data::PlayerData* data;
 
@@ -23,9 +24,12 @@ public:
 
 	void SetCamera(bool isfocus);
 	void CreateBomb(Data::BombData::BombType type);
+	
+	void SubtractCurrentBombCount();
 
 	void Update() override;
 	void Edit() override;
+
 
 	static int _playerId;
 
@@ -38,6 +42,8 @@ public:
 	{
 		_playerId = 0; 
 	}
+	
+	
 
 	void LoadFromJson(const json&) override;
 	json SaveToJson() override;

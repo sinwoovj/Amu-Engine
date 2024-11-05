@@ -3,7 +3,8 @@
     "Default",
     "UI",
     "Particle",
-    "Tile"
+    "Tile",
+    "Player"
   ],
   "tags": [
     "Untagged",

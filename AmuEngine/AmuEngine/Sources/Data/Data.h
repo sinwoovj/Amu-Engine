@@ -49,6 +49,14 @@ namespace Data
 	class BombData
 	{
 	public:
+		enum BombState {
+			BombCreated				= 0, // 폭탄이 생성됐을 때
+			BombIdleBeforeExplosion	= 1, // 폭탄이 생성되고 터지기 전까지
+			BombExploded			= 2, // 폭탄이 터졌을 때
+			BombEffectActive		= 3, // 폭탄이 터지고 효과가 발동되고 있을 때
+			BombDisappearing		= 4, // 폭탄이 사라질 때
+			BombDelete				= 5	 // 폭탄이 삭제될 때
+		};
 		enum BombType
 		{
 			Default,

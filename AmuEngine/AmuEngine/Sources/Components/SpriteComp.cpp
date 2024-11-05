@@ -124,9 +124,9 @@ SpriteComp::~SpriteComp()
 	glDeleteVertexArrays(1, &select_edge_VAO);
 	glDeleteBuffers(1, &select_edge_VBO);
 	glDeleteBuffers(1, &select_edge_EBO);
-	/*glDeleteVertexArrays(1, &collider_edge_VAO);
+	glDeleteVertexArrays(1, &collider_edge_VAO);
 	glDeleteBuffers(1, &collider_edge_VBO);
-	glDeleteBuffers(1, &collider_edge_EBO);*/
+	glDeleteBuffers(1, &collider_edge_EBO);
 
 }
 
@@ -141,14 +141,14 @@ void SpriteComp::SpriteCreateRect(GLuint& vao, GLuint& vbo, GLuint& ebo)
 	// 정점 좌표 & 사각형 색상 & 텍스처 좌표 (좌표계가 stbi 라이브러리와 opengl라이브러리의 서로 달라서 y축만 -를 달아서 반전시킴)
 	float vertices[] = {
 		// positions          // colors	// isBorder
-		-0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 1.0f,	0,	// top right
-		 0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 1.0f,	0,	// bottom right
-		 0.5f,  0.5f, 0.0f,  1.0f, 0.0f, 1.0f,	0,	// bottom left
-		-0.5f,  0.5f, 0.0f,  1.0f, 0.0f, 1.0f,	0,	// top left 
-		-0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 1.0f,	1,	// top right
-		 0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 1.0f,	2,	// bottom right
-		 0.5f,  0.5f, 0.0f,  1.0f, 0.0f, 1.0f,	3,	// bottom left
-		-0.5f,  0.5f, 0.0f,  1.0f, 0.0f, 1.0f,	4	// top left 
+		-0.5f, -0.5f, 1.0f,  1.0f, 0.0f, 1.0f,	0,	// top right
+		 0.5f, -0.5f, 1.0f,  1.0f, 0.0f, 1.0f,	0,	// bottom right
+		 0.5f,  0.5f, 1.0f,  1.0f, 0.0f, 1.0f,	0,	// bottom left
+		-0.5f,  0.5f, 1.0f,  1.0f, 0.0f, 1.0f,	0,	// top left 
+		-0.5f, -0.5f, 1.0f,  1.0f, 0.0f, 1.0f,	1,	// top right
+		 0.5f, -0.5f, 1.0f,  1.0f, 0.0f, 1.0f,	2,	// bottom right
+		 0.5f,  0.5f, 1.0f,  1.0f, 0.0f, 1.0f,	3,	// bottom left
+		-0.5f,  0.5f, 1.0f,  1.0f, 0.0f, 1.0f,	4	// top left 
 	};
 	// 정점 인덱스
 	GLint vertexIndeces[] = {
@@ -215,10 +215,10 @@ void SpriteComp::SpriteCreateSprite()
 	// 정점 좌표 & 사각형 색상 & 텍스처 좌표 (좌표계가 stbi 라이브러리와 opengl라이브러리의 서로 달라서 y축만 -를 달아서 반전시킴)
 	float vertices[] = {
 		// positions         // colors           // sprite_texture coords
-		-0.5f, -0.5f, 0.0f,  1.0f, 1.0f, 1.0f,   0.0f,  0.0f, // top right
-		 0.5f, -0.5f, 0.0f,  1.0f, 1.0f, 1.0f,   1.0f,  0.0f, // bottom right
-		 0.5f,  0.5f, 0.0f,  1.0f, 1.0f, 1.0f,   1.0f,  1.0f, // bottom left
-		-0.5f,  0.5f, 0.0f,  1.0f, 1.0f, 1.0f,   0.0f,  1.0f  // top left 
+		-0.5f, -0.5f, 1.0f,  1.0f, 1.0f, 1.0f,   0.0f,  0.0f, // top right
+		 0.5f, -0.5f, 1.0f,  1.0f, 1.0f, 1.0f,   1.0f,  0.0f, // bottom right
+		 0.5f,  0.5f, 1.0f,  1.0f, 1.0f, 1.0f,   1.0f,  1.0f, // bottom left
+		-0.5f,  0.5f, 1.0f,  1.0f, 1.0f, 1.0f,   0.0f,  1.0f  // top left 
 	};
 	// 2D를 표현할 때 정점좌표의 z값은 1이여야 transform할 때 mat랑 연산 할 때 정상적인 값이 도출된다.
 
@@ -516,8 +516,8 @@ void SpriteComp::SetVector4Shader(const std::string& name, glm::vec4 value) cons
 void SpriteComp::SpriteDebugUpdate()
 {
 	DEBUG_EDITOR_MODE_IN
-		if (selected)
-			SetBoolShader("useBorder", true);
+	if (selected)
+		SetBoolShader("useBorder", true);
 	SpriteDrawRectBorder(select_edge_VAO, 3, { 255, 0, 0 });
 	SetBoolShader("useBorder", false);
 
@@ -533,13 +533,6 @@ void SpriteComp::SpriteDebugUpdate()
 }
 void SpriteComp::SpriteUpdate()
 {
-	//Set transform
-	//Get the transform from my owner transfrom comp
-	SpriteApplyTransform();
-
-	//Set color 
-	SetTransparency();
-
 	// Draw
 	SpriteDrawSprite();
 }
@@ -631,6 +624,11 @@ json SpriteComp::SaveToJson()
 
 void SpriteComp::Update()
 {
+	//Set transform
+	SpriteApplyTransform();
+
+	//Set color 
+	SetTransparency();
 }
 
 void SpriteComp::Edit()
