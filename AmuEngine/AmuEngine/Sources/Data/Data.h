@@ -56,7 +56,18 @@ namespace Data
 			Magma,
 			Ice
 		};
-
+		static std::string to_string(BombType b)
+		{
+			switch (b)
+			{
+			case BombType::Default:			return "Default";
+			case BombType::Radioactivity:	return "Radioactivity";
+			case BombType::Magma:			return "Magma";
+			case BombType::Ice:				return "Ice";
+			}
+			return "<none>"; // or an empty string
+			// or throw an exception
+		}
 		struct BombVar
 		{
 			float timeToExplode;
@@ -140,6 +151,22 @@ namespace Data
 			InvisibilityCape,
 			Bandage
 		};
+		static std::string to_string(ItemType b)
+		{
+			switch (b)
+			{
+			case ItemType::WaterBalloonIncrease:	return "WaterBalloonIncrease";
+			case ItemType::WaterStreamIncrease:		return "WaterStreamIncrease";
+			case ItemType::Shoes:					return "Shoes";
+			case ItemType::Medicine:				return "Medicine";
+			case ItemType::BombItem:				return "BombItem";
+			case ItemType::Shield:					return "Shield";
+			case ItemType::InvisibilityCape:		return "InvisibilityCape";
+			case ItemType::Bandage:					return "Bandage";
+			}
+			return "<none>"; // or an empty string
+			// or throw an exception
+		}
 
 		struct ItemVar
 		{

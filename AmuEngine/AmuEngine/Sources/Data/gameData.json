@@ -6,7 +6,7 @@
         "timeToExplode": 3.0,
         "effectDurationAfterExplosion": 1.0,
         "specialConditionDuration": 0.0,
-        "damageAmount": 2,
+        "damageAmount": 14,
         "damageCount": 1,
         "damageInterval": 0.0
       }

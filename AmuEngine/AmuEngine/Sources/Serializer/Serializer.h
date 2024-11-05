@@ -31,6 +31,6 @@ public:
 	bool SaveLevel(const std::string& str);
 	void LoadEditorSetting();
 	void SaveEditorSetting();
-	void LoadGameDataSetting();
+	void LoadGameDataSetting();;
 	void SaveGameDataSetting();
 };

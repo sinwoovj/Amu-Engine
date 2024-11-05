@@ -53,6 +53,7 @@ namespace editor
 			bool showAllObjects = true; // Default
 			bool showProfiler = false;
 			bool showMapEditor = false;
+			bool showGameDataEditor = false;
 
 			// Show Popup
 			bool showNewObjectPopup = false;
@@ -100,6 +101,8 @@ namespace editor
 		void TopBar();
 		void ShowLevelObject(bool* p_open);
 		void ShowProfiler(bool* p_open);
+		void ShowMapEditor(bool* p_open);
+		void ShowGameDataEditor(bool* p_open);
 
 		void MainEditorInit();
 		void MainEditorUpdate();

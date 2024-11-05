@@ -10,6 +10,7 @@
 #include "../Components/Components.h"
 #include "../Level/NormalLevel.h"
 #include "../Profiler/Profiler.h"
+#include "../Data/DataManager.h"
 #include <vector>
 #include <map>
 #include <string>
@@ -598,16 +599,20 @@ void editor::MainEditor::TopBar()
 
             }
 
-            if (ImGui::MenuItem("Show Profiler", 0, &editor_data.showProfiler))
+            if (ImGui::MenuItem("Profiler", 0, &editor_data.showProfiler))
             {
 
             }
 
-            if (ImGui::MenuItem("Show Map Editor", 0, &editor_data.showMapEditor))
+            if (ImGui::MenuItem("Map Editor", 0, &editor_data.showMapEditor))
             {
 
             }
-            
+
+            if (ImGui::MenuItem("Game Data Editor", 0, &editor_data.showGameDataEditor))
+            {
+            }
+
             ImGui::Separator();
             if (ImGui::MenuItem("Close")) { ImGui::CloseCurrentPopup(); }
             ImGui::EndMenu();
@@ -1052,6 +1057,70 @@ void editor::MainEditor::ShowProfiler(bool* p_open)
     }
 }
 
+void editor::MainEditor::ShowMapEditor(bool* p_open)
+{
+    if (ImGui::Begin("Map Editor", p_open))
+    {
+    }
+    ImGui::End();
+}
+
+void editor::MainEditor::ShowGameDataEditor(bool* p_open)
+{
+    auto& data = Data::DataManager::GetInstance().gameData;
+    int id = 0;
+    if (ImGui::Begin("Game Data Editor", p_open))
+    {
+        ImGui::LabelText("label", "Value");
+        if (ImGui::TreeNodeEx("Bomb Data", ImGuiTreeNodeFlags_OpenOnArrow))
+        {
+            for (auto& it : data.BombDatas)
+            {
+                ImGui::PushID(id++);
+                if (ImGui::TreeNode(Data::BombData::to_string(it.first).c_str()))
+                {
+                    ImGui::DragFloat("timeToExplode", &it.second.timeToExplode, 0.01f, 0.f);
+                    ImGui::DragFloat("effectDurationAfterExplosion", &it.second.effectDurationAfterExplosion, 0.01f, 0.f);
+                    ImGui::DragFloat("specialConditionDuration", &it.second.specialConditionDuration, 0.01f, 0.f);
+                    ImGui::DragInt("damageAmount", &it.second.damageAmount, 1, 0);
+                    ImGui::DragInt("damageCount", &it.second.damageCount, 1, 0);
+                    ImGui::DragFloat("damageInterval", &it.second.damageInterval, 0.01f, 0.0f);
+                    ImGui::TreePop();
+                }
+                ImGui::PopID();
+            }
+
+            if (ImGui::Button("Initialize"))
+            {
+                Data::BombData::InitData(data.BombDatas);
+            }
+            ImGui::TreePop();
+        }
+        id = 0;
+        if (ImGui::TreeNodeEx("Item Data", ImGuiTreeNodeFlags_OpenOnArrow))
+        {
+            for (auto& it : data.ItemDatas)
+            {
+                ImGui::PushID(id++);
+                if (ImGui::TreeNode(Data::ItemData::to_string(it.first).c_str()))
+                {
+                    ImGui::DragFloat("duration", &it.second.duration, 0.01f, 0.f);
+                    ImGui::DragInt("effectStrength", &it.second.effectStrength, 1, 0);
+                    ImGui::TreePop();
+                }
+                ImGui::PopID();
+            }
+
+            if (ImGui::Button("Initialize"))
+            {
+                Data::ItemData::InitData(data.ItemDatas);
+            }
+            ImGui::TreePop();
+        }
+    }
+    ImGui::End();
+}
+
 void editor::MainEditor::MainEditorInit()
 {
     // Set Korean Font
@@ -1069,6 +1138,10 @@ void editor::MainEditor::MainEditorUpdate()
     //Tabs
     if (editor_data.showAllObjects) { ShowLevelObject(&editor_data.showAllObjects); }
     if (editor_data.showProfiler) { ShowProfiler(&editor_data.showProfiler); }
+    if (editor_data.showMapEditor) { ShowMapEditor(&editor_data.showMapEditor); }
+    if (editor_data.showGameDataEditor) { ShowGameDataEditor(&editor_data.showGameDataEditor); }
+
+
     if (editor_data.ShowFps) { renderFPSOverlay(); }
 }
 
