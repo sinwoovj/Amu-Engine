@@ -141,6 +141,10 @@ int main(void)
     Serializer::GetInstance().LoadEditorSetting();
     Serializer::GetInstance().LoadGameDataSetting();
 
+    glEnable(GL_BLEND);
+
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     int LastFrameFullscreenKey = GLFW_RELEASE;
 
     /* Loop until the user closes the window */

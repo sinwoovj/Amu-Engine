@@ -66,10 +66,10 @@
               1.0
             ],
             "alpha": 1.0,
-            "texturePath": "./Sources/Assets/Sprite/Object/bombs/icons/icons-and-abulites-stuff_0000s_0007_Calque-45.png",
+            "texturePath": "./Sources/Assets/Sprite/Example/Icon2.png",
             "textureSize": [
-              18.0,
-              25.0
+              200.0,
+              200.0
             ],
             "orderinLayer": 0
           }

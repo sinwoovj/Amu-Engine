@@ -37,7 +37,7 @@ void GSM::GameStateManager::Update()
 {
     if (currentLevel)
     {
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 
         DEBUG_PROFILER_START("Camera");
         Camera::GetInstance().Update();

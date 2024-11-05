@@ -64,6 +64,8 @@ public:
 	void SpriteDrawRectBorder(GLuint& vao, GLfloat lineWidth, glm::vec3 color);
 	void SpriteApplyTransform(float offset = 0.0f);
 	
+	void SpriteDebugUpdate();
+
 	//Draw
 	void SpriteUpdate();
 

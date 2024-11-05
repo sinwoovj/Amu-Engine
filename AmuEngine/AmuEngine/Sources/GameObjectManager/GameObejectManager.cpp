@@ -26,12 +26,14 @@ bool Comp(SpriteComp* first, SpriteComp* second)
 void GameObjectManager::Update()
 {
 	//sorting objects for layer (Default, UI, Particle, ETC..)
+	std::list<SpriteComp*> objectList;
 	for (auto& layer : Layer)
 	{
 		std::list<SpriteComp*> orderinlayer;
 		for (auto& obj : objects)
 		{
 			GameObject* o = obj.second;
+			objectList.push_back(o->GetComponent<SpriteComp>());
 			if (o->GetLayer() == layer)
 			{
 				//other component update
@@ -47,6 +49,10 @@ void GameObjectManager::Update()
 		{
 			obj->SpriteUpdate();
 		}
+	}
+	for (auto& obj : objectList)
+	{
+		obj->SpriteDebugUpdate();
 	}
 }
 

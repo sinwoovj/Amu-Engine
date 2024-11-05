@@ -28,6 +28,7 @@ void BOMB::BombComp::SetBomb(Data::BombData::BombType type_)
 
 void BOMB::BombComp::BombExplode()
 {
+
 }
 
 void BOMB::BombComp::Update()

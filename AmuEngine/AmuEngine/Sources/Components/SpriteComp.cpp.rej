@@ -1,0 +1,19 @@
+diff a/AmuEngine/AmuEngine/Sources/Components/SpriteComp.cpp b/AmuEngine/AmuEngine/Sources/Components/SpriteComp.cpp	(rejected hunks)
+@@ -65,12 +65,12 @@
+ {
+ 	if(useTexture)
+     {
+-		// ���İ��� 0���� ũ�� ������ ���ؼ� �����ϰ�, �׷��� ������ �ؽ�ó �״�� ���
+ 		vec4 texColor = texture2D(texture1, TexCoord);
+-		if (texColor.a > 0.0)
+-			FragColor = texColor * ucolor;
+-		else
+-			FragColor = texColor; // �ؽ�ó�� �� �κ��� �״�� ���
++		if (texColor.a < 0.1)
++		{
++			discard;
++		}
++		FragColor = texColor * ucolor; // �ؽ�ó�� �� �κ��� �״�� ���
+     }
+     else
+     {
