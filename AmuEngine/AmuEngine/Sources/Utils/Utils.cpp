@@ -50,23 +50,21 @@ float GetCamPositionY()
 
 int PosToMapX(float x)
 {
-    return (int)(x + (windowWidth / 2)) / (windowWidth / width);
+    return (int)(x + ((int)Utility::GetCurrentWindowSize().x / static_cast<float>(2))) / (int)(Utility::GetCurrentWindowSize().x / width);
 }
 
 int PosToMapY(float y)
 {
-    return (int)(y + (windowHeight / 2)) / (windowHeight / height);
+    return (int)(y + ((int)Utility::GetCurrentWindowSize().y / static_cast<float>(2))) / ((int)Utility::GetCurrentWindowSize().y / height);
 }
 
 float MapToPosX(float ind)
 {
-    //return (windowWidth / width) * ind - (windowWidth / 2) + ((windowWidth / width) / 2);
     return ind * width;
 }
 
 float MapToPosY(float ind)
 {
-    //return -((windowHeight / height) * ind - (windowHeight / 2) + ((windowHeight / height) / 2));
     return -ind * height;
 }
 
@@ -78,7 +76,6 @@ float GetSqDistance(float ax, float ay, float bx, float by)
 
 #include <windows.h>
 #include <string>
-#include <filesystem>
 #include <codecvt>
 
 
@@ -237,6 +234,13 @@ std::string Utility::AbsToRelPath(const std::string& base, const std::string& ta
     }
 
     return "./" + result;
+}
+
+glm::vec2 Utility::GetCurrentWindowSize()
+{
+    int x, y;
+    glfwGetWindowSize(glfwGetCurrentContext(), &x, &y);
+    return glm::vec2(x,y);
 }
 
 bool Utility::isMultibyte(std::string str)

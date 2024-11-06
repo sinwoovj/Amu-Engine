@@ -6,6 +6,7 @@
 #include "../EventManager/EventManager.h"
 #include "../CollisionManager/CollisionManager.h"
 #include "../Bomb/BombManager.h"
+#include "../Map/MapManager.h"
 #include "../GameObjectManager/GameObjectManager.h"
 #include "../ResourceManager/ResourceManager.h"
 #include "../Serializer/Serializer.h"
@@ -31,6 +32,7 @@ void GSM::GameStateManager::Init()
     {
         currentLevel->Init();
     }
+    MapManager::GetInstance().SetCurrentMap(new Map("Demo", 1.f, 1.f, 0.1f));
 }
 
 void GSM::GameStateManager::Update()
@@ -65,6 +67,16 @@ void GSM::GameStateManager::Update()
             DEBUG_PROFILER_END;
         }
 
+        DEBUG_PROFILER_START("Map");
+        MapManager::GetInstance().Update();
+        DEBUG_PROFILER_END;
+        //grid not top viewe
+        if (editor::MainEditor::editorMode == editor::MainEditor::EditorMode::Edit &&
+            editor::MainEditor::editor_data.showMapEditor == true &&
+            editor::MainEditor::editor_data.GridViewTop == false)
+        {
+            MapManager::GetInstance().GetCurrentMap()->GridUpdate();
+        }
 
         DEBUG_PROFILER_START("Graphic");
         ComponentManager<GraphicComponent>::GetInstance().Update();
@@ -72,6 +84,14 @@ void GSM::GameStateManager::Update()
         DEBUG_PROFILER_START("GameObject");
         GameObjectManager::GetInstance().Update();
         DEBUG_PROFILER_END;
+
+        //grid top view
+        if (editor::MainEditor::editorMode == editor::MainEditor::EditorMode::Edit &&
+            editor::MainEditor::editor_data.showMapEditor == true &&
+            editor::MainEditor::editor_data.GridViewTop == true)
+        {
+            MapManager::GetInstance().GetCurrentMap()->GridUpdate();
+        }
     }
 }
 
@@ -83,6 +103,7 @@ void GSM::GameStateManager::Exit()
     }
     EventManager::GetInstance().DeleteUndispahchEvent();
     GameObjectManager::GetInstance().RemoveAllObject();
+    MapManager::GetInstance().RemoveAllMap();
     ResourceManager::GetInstance().UnloadAllResource();
 }
 

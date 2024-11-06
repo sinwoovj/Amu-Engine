@@ -23,7 +23,7 @@ editor::MainEditor::~MainEditor()
 {
 }
 
-void editor::MainEditor::renderFPSOverlay()
+void editor::MainEditor::ShowFPSOverlay()
 {
     // ImGui 윈도우 생성 (투명하게 만들기)
     ImGui::SetNextWindowBgAlpha(0.35f); // 배경 투명도 설정
@@ -1142,7 +1142,7 @@ void editor::MainEditor::MainEditorUpdate()
     if (editor_data.showGameDataEditor) { ShowGameDataEditor(&editor_data.showGameDataEditor); }
 
 
-    if (editor_data.ShowFps) { renderFPSOverlay(); }
+    if (editor_data.ShowFps) { ShowFPSOverlay(); }
 }
 
 void editor::MainEditor::MainEditorExit()

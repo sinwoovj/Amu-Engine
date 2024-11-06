@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include "../Map/Map.h"
 #include "json.hpp"
 
 using json = nlohmann::ordered_json;	// Map. Orders the order the variables were declared in
@@ -31,6 +32,8 @@ public:
 	bool SaveLevel(const std::string& str);
 	void LoadEditorSetting();
 	void SaveEditorSetting();
-	void LoadGameDataSetting();;
+	void LoadGameDataSetting();
 	void SaveGameDataSetting();
+	Map LoadMapData(const std::string& str);
+	void SaveMapData(const std::string& str, const Map& map);
 };

@@ -12,7 +12,7 @@ BOMB::BombComp::BombComp(GameObject* _owner) : LogicComponent(_owner)
 {
 	owner = _owner;
 	owner->GetComponent<TransformComp>()->SetPos(GameObjectManager::GetInstance().GetObj("Player")->GetComponent<TransformComp>()->GetPos());
-	BOMB::BombManager::GetInstance().AddBomb(owner);
+	SetBomb(type);
 }
 
 void BOMB::BombComp::SetBomb(Data::BombData::BombType type_)

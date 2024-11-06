@@ -416,3 +416,12 @@ void Serializer::SaveGameDataSetting()
 
 	gameDataFile.close();
 }
+
+Map Serializer::LoadMapData(const std::string& str)
+{
+	return Map();
+}
+
+void Serializer::SaveMapData(const std::string& str, const Map& map)
+{
+}

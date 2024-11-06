@@ -1,44 +1,6 @@
 {
   "objects": [
     {
-      "object": "Back",
-      "layer": "Default",
-      "tag": "Untagged",
-      "components": [
-        {
-          "type": "TransformComp",
-          "compData": {
-            "position": [
-              0.0,
-              0.0
-            ],
-            "scale": [
-              1.0,
-              1.0
-            ],
-            "rotation": 0.0
-          }
-        },
-        {
-          "type": "SpriteComp",
-          "compData": {
-            "color": [
-              1.0,
-              0.45098039507865906,
-              1.0
-            ],
-            "alpha": 1.0,
-            "texturePath": "./Sources/Assets/Sprite/Background/Exam.png",
-            "textureSize": [
-              1000.0,
-              563.0
-            ],
-            "orderinLayer": 0
-          }
-        }
-      ]
-    },
-    {
       "object": "Player",
       "layer": "Player",
       "tag": "Player",
@@ -47,8 +9,8 @@
           "type": "TransformComp",
           "compData": {
             "position": [
-              104.0,
-              0.0
+              229.00025939941406,
+              -104.99998474121094
             ],
             "scale": [
               1.0,
@@ -66,10 +28,10 @@
               1.0
             ],
             "alpha": 1.0,
-            "texturePath": "./Sources/Assets/Sprite/Example/Icon2.png",
+            "texturePath": "./Sources/Assets/Sprite/default.png",
             "textureSize": [
-              200.0,
-              200.0
+              50.0,
+              50.0
             ],
             "orderinLayer": 0
           }
@@ -92,8 +54,8 @@
           "type": "ColliderComp",
           "compData": {
             "position": [
-              0.0,
-              0.0
+              229.00025939941406,
+              -104.99998474121094
             ],
             "scale": [
               1.0,

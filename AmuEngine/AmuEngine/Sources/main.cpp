@@ -11,12 +11,21 @@
 #include "../Profiler/Profiler.h"
 #include "FrameCounter/FrameCounter.h"
 
-
 GLboolean fullScreen = GL_FALSE;
 
 
 //---------------------------------------------
 GLFWwindow* mainWindow;
+
+int screenWidth = 1600;
+int screenHeight = 900;
+
+void window_size_callback(GLFWwindow* window, int width, int height)
+{
+    glViewport(0, 0, width, height);
+    screenWidth = width;
+    screenHeight = height;
+}
 
 int AMSysInit(GLint width, GLint height, const char* title)
 {
@@ -55,6 +64,7 @@ int AMSysInit(GLint width, GLint height, const char* title)
         return (1);
     }
 
+    glfwSetWindowSizeCallback(mainWindow, window_size_callback);
     // + 버퍼 생성
     // 버퍼 가로, 버퍼 세로 선언
     int bufferWidth, bufferHeight;
@@ -109,7 +119,7 @@ void fullscreenInput(int& LastFrameFullscreenKey)
     {
         if (fullScreen)
         {
-            glfwSetWindowSize(mainWindow, windowWidth, windowHeight);
+            glfwSetWindowSize(mainWindow, Utility::GetCurrentWindowSize().x, Utility::GetCurrentWindowSize().y);
             fullScreen = GL_FALSE;
         }
         else
@@ -127,7 +137,7 @@ int main(void)
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
     //_CrtSetBreakAlloc(515);
-    if (AMSysInit(windowWidth, windowHeight, "Amu Engine") )
+    if (AMSysInit(screenWidth, screenHeight, "Amu Engine") )
         return 1;
     Utility::InitUtility();
     // Editor Init

@@ -30,6 +30,8 @@ inline T* GameObject::AddComponent(BaseComponent* comp)
 template<typename T>
 inline T* GameObject::GetComponent()
 {
+	if (component.empty())
+		return nullptr;
 	auto it = component.find(T::TypeName);
 	if (it != component.end())
 	{

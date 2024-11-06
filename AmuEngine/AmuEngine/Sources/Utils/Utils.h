@@ -2,6 +2,7 @@
 #include "Size.h"
 #include <string>
 #include <vector>
+#include <EasyOpengl.h>
 
 void AESleep(long long t);
 float GetMouseCursorPositionX();
@@ -32,5 +33,6 @@ namespace Utility {
 	std::vector<std::string> splitPath(const std::string& path);
 	std::string AbsToRelPath(const std::string& base, const std::string& target);
 
+	glm::vec2 GetCurrentWindowSize();
 	bool isMultibyte(std::string str);
 }

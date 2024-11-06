@@ -515,7 +515,9 @@
     <ClInclude Include="Sources\GSM\GameStateManager.h" />
     <ClInclude Include="Sources\Level\BaseLevel.h" />
     <ClInclude Include="Sources\Level\Menu.h" />
+    <ClInclude Include="Sources\Map\Grid.h" />
     <ClInclude Include="Sources\Map\Map.h" />
+    <ClInclude Include="Sources\Map\MapManager.h" />
     <ClInclude Include="Sources\Prefab\Prefab.h" />
     <ClInclude Include="Sources\Profiler\Profiler.h" />
     <ClInclude Include="Sources\ResourceManager\ResourceManager.h" />
@@ -573,6 +575,9 @@
     <ClCompile Include="Sources\Level\Menu.cpp" />
     <ClCompile Include="Sources\Level\NormalLevel.cpp" />
     <ClCompile Include="Sources\main.cpp" />
+    <ClCompile Include="Sources\map\Grid.cpp" />
+    <ClCompile Include="Sources\map\Map.cpp" />
+    <ClCompile Include="Sources\map\MapManager.cpp" />
     <ClCompile Include="Sources\Prefab\Prefab.cpp" />
     <ClCompile Include="Sources\Profiler\Profiler.cpp" />
     <ClCompile Include="Sources\ResourceManager\ResourceManager.cpp" />

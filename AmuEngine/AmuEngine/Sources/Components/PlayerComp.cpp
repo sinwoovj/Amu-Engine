@@ -7,6 +7,7 @@
 #include "../Prefab/Prefab.h"
 #include "../GameObjectManager/GameObjectManager.h"
 #include <EasyImgui.h>
+#include "../Editor/MainEditor.h"
 
 int PlayerComp::_playerId = 0;
 
@@ -42,8 +43,9 @@ void PlayerComp::CreateBomb(Data::BombData::BombType type)
 		bombObj->AddComponent<ColliderComp>();
 		bombObj->AddComponent<RigidbodyComp>();
 		bombObj->AddComponent<BOMB::BombComp>();
-		bombObj->GetComponent<BOMB::BombComp>()->SetBomb(type);
 		bombObj->GetComponent<BOMB::BombComp>()->SetPlayer(owner);
+
+		BOMB::BombManager::GetInstance().AddBomb(bombObj);
 		currentBombCount++;
 	}
 	
@@ -101,10 +103,12 @@ void PlayerComp::Update()
 
 	int currentFrameKey = glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_SPACE);
 
-
-	if (currentFrameKey == GLFW_PRESS && currentFrameKey != LastFrameKey)
+	if (editor::MainEditor::editorMode == editor::MainEditor::EditorMode::Play)
 	{
-		CreateBomb(Data::BombData::BombType::Default);
+		if (currentFrameKey == GLFW_PRESS && currentFrameKey != LastFrameKey)
+		{
+			CreateBomb(Data::BombData::BombType::Default);
+		}
 	}
 
 	LastFrameKey = currentFrameKey;

@@ -11,6 +11,7 @@ GameObject::GameObject(std::string str) : type(None)
 	name = str;
 	layer = "Default";
 	tag = "Untagged";
+	component = {};
 	GameObjectManager::GetInstance().InsertObject(str, this);
 }
 

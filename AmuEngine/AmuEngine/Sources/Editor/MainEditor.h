@@ -82,6 +82,7 @@ namespace editor
 			bool IsTraceObject = true; //Defualt
 			bool ShowFps = false;
 			bool ShowGrid = false;
+			bool GridViewTop = false;
 
 			// Constant Variable
 			const std::string editorFileName = "./Sources/Editor/editor.json";
@@ -95,13 +96,13 @@ namespace editor
 		MainEditor() {}
 		MainEditor(const MainEditor&) {}
 
-		void renderFPSOverlay();
 		void TraceObject();
 		void PopUp();
 		void TopBar();
 		void ShowLevelObject(bool* p_open);
 		void ShowProfiler(bool* p_open);
 		void ShowMapEditor(bool* p_open);
+		void ShowFPSOverlay();
 		void ShowGameDataEditor(bool* p_open);
 
 		void MainEditorInit();
