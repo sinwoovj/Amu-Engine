@@ -72,7 +72,7 @@ void GSM::GameStateManager::Update()
         DEBUG_PROFILER_END;
         //grid not top viewe
         if (editor::MainEditor::editorMode == editor::MainEditor::EditorMode::Edit &&
-            editor::MainEditor::editor_data.showMapEditor == true &&
+            editor::MainEditor::editor_data.ShowGrid == true &&
             editor::MainEditor::editor_data.GridViewTop == false)
         {
             MapManager::GetInstance().GetCurrentMap()->GridUpdate();
@@ -87,7 +87,7 @@ void GSM::GameStateManager::Update()
 
         //grid top view
         if (editor::MainEditor::editorMode == editor::MainEditor::EditorMode::Edit &&
-            editor::MainEditor::editor_data.showMapEditor == true &&
+            editor::MainEditor::editor_data.ShowGrid == true &&
             editor::MainEditor::editor_data.GridViewTop == true)
         {
             MapManager::GetInstance().GetCurrentMap()->GridUpdate();
