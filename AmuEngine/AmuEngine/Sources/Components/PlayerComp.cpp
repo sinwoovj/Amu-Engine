@@ -8,8 +8,10 @@
 #include "../GameObjectManager/GameObjectManager.h"
 #include <EasyImgui.h>
 #include "../Editor/MainEditor.h"
+#include "../Data/DataManager.h"
 
 int PlayerComp::_playerId = 0;
+int PlayerComp::keyBindIndex[5] = { 0,0,0,0,0 };
 
 PlayerComp::PlayerComp(GameObject* _owner) : EngineComponent(_owner)
 {
@@ -17,23 +19,12 @@ PlayerComp::PlayerComp(GameObject* _owner) : EngineComponent(_owner)
 
 	id = GetPlayerId();
 	focusMe = false;
-	Data::KeyData keyData;
-	switch (id)
-	{
-	case 0: 
-		keyData = { GLFW_KEY_W, GLFW_KEY_A, GLFW_KEY_S, GLFW_KEY_D, GLFW_KEY_SPACE };
-		break;
-	case 1: 
-		keyData = { GLFW_KEY_UP, GLFW_KEY_LEFT, GLFW_KEY_DOWN, GLFW_KEY_RIGHT, GLFW_KEY_KP_0 };
-		break;
-	default :
-		keyData = { GLFW_KEY_LAST, GLFW_KEY_LAST, GLFW_KEY_LAST, GLFW_KEY_LAST, GLFW_KEY_LAST };
-	}
-	data = new Data::PlayerData(1, 1, 1, 10, Data::BombData::BombType::Default, 0, keyData);
+	data = new Data::PlayerData(1, 1, 1, 10, Data::BombData::BombType::Default, 0);
 }
 
 PlayerComp::~PlayerComp()
 {
+	_playerId--;
 	delete data;
 }	
 
@@ -90,30 +81,31 @@ void PlayerComp::Update()
 	r->SetVelocityX(0);
 	r->SetVelocityY(0);
 
-	if (glfwGetKey(glfwGetCurrentContext(), data->kData.moveU) == GLFW_PRESS)
+	auto kData = Data::DataManager::GetInstance().gameData.KeyDatas.find(id)->second;
+	if (glfwGetKey(glfwGetCurrentContext(), kData.moveU) == GLFW_PRESS)
 	{
 		//t->ReverseX(1);
 		r->SetVelocityY(speed);
 	}
 
-	else if (glfwGetKey(glfwGetCurrentContext(), data->kData.moveD) == GLFW_PRESS)
+	else if (glfwGetKey(glfwGetCurrentContext(), kData.moveD) == GLFW_PRESS)
 	{
 		//t->ReverseX(0);
 		r->SetVelocityY(-speed);
 	}
 
-	if (glfwGetKey(glfwGetCurrentContext(), data->kData.moveL) == GLFW_PRESS)
+	if (glfwGetKey(glfwGetCurrentContext(), kData.moveL) == GLFW_PRESS)
 	{
 		//t->ReverseX(0);
 		r->SetVelocityX(-speed);
 	}
 
-	else if (glfwGetKey(glfwGetCurrentContext(), data->kData.moveR) == GLFW_PRESS)
+	else if (glfwGetKey(glfwGetCurrentContext(), kData.moveR) == GLFW_PRESS)
 	{
 		//t->ReverseX(1);
 		r->SetVelocityX(speed);
 	}
-	int currentFrameKey = glfwGetKey(glfwGetCurrentContext(), data->kData.plant);
+	int currentFrameKey = glfwGetKey(glfwGetCurrentContext(), kData.plant);
 
 	if (editor::MainEditor::editorMode == editor::MainEditor::EditorMode::Play)
 	{
@@ -156,29 +148,28 @@ void PlayerComp::Edit()
 		const char* bombTypes[] = { "Default", "Radioactivity", "Magma", "Ice" };
 		ImGui::Combo("CurrentBombType", reinterpret_cast<int*>(&data->currentBombType), bombTypes, IM_ARRAYSIZE(bombTypes));
 		ImGui::InputInt("ItemVitalizationFlag", &data->itemVitalizationFlag);
-		
 		//kData
-		static int keyBind[5];
-		keyBind[0] = Utility::getKeyIndex(data->kData.moveU);
-		keyBind[1] = Utility::getKeyIndex(data->kData.moveL);
-		keyBind[2] = Utility::getKeyIndex(data->kData.moveD);
-		keyBind[3] = Utility::getKeyIndex(data->kData.moveR);
-		keyBind[4] = Utility::getKeyIndex(data->kData.plant);
+		auto kData = Data::DataManager::GetInstance().gameData.KeyDatas.find(id)->second;
+		PlayerComp::keyBindIndex[0] = Utility::getKeyIndex(kData.moveU);
+		PlayerComp::keyBindIndex[1] = Utility::getKeyIndex(kData.moveL);
+		PlayerComp::keyBindIndex[2] = Utility::getKeyIndex(kData.moveD);
+		PlayerComp::keyBindIndex[3] = Utility::getKeyIndex(kData.moveR);
+		PlayerComp::keyBindIndex[4] = Utility::getKeyIndex(kData.plant);
 
 		ImGui::SeparatorText("Key Data");
 		{
-			ImGui::Combo("Up", &keyBind[0], Utility::keyTypes, IM_ARRAYSIZE(Utility::keyTypes));
-			ImGui::Combo("Left", &keyBind[1], Utility::keyTypes, IM_ARRAYSIZE(Utility::keyTypes));
-			ImGui::Combo("Down", &keyBind[2], Utility::keyTypes, IM_ARRAYSIZE(Utility::keyTypes));
-			ImGui::Combo("Right", &keyBind[3], Utility::keyTypes, IM_ARRAYSIZE(Utility::keyTypes));
-			ImGui::Combo("Plant", &keyBind[4], Utility::keyTypes, IM_ARRAYSIZE(Utility::keyTypes));
+			ImGui::Combo("Up",	&PlayerComp::keyBindIndex[0], Utility::keyTypes, IM_ARRAYSIZE(Utility::keyTypes));
+			ImGui::Combo("Left", &PlayerComp::keyBindIndex[1], Utility::keyTypes, IM_ARRAYSIZE(Utility::keyTypes));
+			ImGui::Combo("Down", &PlayerComp::keyBindIndex[2], Utility::keyTypes, IM_ARRAYSIZE(Utility::keyTypes));
+			ImGui::Combo("Right", &PlayerComp::keyBindIndex[3], Utility::keyTypes, IM_ARRAYSIZE(Utility::keyTypes));
+			ImGui::Combo("Plant", &PlayerComp::keyBindIndex[4], Utility::keyTypes, IM_ARRAYSIZE(Utility::keyTypes));
 		}
 
-		data->kData.moveU = Utility::getKeyValue(keyBind[0]);
-		data->kData.moveL = Utility::getKeyValue(keyBind[1]);
-		data->kData.moveD = Utility::getKeyValue(keyBind[2]);
-		data->kData.moveR = Utility::getKeyValue(keyBind[3]);
-		data->kData.plant = Utility::getKeyValue(keyBind[4]);
+		kData.moveU = Utility::getKeyValue(PlayerComp::keyBindIndex[0]);
+		kData.moveL = Utility::getKeyValue(PlayerComp::keyBindIndex[1]);
+		kData.moveD = Utility::getKeyValue(PlayerComp::keyBindIndex[2]);
+		kData.moveR = Utility::getKeyValue(PlayerComp::keyBindIndex[3]);
+		kData.plant = Utility::getKeyValue(PlayerComp::keyBindIndex[4]);
 	}
 }
 

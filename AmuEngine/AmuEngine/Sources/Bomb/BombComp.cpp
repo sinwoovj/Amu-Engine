@@ -11,8 +11,6 @@
 BOMB::BombComp::BombComp(GameObject* _owner) : LogicComponent(_owner)
 {
 	owner = _owner;
-	owner->GetComponent<TransformComp>()->SetPos(GameObjectManager::GetInstance().GetObj("Player")->GetComponent<TransformComp>()->GetPos());
-	SetBomb(type);
 }
 
 void BOMB::BombComp::SetBomb(Data::BombData::BombType type_)
@@ -20,9 +18,16 @@ void BOMB::BombComp::SetBomb(Data::BombData::BombType type_)
 	type = type_;
 	//Set Sprite, Audio, Animation, Effects ..
 	std::string bombTextureName = SpriteComp::DefaultSprite;
+	playerObj->GetComponent<TransformComp>()->SetPos(playerObj->GetComponent<TransformComp>()->GetPos());
 
 	owner->GetComponent<SpriteComp>()->SetTexture(bombTextureName);
 	owner->GetComponent<SpriteComp>()->SetTextureSize({50,50});
+}
+
+void BOMB::BombComp::SetPlayer(GameObject* obj)
+{
+	playerObj = obj;
+	SetBomb(type);
 }
 
 void BOMB::BombComp::Update()

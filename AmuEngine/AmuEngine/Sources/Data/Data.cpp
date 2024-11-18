@@ -184,3 +184,82 @@ json Data::PlayerData::SaveToJson()
 {
 	return json();
 }
+
+void Data::KeyData::InitData(std::map<int, Data::KeyData::KeyVar>& tar)
+{
+	tar =
+	{
+		{ 0, { GLFW_KEY_W, GLFW_KEY_A, GLFW_KEY_S, GLFW_KEY_D, GLFW_KEY_SPACE } },
+		{ 1, { GLFW_KEY_UP, GLFW_KEY_LEFT, GLFW_KEY_DOWN, GLFW_KEY_RIGHT, GLFW_KEY_KP_0 } },
+		{ 2, { GLFW_KEY_W, GLFW_KEY_A, GLFW_KEY_S, GLFW_KEY_D, GLFW_KEY_SPACE } },
+		{ 3, { GLFW_KEY_W, GLFW_KEY_A, GLFW_KEY_S, GLFW_KEY_D, GLFW_KEY_SPACE } }
+	};
+}
+
+void Data::KeyData::LoadFromJson(const json& data)
+{
+	auto& datas = Data::DataManager::GetInstance().gameData.KeyDatas;
+	for (auto& it : data)
+	{
+		int id = it.find("Id").value();
+		auto& value = it.find("value").value();
+		if (datas.find(id) != datas.end())
+		{
+			datas.find(id)->second.moveU =
+				value.find("moveU").value();
+			datas.find(id)->second.moveL =
+				value.find("moveL").value();
+			datas.find(id)->second.moveD =
+				value.find("moveD").value();
+			datas.find(id)->second.moveR =
+				value.find("moveR").value();
+			datas.find(id)->second.plant =
+				value.find("plant").value();
+		}
+		else
+		{
+			datas.insert({
+				id,
+				{
+					value.find("moveU").value(),
+					value.find("moveL").value(),
+					value.find("moveD").value(),
+					value.find("moveR").value(),
+					value.find("plant").value()
+				}
+			});
+		}
+	}
+}
+
+json Data::KeyData::SaveToJson()
+{
+	json data;
+
+	auto& keyDatas = Data::DataManager::GetInstance().gameData.KeyDatas;
+
+	if (keyDatas.empty())
+		Data::KeyData::InitData(keyDatas);
+
+
+	for (auto& it : keyDatas)
+	{
+		json keyData;
+
+		keyData["Id"] = it.first;
+
+		json value;
+
+		value["moveU"] = it.second.moveU;
+		value["moveL"] = it.second.moveL;
+		value["moveD"] = it.second.moveD;
+		value["moveR"] = it.second.moveR;
+		value["plant"] = it.second.plant;
+
+		keyData["value"] = value;
+
+		data.push_back(keyData);
+	}
+
+	return data;
+}

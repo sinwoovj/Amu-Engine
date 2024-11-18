@@ -6,7 +6,7 @@
         "timeToExplode": 3.0,
         "effectDurationAfterExplosion": 1.0,
         "specialConditionDuration": 0.0,
-        "damageAmount": 14,
+        "damageAmount": 2,
         "damageCount": 1,
         "damageInterval": 0.0
       }
@@ -100,6 +100,48 @@
       "value": {
         "duration": 3.0,
         "effectStrength": 5
+      }
+    }
+  ],
+  "keyData": [
+    {
+      "Id": 0,
+      "value": {
+        "moveU": 87,
+        "moveL": 65,
+        "moveD": 83,
+        "moveR": 68,
+        "plant": 32
+      }
+    },
+    {
+      "Id": 1,
+      "value": {
+        "moveU": 265,
+        "moveL": 263,
+        "moveD": 264,
+        "moveR": 262,
+        "plant": 320
+      }
+    },
+    {
+      "Id": 2,
+      "value": {
+        "moveU": 87,
+        "moveL": 65,
+        "moveD": 83,
+        "moveR": 68,
+        "plant": 32
+      }
+    },
+    {
+      "Id": 3,
+      "value": {
+        "moveU": 87,
+        "moveL": 65,
+        "moveD": 83,
+        "moveR": 68,
+        "plant": 32
       }
     }
   ]

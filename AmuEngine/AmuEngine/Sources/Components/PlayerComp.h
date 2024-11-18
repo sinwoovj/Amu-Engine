@@ -15,8 +15,8 @@ private:
 	int currentBombCount = 0;
 	bool focusMe;
 	Data::PlayerData* data;
-
 	int LastFrameKey = GLFW_RELEASE;
+
 public:
 	GameObject* owner;
 	PlayerComp(GameObject* _owner);
@@ -31,6 +31,7 @@ public:
 	void Edit() override;
 
 
+	static int keyBindIndex[5];
 	static int _playerId;
 
 	static int GetPlayerId()

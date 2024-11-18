@@ -26,7 +26,7 @@ namespace BOMB
 		void SetBomb(Data::BombData::BombType type_);
 		Data::BombData::BombType GetBomb() { return type; }
 
-		void SetPlayer(GameObject* obj) { playerObj = obj; }
+		void SetPlayer(GameObject* obj);
 		GameObject* GetPlayer() const { return playerObj; }
 
 		void Update() override;

@@ -197,13 +197,22 @@ namespace Data
 		static json SaveToJson();
 	};
 
-	struct KeyData {
-		int moveU;
-		int moveL;
-		int moveD;
-		int moveR;
-		int plant;
+	class KeyData
+	{
+	public:
+		struct KeyVar {
+			int moveU;
+			int moveL;
+			int moveD;
+			int moveR;
+			int plant;
+		};
+		KeyVar keyVar;
+		static void InitData(std::map<int, Data::KeyData::KeyVar>& tar);
+		static void LoadFromJson(const json& data);
+		static json SaveToJson();
 	};
+	
 	/* <summary>
 		플레이어 관련 데이터 {비상수 구조체} [
 			<변수 종류>
@@ -232,7 +241,7 @@ namespace Data
 	class PlayerData
 	{
 	public:
-		PlayerData(int bombCountV, int explosionRadiusV, float moveSpeedV, int hpV, Data::BombData::BombType currentBombTypeV, int itemVitalizationFlagV, KeyData kDataV)
+		PlayerData(int bombCountV, int explosionRadiusV, float moveSpeedV, int hpV, Data::BombData::BombType currentBombTypeV, int itemVitalizationFlagV)
 		{
 			bombCount = bombCountV;
 			explosionRadius = explosionRadiusV;
@@ -240,7 +249,6 @@ namespace Data
 			hp = hpV;
 			currentBombType = currentBombTypeV;
 			itemVitalizationFlag = itemVitalizationFlagV;
-			kData = kDataV;
 		}
 
 		int bombCount;
@@ -249,7 +257,6 @@ namespace Data
 		int hp;
 		Data::BombData::BombType currentBombType;
 		int itemVitalizationFlag;
-		KeyData kData;
 
 		void InitData(int bombCountV, int explosionRadiusV, float moveSpeedV, int hpV, Data::BombData::BombType currentBombTypeV, int itemVitalizationFlagV)
 		{
@@ -272,6 +279,7 @@ namespace Data
 		//std::map<type, value>
 		std::map <Data::BombData::BombType, Data::BombData::BombVar> BombDatas;
 		std::map <Data::ItemData::ItemType, Data::ItemData::ItemVar> ItemDatas;
+		std::map <int, Data::KeyData::KeyVar> KeyDatas;
 		~GameData() { BombDatas.clear(); ItemDatas.clear(); }
 	};
 	
