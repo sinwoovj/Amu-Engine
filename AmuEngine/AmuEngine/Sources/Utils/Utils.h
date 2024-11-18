@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <EasyOpengl.h>
+#include <map>
 
 void AESleep(long long t);
 float GetMouseCursorPositionX();
@@ -35,4 +36,11 @@ namespace Utility {
 
 	glm::vec2 GetCurrentWindowSize();
 	bool isMultibyte(std::string str);
+
+    // GLFW 키 값 매핑
+	extern std::vector<int> keyMap;
+	extern const char* keyTypes[120];
+    // 키 이름으로 값을 반환하는 함수
+	int getKeyValue(int index);
+	int getKeyIndex(int value);
 }

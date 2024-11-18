@@ -14,8 +14,8 @@ Map 클래스
 class Map {
 public:
     std::string mapName;
-    float width;
-    float height;
+    int width;
+    int height;
     float spacing;
     std::vector<std::vector<Tile>> tiles;       // 2D 배열 형태의 타일 맵
     std::vector<Item> items;                    // 맵에 배치된 아이템들
@@ -25,15 +25,15 @@ public:
 
     Map() : mapName(""), width(0), height(0), spacing(0), tiles(), items(), spawnPoints(), isViewGrid(false), grid() {}
 
-    Map(std::string mapName_, float width_, float height_, float spacing_);
+    Map(std::string mapName_, int width_, int height_, float spacing_);
 
     ~Map() {}
 
     void addItem(Item item);
 
-    void addSpawnPoint(float x, float y);
+    void addSpawnPoint(int x, int y);
 
-    void setTile(float x, float y, Tile::TileType type, bool destructible);
+    void setTile(int x, int y, Tile::TileType type, bool destructible);
 
     void Update();
 

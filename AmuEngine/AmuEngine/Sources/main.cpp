@@ -119,7 +119,7 @@ void fullscreenInput(int& LastFrameFullscreenKey)
     {
         if (fullScreen)
         {
-            glfwSetWindowSize(mainWindow, Utility::GetCurrentWindowSize().x, Utility::GetCurrentWindowSize().y);
+            glfwSetWindowSize(mainWindow, (int)Utility::GetCurrentWindowSize().x, (int)Utility::GetCurrentWindowSize().y);
             fullScreen = GL_FALSE;
         }
         else

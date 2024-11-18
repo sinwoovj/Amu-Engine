@@ -1,6 +1,7 @@
 #pragma once
 #include "json.hpp"
 #include <map>
+#include <EasyOpengl.h>
 
 using json = nlohmann::ordered_json;
 
@@ -59,10 +60,10 @@ namespace Data
 		};
 		enum BombType
 		{
-			Default,
-			Radioactivity,
-			Magma,
-			Ice
+			Default = 0,
+			Radioactivity = 1,
+			Magma = 2,
+			Ice = 3
 		};
 		static std::string to_string(BombType b)
 		{
@@ -196,6 +197,13 @@ namespace Data
 		static json SaveToJson();
 	};
 
+	struct KeyData {
+		int moveU;
+		int moveL;
+		int moveD;
+		int moveR;
+		int plant;
+	};
 	/* <summary>
 		플레이어 관련 데이터 {비상수 구조체} [
 			<변수 종류>
@@ -224,7 +232,7 @@ namespace Data
 	class PlayerData
 	{
 	public:
-		PlayerData(int bombCountV, int explosionRadiusV, float moveSpeedV, int hpV, Data::BombData::BombType currentBombTypeV, int itemVitalizationFlagV)
+		PlayerData(int bombCountV, int explosionRadiusV, float moveSpeedV, int hpV, Data::BombData::BombType currentBombTypeV, int itemVitalizationFlagV, KeyData kDataV)
 		{
 			bombCount = bombCountV;
 			explosionRadius = explosionRadiusV;
@@ -232,6 +240,7 @@ namespace Data
 			hp = hpV;
 			currentBombType = currentBombTypeV;
 			itemVitalizationFlag = itemVitalizationFlagV;
+			kData = kDataV;
 		}
 
 		int bombCount;
@@ -240,6 +249,7 @@ namespace Data
 		int hp;
 		Data::BombData::BombType currentBombType;
 		int itemVitalizationFlag;
+		KeyData kData;
 
 		void InitData(int bombCountV, int explosionRadiusV, float moveSpeedV, int hpV, Data::BombData::BombType currentBombTypeV, int itemVitalizationFlagV)
 		{
@@ -255,6 +265,8 @@ namespace Data
 		void LoadFromJson(const json& data);
 		json SaveToJson();
 	};
+
+	
 
 	struct GameData {
 		//std::map<type, value>

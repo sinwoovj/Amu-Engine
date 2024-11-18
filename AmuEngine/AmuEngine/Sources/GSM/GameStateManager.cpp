@@ -32,7 +32,7 @@ void GSM::GameStateManager::Init()
     {
         currentLevel->Init();
     }
-    MapManager::GetInstance().SetCurrentMap(new Map("Demo", 1.f, 1.f, 0.1f));
+    MapManager::GetInstance().SetCurrentMap(new Map("Demo", 1, 1, 0.1f));
 }
 
 void GSM::GameStateManager::Update()

@@ -22,8 +22,9 @@ public:
 
 	//To support polymorphism we MUST make this interface virtual
 	//Update function -> performs the logic, all my inherited classes will use the function with the same syntax
-	virtual void Update() = 0;
-
+	virtual void Init();
+	virtual void Update();
+	virtual void Exit();
 	virtual void Edit();
 
 	GameObject* GetOwner() { return owner; }

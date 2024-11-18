@@ -17,7 +17,19 @@ PlayerComp::PlayerComp(GameObject* _owner) : EngineComponent(_owner)
 
 	id = GetPlayerId();
 	focusMe = false;
-	data = new Data::PlayerData(1, 1, 1, 10, Data::BombData::BombType::Default, 0);
+	Data::KeyData keyData;
+	switch (id)
+	{
+	case 0: 
+		keyData = { GLFW_KEY_W, GLFW_KEY_A, GLFW_KEY_S, GLFW_KEY_D, GLFW_KEY_SPACE };
+		break;
+	case 1: 
+		keyData = { GLFW_KEY_UP, GLFW_KEY_LEFT, GLFW_KEY_DOWN, GLFW_KEY_RIGHT, GLFW_KEY_KP_0 };
+		break;
+	default :
+		keyData = { GLFW_KEY_LAST, GLFW_KEY_LAST, GLFW_KEY_LAST, GLFW_KEY_LAST, GLFW_KEY_LAST };
+	}
+	data = new Data::PlayerData(1, 1, 1, 10, Data::BombData::BombType::Default, 0, keyData);
 }
 
 PlayerComp::~PlayerComp()
@@ -47,9 +59,10 @@ void PlayerComp::CreateBomb(Data::BombData::BombType type)
 
 		BOMB::BombManager::GetInstance().AddBomb(bombObj);
 		currentBombCount++;
-	}
-	
+	}	
 }
+
+
 
 void PlayerComp::SubtractCurrentBombCount()
 {
@@ -77,31 +90,30 @@ void PlayerComp::Update()
 	r->SetVelocityX(0);
 	r->SetVelocityY(0);
 
-	if (glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_A) == GLFW_PRESS)
-	{
-		//t->ReverseX(0);
-		r->SetVelocityX(-speed);
-	}
-
-	else if (glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_D) == GLFW_PRESS)
-	{
-		//t->ReverseX(1);
-		r->SetVelocityX(speed);
-	}
-	
-	if (glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_S) == GLFW_PRESS)
-	{
-		//t->ReverseX(0);
-		r->SetVelocityY(-speed);
-	}
-
-	else if (glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_W) == GLFW_PRESS)
+	if (glfwGetKey(glfwGetCurrentContext(), data->kData.moveU) == GLFW_PRESS)
 	{
 		//t->ReverseX(1);
 		r->SetVelocityY(speed);
 	}
 
-	int currentFrameKey = glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_SPACE);
+	else if (glfwGetKey(glfwGetCurrentContext(), data->kData.moveD) == GLFW_PRESS)
+	{
+		//t->ReverseX(0);
+		r->SetVelocityY(-speed);
+	}
+
+	if (glfwGetKey(glfwGetCurrentContext(), data->kData.moveL) == GLFW_PRESS)
+	{
+		//t->ReverseX(0);
+		r->SetVelocityX(-speed);
+	}
+
+	else if (glfwGetKey(glfwGetCurrentContext(), data->kData.moveR) == GLFW_PRESS)
+	{
+		//t->ReverseX(1);
+		r->SetVelocityX(speed);
+	}
+	int currentFrameKey = glfwGetKey(glfwGetCurrentContext(), data->kData.plant);
 
 	if (editor::MainEditor::editorMode == editor::MainEditor::EditorMode::Play)
 	{
@@ -132,6 +144,41 @@ void PlayerComp::Edit()
 	ImGui::SeparatorText("Camera");
 	{
 		ImGui::Checkbox("Focus Me", &focusMe);
+	}
+
+	//Player Data
+	ImGui::SeparatorText("Player Data");
+	{
+		ImGui::DragInt("BombCount", &data->bombCount);
+		ImGui::DragInt("ExplosionRadius", &data->explosionRadius);
+		ImGui::DragFloat("MoveSpeed", &data->moveSpeed, 1, 0.0000001f);
+		ImGui::DragInt("Hp", &data->hp);
+		const char* bombTypes[] = { "Default", "Radioactivity", "Magma", "Ice" };
+		ImGui::Combo("CurrentBombType", reinterpret_cast<int*>(&data->currentBombType), bombTypes, IM_ARRAYSIZE(bombTypes));
+		ImGui::InputInt("ItemVitalizationFlag", &data->itemVitalizationFlag);
+		
+		//kData
+		static int keyBind[5];
+		keyBind[0] = Utility::getKeyIndex(data->kData.moveU);
+		keyBind[1] = Utility::getKeyIndex(data->kData.moveL);
+		keyBind[2] = Utility::getKeyIndex(data->kData.moveD);
+		keyBind[3] = Utility::getKeyIndex(data->kData.moveR);
+		keyBind[4] = Utility::getKeyIndex(data->kData.plant);
+
+		ImGui::SeparatorText("Key Data");
+		{
+			ImGui::Combo("Up", &keyBind[0], Utility::keyTypes, IM_ARRAYSIZE(Utility::keyTypes));
+			ImGui::Combo("Left", &keyBind[1], Utility::keyTypes, IM_ARRAYSIZE(Utility::keyTypes));
+			ImGui::Combo("Down", &keyBind[2], Utility::keyTypes, IM_ARRAYSIZE(Utility::keyTypes));
+			ImGui::Combo("Right", &keyBind[3], Utility::keyTypes, IM_ARRAYSIZE(Utility::keyTypes));
+			ImGui::Combo("Plant", &keyBind[4], Utility::keyTypes, IM_ARRAYSIZE(Utility::keyTypes));
+		}
+
+		data->kData.moveU = Utility::getKeyValue(keyBind[0]);
+		data->kData.moveL = Utility::getKeyValue(keyBind[1]);
+		data->kData.moveD = Utility::getKeyValue(keyBind[2]);
+		data->kData.moveR = Utility::getKeyValue(keyBind[3]);
+		data->kData.plant = Utility::getKeyValue(keyBind[4]);
 	}
 }
 
