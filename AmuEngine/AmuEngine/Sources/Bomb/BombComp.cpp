@@ -13,6 +13,11 @@ BOMB::BombComp::BombComp(GameObject* _owner) : LogicComponent(_owner)
 	owner = _owner;
 }
 
+BOMB::BombComp::~BombComp()
+{
+	playerObj->GetComponent<PlayerComp>()->SubtractCurrentBombCount();
+}
+
 void BOMB::BombComp::SetBomb(Data::BombData::BombType type_)
 {
 	type = type_;
@@ -60,7 +65,7 @@ void BOMB::BombComp::Update()
 	case Data::BombData::BombDisappearing:// ÆøÅºÀÌ »ç¶óÁú ¶§
 		state = Data::BombData::BombDelete;
 	case Data::BombData::BombDelete:
-		playerObj->GetComponent<PlayerComp>()->SubtractCurrentBombCount();
+		
 		break;
 	}
 	currentTime += FrameCounter::GetInstance().getDeltaTime();

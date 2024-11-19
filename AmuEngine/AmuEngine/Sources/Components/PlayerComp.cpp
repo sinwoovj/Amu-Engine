@@ -76,35 +76,9 @@ void PlayerComp::Update()
 	
 	/*AudioComp* ad = owner->GetComponent<AudioComp>();
 	if (!ad) return;*/
-	
-	//if smooth step
-	r->SetVelocityX(0);
-	r->SetVelocityY(0);
 
 	auto kData = Data::DataManager::GetInstance().gameData.KeyDatas.find(id)->second;
-	if (glfwGetKey(glfwGetCurrentContext(), kData.moveU) == GLFW_PRESS)
-	{
-		//t->ReverseX(1);
-		r->SetVelocityY(speed);
-	}
 
-	else if (glfwGetKey(glfwGetCurrentContext(), kData.moveD) == GLFW_PRESS)
-	{
-		//t->ReverseX(0);
-		r->SetVelocityY(-speed);
-	}
-
-	if (glfwGetKey(glfwGetCurrentContext(), kData.moveL) == GLFW_PRESS)
-	{
-		//t->ReverseX(0);
-		r->SetVelocityX(-speed);
-	}
-
-	else if (glfwGetKey(glfwGetCurrentContext(), kData.moveR) == GLFW_PRESS)
-	{
-		//t->ReverseX(1);
-		r->SetVelocityX(speed);
-	}
 	int currentFrameKey = glfwGetKey(glfwGetCurrentContext(), kData.plant);
 
 	if (editor::MainEditor::editorMode == editor::MainEditor::EditorMode::Play)
@@ -116,6 +90,39 @@ void PlayerComp::Update()
 	}
 
 	LastFrameKey = currentFrameKey;
+
+	//if smooth step
+	r->SetVelocityX(0);
+	r->SetVelocityY(0);
+
+	// 초기 속도 설정
+	float velocityX = 0.0f;
+	float velocityY = 0.0f;
+
+	// 상하 이동 처리
+	if (glfwGetKey(glfwGetCurrentContext(), kData.moveU) == GLFW_PRESS) {
+		velocityY = speed; // 위로 이동
+	}
+	else if (glfwGetKey(glfwGetCurrentContext(), kData.moveD) == GLFW_PRESS) {
+		velocityY = -speed; // 아래로 이동
+	}
+
+	// 좌우 이동 처리
+	if (glfwGetKey(glfwGetCurrentContext(), kData.moveL) == GLFW_PRESS) {
+		velocityX = -speed; // 왼쪽으로 이동
+	}
+	else if (glfwGetKey(glfwGetCurrentContext(), kData.moveR) == GLFW_PRESS) {
+		velocityX = speed; // 오른쪽으로 이동
+	}
+
+	// 대각선 이동 방지: 하나의 방향만 허용
+	if (velocityX != 0.0f && velocityY != 0.0f) {
+		velocityX = 0.0f; // 우선순위에 따라 좌우 이동 무효화
+	}
+
+	// 최종 속도 설정
+	r->SetVelocityX(velocityX);
+	r->SetVelocityY(velocityY);
 	
 	SetCamera(focusMe);
 }

@@ -22,6 +22,7 @@ namespace BOMB
 		GameObject* owner;
 
 		BombComp(GameObject* _owner);
+		~BombComp();
 
 		void SetBomb(Data::BombData::BombType type_);
 		Data::BombData::BombType GetBomb() { return type; }
