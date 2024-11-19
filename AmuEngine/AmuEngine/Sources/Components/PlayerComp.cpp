@@ -9,7 +9,6 @@
 #include <EasyImgui.h>
 #include "../Editor/MainEditor.h"
 #include "../Data/DataManager.h"
-
 int PlayerComp::_playerId = 0;
 int PlayerComp::keyBindIndex[5] = { 0,0,0,0,0 };
 
@@ -37,7 +36,7 @@ void PlayerComp::CreateBomb(Data::BombData::BombType type)
 {
 	if (currentBombCount < data->bombCount)
 	{
-		std::string bombName = "Bomb" + std::to_string(BOMB::BombManager::GetInstance().GetAllBombs().size());
+		std::string bombName = "Bomb" + std::to_string(BOMB::BombManager::BombCount++);
 		GameObjectManager::GetInstance().AddObject(bombName);
 		GameObject* bombObj = GameObjectManager::GetInstance().GetObj(bombName);
 		bombObj->AddComponent<TransformComp>();
@@ -50,7 +49,8 @@ void PlayerComp::CreateBomb(Data::BombData::BombType type)
 
 		BOMB::BombManager::GetInstance().AddBomb(bombObj);
 		currentBombCount++;
-	}	
+		std::cout << currentBombCount << std::endl;
+	}
 }
 
 

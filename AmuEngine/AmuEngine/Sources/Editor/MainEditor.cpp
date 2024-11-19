@@ -693,7 +693,8 @@ void editor::MainEditor::TopBar()
             
             editorMode = Play;
             // 게임 모드에서는 ImGui 입력을 비활성화
-            ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoKeyboard;
+            ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoKeyboard; 
+            BOMB::BombManager::BombCount = 0;
         }
         ImGui::PopItemFlag();
         ImGui::Spacing();

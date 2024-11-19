@@ -2,6 +2,8 @@
 #include "BombComp.h"
 #include "../GameObjectManager/GameObjectManager.h"
 
+int BOMB::BombManager::BombCount = 0;
+
 BOMB::BombManager::~BombManager()
 {
 

@@ -26,6 +26,7 @@ namespace BOMB
 
 		//	Functions that anyone can access to:
 	public:
+		static int BombCount;
 		static BombManager& GetInstance()
 		{
 			static BombManager instance;

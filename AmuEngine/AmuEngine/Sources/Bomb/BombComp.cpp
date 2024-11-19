@@ -64,6 +64,7 @@ void BOMB::BombComp::Update()
 		break;
 	case Data::BombData::BombDisappearing:// ÆøÅºÀÌ »ç¶óÁú ¶§
 		state = Data::BombData::BombDelete;
+		break;
 	case Data::BombData::BombDelete:
 		
 		break;
