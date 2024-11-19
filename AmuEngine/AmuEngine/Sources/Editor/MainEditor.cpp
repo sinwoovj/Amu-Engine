@@ -14,6 +14,42 @@
 #include <vector>
 #include <map>
 #include <string>
+#include "../FrameCounter/FrameCounter.h"
+
+// 전역 변수: 애니메이션 상태
+float menuHeight = 0.0f;        // 현재 메뉴 높이
+float menuTargetHeight = 50.f; // 목표 메뉴 높이
+float animationSpeed = 300.f;  // 애니메이션 속도 (픽셀/초)
+bool isMouseOverMenu = false;   // 마우스 오버 상태
+
+void editor::MainEditor::RenderTopMenuBar(float deltaTime) {
+    if (editor::MainEditor::editorMode == Edit)
+    {
+        TopBar();
+        return;
+    }
+    ImVec2 mousePos = ImGui::GetMousePos();
+    ImVec2 menuPos = ImGui::GetMainViewport()->Pos;
+
+    // 메뉴 영역 체크
+    isMouseOverMenu = (mousePos.x >= menuPos.x && mousePos.x <= menuPos.x + ImGui::GetMainViewport()->Size.x &&
+        mousePos.y >= menuPos.y && mousePos.y <= menuPos.y + menuHeight+20);
+
+    // 애니메이션 업데이트
+    if (isMouseOverMenu) {
+        menuHeight = menuTargetHeight;
+    }
+    else {
+        menuHeight = 0.0f;
+    }
+
+    // 메뉴 렌더링
+    if (menuHeight > 0.0f) {
+        ImGui::SetNextWindowPos(menuPos);
+        ImGui::SetNextWindowSize(ImVec2(ImGui::GetMainViewport()->Size.x, menuHeight));
+        TopBar();
+    }
+}
 
 editor::MainEditor::EditorMode editor::MainEditor::editorMode = Edit;
 
@@ -1138,7 +1174,8 @@ void editor::MainEditor::MainEditorInit()
 void editor::MainEditor::MainEditorUpdate()
 {
     //Top Bar
-    TopBar();
+    //TopBar();
+    RenderTopMenuBar(FrameCounter::GetInstance().getDeltaTime());
     // https://stackoverflow.com/questions/66955023/closing-an-imgui-window-this-seems-like-it-should-be-easy-how-does-one-do-it
     
     //Tabs

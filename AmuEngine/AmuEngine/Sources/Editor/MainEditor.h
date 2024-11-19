@@ -12,6 +12,7 @@ namespace editor
 	{
 
 	public:
+		void RenderTopMenuBar(float deltaTime);
 		~MainEditor();
 		enum EditorMode
 		{
