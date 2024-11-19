@@ -46,6 +46,9 @@ void GSM::GameStateManager::Update()
         Camera::GetInstance().Update();
         DEBUG_PROFILER_END;
 
+        DEBUG_PROFILER_START("Logic");
+        ComponentManager<LogicComponent>::GetInstance().Update();
+        DEBUG_PROFILER_END;
         DEBUG_PROFILER_START("Collision");
         CollisionManager::GetInstance().Update();
         DEBUG_PROFILER_END;
@@ -64,9 +67,6 @@ void GSM::GameStateManager::Update()
             currentLevel->Update();
             DEBUG_PROFILER_END;
         }
-        DEBUG_PROFILER_START("Logic");
-        ComponentManager<LogicComponent>::GetInstance().Update();
-        DEBUG_PROFILER_END;
 
         DEBUG_PROFILER_START("Map");
         MapManager::GetInstance().Update();

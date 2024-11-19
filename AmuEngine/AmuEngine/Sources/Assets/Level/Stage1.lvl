@@ -55,11 +55,11 @@
           "compData": {
             "isTrigger": true,
             "triggerList": {
-              "Default": true,
-              "Particle": true,
+              "Default": false,
+              "Particle": false,
               "Player": true,
-              "Tile": true,
-              "UI": true
+              "Tile": false,
+              "UI": false
             },
             "position": [
               0.0,
@@ -134,7 +134,7 @@
         {
           "type": "ColliderComp",
           "compData": {
-            "isTrigger": true,
+            "isTrigger": false,
             "triggerList": {
               "Default": false,
               "Particle": false,

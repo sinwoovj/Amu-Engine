@@ -328,6 +328,7 @@ bool CollisionManager::CheckerSquareCheck(ColliderComp*a , ColliderComp* b)
 	return false;
 }
 
+//a : type, pos, scale - b : type, pos, scale
 bool CollisionManager::isCollision(GameObject::Type aType, glm::vec2 aPos, glm::vec2 aScale, GameObject::Type bType, glm::vec2 bPos, glm::vec2 bScale)
 {
 	switch (aType)

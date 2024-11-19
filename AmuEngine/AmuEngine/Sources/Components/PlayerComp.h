@@ -16,7 +16,6 @@ private:
 	bool focusMe;
 	Data::PlayerData* data;
 	int LastFrameKey = GLFW_RELEASE;
-
 public:
 	GameObject* owner;
 	PlayerComp(GameObject* _owner);

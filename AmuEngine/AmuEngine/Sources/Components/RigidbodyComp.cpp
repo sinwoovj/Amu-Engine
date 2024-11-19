@@ -3,8 +3,9 @@
 #include <EasyImgui.h>
 #include "../Utils/Direction.h"
 #include "../GameObjectManager/GameObjectManager.h"
-
-
+#include "../CollisionManager/CollisionManager.h"
+#include "PlayerComp.h"
+#include "SpriteComp.h"
 bool RigidbodyComp::CheckEpsilon(float v, float EP)
 {
 	if (v < -EP || v > EP)
@@ -15,48 +16,49 @@ bool RigidbodyComp::CheckEpsilon(float v, float EP)
 
 void RigidbodyComp::CorrectPosByAABB(ColliderComp* oc, ColliderComp* c, float& x, float& y)
 {
-	float dis[4] =
-	{
-		abs(oc->GetPos().x + oc->GetScale().x / 2 + 0.5f - (c->GetPos().x - c->GetScale().x / 2)),
-		abs(oc->GetPos().x - oc->GetScale().x / 2 - 0.5f - (c->GetPos().x + c->GetScale().x / 2)),
-		abs(oc->GetPos().y + oc->GetScale().y / 2 - (c->GetPos().y - c->GetScale().y / 2)),
-		abs(oc->GetPos().y - oc->GetScale().y / 2 - (c->GetPos().y + c->GetScale().y / 2))
+	struct Rect {
+		float x, y, width, height;
 	};
 
-	float minDis = dis[0];
-	int minInd = 0;
+	auto cp = c->GetOwner()->GetComponent<PlayerComp>();
+	glm::vec2 octp = oc->GetOwner()->GetComponent<TransformComp>()->GetPos() + oc->GetPos();
+	glm::vec2 ocsts = oc->GetOwner()->GetComponent<SpriteComp>()->GetTextureSize();
+	glm::vec2 octs = oc->GetOwner()->GetComponent<TransformComp>()->GetScale() * oc->GetScale() * ocsts;
+	glm::vec2 ctp = c->GetOwner()->GetComponent<TransformComp>()->GetPos() + c->GetPos();
+	glm::vec2 csts = c->GetOwner()->GetComponent<SpriteComp>()->GetTextureSize();
+	glm::vec2 cts = c->GetOwner()->GetComponent<TransformComp>()->GetScale() * c->GetScale() * csts;
 
-	for (int i = 1; i < 3; i++)
+	if (!CollisionManager::GetInstance().isCollision(GameObject::Type::Square, octp, octs, GameObject::Type::Square, ctp, cts))
 	{
-		if (dis[i] < minDis)
-		{
-			minDis = dis[i];
-			minInd = i;
+		return;
+	}
+
+	Rect a = { octp.x, octp.y, octs.x, octs.y };
+	Rect b = { ctp.x, ctp.y, cts.x, cts.y };
+
+	float overlapX = std::min(a.x + a.width, b.x + b.width) - std::max(a.x, b.x);
+	float overlapY = std::min(a.y + a.height, b.y + b.height) - std::max(a.y, b.y);
+	float offset = 2;
+	// X 또는 Y 방향으로 더 적게 겹친 방향으로 이동
+	if (overlapX < overlapY) {
+		if (a.x < b.x) {
+			a.x -= overlapX + offset;  // 왼쪽으로 이동
+		}
+		else {
+			a.x += overlapX + offset;  // 오른쪽으로 이동
+		}
+	}
+	else {
+		if (a.y < b.y) {
+			a.y -= overlapY + offset;  // 위쪽으로 이동
+		}
+		else {
+			a.y += overlapY + offset;  // 아래쪽으로 이동
 		}
 	}
 
-	if (minDis < 0.1f)
-		return;
-
-	switch (minInd)
-	{
-	case 0:
-		x = oc->GetPos().x + oc->GetScale().x / 2 + c->GetScale().x / 2;
-		velocity.x = 0;
-		break;
-	case 1:
-		x = oc->GetPos().x - oc->GetScale().x / 2 - c->GetScale().x / 2;
-		velocity.x = 0;
-		break;
-	case 2:
-		y = oc->GetPos().y + oc->GetScale().y / 2 + c->GetScale().y / 2;
-		velocity.y = 0;
-		break;
-	case 3:
-		y = oc->GetPos().y - oc->GetScale().y / 2 - c->GetScale().y / 2;
-		velocity.y = 0;
-		break;
-	}
+	x = a.x;
+	y = a.y;
 }
 
 RigidbodyComp::RigidbodyComp(GameObject* _owner) : EngineComponent(_owner), velocity(), maxVelocity()
@@ -212,10 +214,7 @@ void RigidbodyComp::Update()
 			{
 				if (obj != owner && obj->ExistComponent("ColliderComp"))
 				{
-					if (obj->GetComponent<ColliderComp>()->isTrigger)
-					{
-						oppoCollider.push(obj->GetComponent<ColliderComp>());
-					}
+					oppoCollider.push(obj->GetComponent<ColliderComp>());
 				}
 			}
 		}
@@ -225,9 +224,7 @@ void RigidbodyComp::Update()
 			{
 				ColliderComp* oc = oppoCollider.front();
 				oppoCollider.pop();
-
 				CorrectPosByAABB(oc, c, x, y);
-				targetRot = glm::radians<float>(0);
 			}
 		}
 	}

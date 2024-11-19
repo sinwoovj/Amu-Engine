@@ -16,9 +16,7 @@ private:
 	~CollisionManager();
 
 	static CollisionManager* ptr;
-
 	std::vector<ColliderComp*> colliderList;
-
 	bool isCollisionPointTri(ColliderComp*, ColliderComp*) const;
 	bool isCollisionPointSquare(ColliderComp*, ColliderComp*) const;
 	bool isCollisionSquareTri(ColliderComp*, ColliderComp*) const;
