@@ -499,7 +499,7 @@ void editor::MainEditor::TopBar()
     {
         editor_data.currLevelName = dynamic_cast<level::NormalLevel*>(GSM::GameStateManager::GetInstance().GetCurrentLevel())->GetName();
     }
-
+    
     ImGui::BeginMainMenuBar();
     {
         if (ImGui::BeginMenu("File"))
@@ -656,6 +656,8 @@ void editor::MainEditor::TopBar()
             //save가 안되어 있을 시 팝업
             
             editorMode = Play;
+            // 게임 모드에서는 ImGui 입력을 비활성화
+            ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoKeyboard;
         }
         ImGui::PopItemFlag();
         ImGui::Spacing();
@@ -667,6 +669,8 @@ void editor::MainEditor::TopBar()
             Serializer::GetInstance().LoadLevel(GSM::GameStateManager::GetInstance().GetCurrentLevel()->GetName());
             Serializer::GetInstance().LoadEditorSetting();
             Serializer::GetInstance().LoadGameDataSetting();
+            // UI 모드에서는 ImGui 입력 활성화
+            ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoKeyboard;
         }
         ImGui::PopItemFlag();
         ImGui::Spacing();
@@ -674,6 +678,8 @@ void editor::MainEditor::TopBar()
         if (ImGui::Button("Pause"))
         {
             editorMode = Pause;
+            // UI 모드에서는 ImGui 입력 활성화
+            ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoKeyboard;
         }
         ImGui::PopItemFlag();
     };
