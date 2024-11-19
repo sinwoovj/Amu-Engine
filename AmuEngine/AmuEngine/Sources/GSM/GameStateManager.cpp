@@ -2,6 +2,7 @@
 #include "../Level/BaseLevel.h"
 #include "../ComponentManager/GraphicComponent.h"
 #include "../ComponentManager/LogicComponent.h"
+#include "../ComponentManager/EngineComponent.h"
 #include "../ComponentManager/ComponentManager.h"
 #include "../EventManager/EventManager.h"
 #include "../CollisionManager/CollisionManager.h"
@@ -48,6 +49,12 @@ void GSM::GameStateManager::Update()
         DEBUG_PROFILER_START("Logic");
         ComponentManager<LogicComponent>::GetInstance().Update();
         DEBUG_PROFILER_END;
+        DEBUG_PROFILER_START("Collision");
+        CollisionManager::GetInstance().Update();
+        DEBUG_PROFILER_END;
+        DEBUG_PROFILER_START("Event");
+        EventManager::GetInstance().DispatchAllEvents();
+        DEBUG_PROFILER_END;
         if (editor::MainEditor::editorMode == editor::MainEditor::EditorMode::Play)
         {
             DEBUG_PROFILER_START("Engine");
@@ -55,12 +62,6 @@ void GSM::GameStateManager::Update()
             DEBUG_PROFILER_END;
             DEBUG_PROFILER_START("Bomb");
             BOMB::BombManager::GetInstance().Update();
-            DEBUG_PROFILER_END;
-            DEBUG_PROFILER_START("Collision");
-            CollisionManager::GetInstance().Update();
-            DEBUG_PROFILER_END;
-            DEBUG_PROFILER_START("Event");
-            EventManager::GetInstance().DispatchAllEvents();
             DEBUG_PROFILER_END;
             DEBUG_PROFILER_START("Level");
             currentLevel->Update();

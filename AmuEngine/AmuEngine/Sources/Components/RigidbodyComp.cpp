@@ -200,85 +200,85 @@ void RigidbodyComp::Update()
 	if (CheckEpsilon(velocity.y) == false)
 		velocity.y = 0;
 
-	ColliderComp* c = owner->GetComponent<ColliderComp>();
-	if (c != nullptr)
-	{
-		if (t->GetRot() < targetRot)
-		{
-			t->SetRot(t->GetRot() + dt * 10);
-		}
+	//ColliderComp* c = owner->GetComponent<ColliderComp>();
+	//if (c != nullptr)
+	//{
+	//	if (t->GetRot() < targetRot)
+	//	{
+	//		t->SetRot(t->GetRot() + dt * 10);
+	//	}
 
-		if (t->GetRot() > targetRot)
-		{
-			t->SetRot(t->GetRot() - dt * 10);
-		}
+	//	if (t->GetRot() > targetRot)
+	//	{
+	//		t->SetRot(t->GetRot() - dt * 10);
+	//	}
 
-		if (abs(t->GetRot() - targetRot) < 0.2f)
-		{
-			t->SetRot(targetRot);
-		}
+	//	if (abs(t->GetRot() - targetRot) < 0.2f)
+	//	{
+	//		t->SetRot(targetRot);
+	//	}
 
-		/*if (AERadToDeg(targetRot) > 40)
-			velocity.x = -10;
-		if (AERadToDeg(targetRot) < -40)
-			velocity.x = 10;*/
+	//	/*if (AERadToDeg(targetRot) > 40)
+	//		velocity.x = -10;
+	//	if (AERadToDeg(targetRot) < -40)
+	//		velocity.x = 10;*/
 
-		if (oppoCollider.size() > 1)
-			c->SetPos({ c->GetPos().x, c->GetPos().y + 1.f });
+	//	if (oppoCollider.size() > 1)
+	//		c->SetPos({ c->GetPos().x, c->GetPos().y + 1.f });
 
-		while (!oppoCollider.empty())
-		{
-			ColliderComp* oc = oppoCollider.front();
-			oppoCollider.pop();
+	//	while (!oppoCollider.empty())
+	//	{
+	//		ColliderComp* oc = oppoCollider.front();
+	//		oppoCollider.pop();
 
-			GameObject::Type type = oc->GetOwner()->type;
+	//		GameObject::Type type = oc->GetOwner()->type;
 
-			if (type == GameObject::Square && !colliderType[GameObject::LeftTri] && !colliderType[GameObject::RightTri])
-			{
-				CorrectPosByAABB(oc, c, x, y);
-				targetRot = glm::radians<float>(0);
-			}
+	//		if (type == GameObject::Square && !colliderType[GameObject::LeftTri] && !colliderType[GameObject::RightTri])
+	//		{
+	//			CorrectPosByAABB(oc, c, x, y);
+	//			targetRot = glm::radians<float>(0);
+	//		}
 
-			else if (type == GameObject::RightTri)
-			{
-				if (colliderType[GameObject::Square] && c->GetPos().x > oc->GetPos().x)
-				{
-					CorrectPosByAABB(oc, c, x, y);
-					targetRot = glm::radians<float>(0);
-				}
-				else
-				{
-					targetRot = glm::atan(oc->GetScale().y / oc->GetScale().x);
-					y = oc->GetPos().y +
-						(c->GetPos().x + (c->GetScale().x / 2 * (abs(glm::sin(targetRot) * 0.5f))) - oc->GetPos().x) *
-						(oc->GetScale().y / oc->GetScale().x) +
-						c->GetScale().y / 2;
-				}
-			}
+	//		else if (type == GameObject::RightTri)
+	//		{
+	//			if (colliderType[GameObject::Square] && c->GetPos().x > oc->GetPos().x)
+	//			{
+	//				CorrectPosByAABB(oc, c, x, y);
+	//				targetRot = glm::radians<float>(0);
+	//			}
+	//			else
+	//			{
+	//				targetRot = glm::atan(oc->GetScale().y / oc->GetScale().x);
+	//				y = oc->GetPos().y +
+	//					(c->GetPos().x + (c->GetScale().x / 2 * (abs(glm::sin(targetRot) * 0.5f))) - oc->GetPos().x) *
+	//					(oc->GetScale().y / oc->GetScale().x) +
+	//					c->GetScale().y / 2;
+	//			}
+	//		}
 
-			else if (type == GameObject::LeftTri)
-			{
-				if (colliderType[GameObject::Square] && c->GetPos().x < oc->GetPos().x)
-				{
-					CorrectPosByAABB(oc, c, x, y);
-					targetRot = glm::radians<float>(0);
-				}
-				else
-				{
-					targetRot = glm::atan(-oc->GetScale().y / oc->GetScale().x);
-					y = oc->GetPos().y +
-						(c->GetPos().x - (c->GetScale().x / 2 * (abs(glm::sin(targetRot) * 0.5f))) - oc->GetPos().x) *
-						(-oc->GetScale().y / oc->GetScale().x) +
-						c->GetScale().y / 2;
-				}
-			}
-		}
+	//		else if (type == GameObject::LeftTri)
+	//		{
+	//			if (colliderType[GameObject::Square] && c->GetPos().x < oc->GetPos().x)
+	//			{
+	//				CorrectPosByAABB(oc, c, x, y);
+	//				targetRot = glm::radians<float>(0);
+	//			}
+	//			else
+	//			{
+	//				targetRot = glm::atan(-oc->GetScale().y / oc->GetScale().x);
+	//				y = oc->GetPos().y +
+	//					(c->GetPos().x - (c->GetScale().x / 2 * (abs(glm::sin(targetRot) * 0.5f))) - oc->GetPos().x) *
+	//					(-oc->GetScale().y / oc->GetScale().x) +
+	//					c->GetScale().y / 2;
+	//			}
+	//		}
+	//	}
 
-		for (auto& i : colliderType)
-			i = false;
+	//	for (auto& i : colliderType)
+	//		i = false;
 
-		c->SetPos({ x, y });
-	}
+	//	c->SetPos({ x, y });
+	//}
 
 	t->SetPos({ x, y });
 }

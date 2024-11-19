@@ -1,16 +1,18 @@
 #pragma once
 #include <queue>
 #include "../ComponentManager/ComponentManager.h"
-#include "../ComponentManager/EngineComponent.h"
+#include "../ComponentManager/LogicComponent.h"
 #include "../Event/Entity.h"
 #include <opengl.h>
 
-class ColliderComp : public EngineComponent, public Entity
+class ColliderComp : public LogicComponent, public Entity
 {
 private:
 	glm::vec2 pos;
-	glm::vec2 scale;
 	float rot;
+	glm::vec2 scale;
+
+	glm::mat3x3 colliderMatrix;
 
 public:
 	ColliderComp(GameObject* _owner);
@@ -28,7 +30,7 @@ public:
 	const glm::vec2& GetPos() const { return pos; }
 	const glm::vec2& GetScale() const { return scale; }
 	const float& GetRot() const { return rot; }
-	const glm::mat3x3 GetMatrix() const;
+	const glm::mat3x3& GetMatrix() const;
 
 	//Mutators
 	void SetPos(const glm::vec2& otherPos);

@@ -30,6 +30,7 @@ public:
 	const glm::vec2& GetScale() const { return scale; }
 	const float& GetRot() const { return rot; }
 	const glm::mat3x3& GetMatrix() const { return transformMatrix; }
+	const glm::mat3x3 GetMatrixEx(glm::vec2 pos, float rot, glm::vec2 scale) const;
 
 	//Mutators
 	void SetPos(const glm::vec2& otherPos);

@@ -6,7 +6,7 @@
 #include "../Components/SpriteComp.h"
 #include <EasyImgui.h>
 
-ColliderComp::ColliderComp(GameObject* _owner) : EngineComponent(_owner), pos(), scale(), rot(0), vertices()
+ColliderComp::ColliderComp(GameObject* _owner) : LogicComponent(_owner), pos(), scale(), rot(0), vertices(), colliderMatrix(glm::identity<glm::mat3>())
 {
 	CollisionManager::GetInstance().AddCollider(this);
 	EventManager::GetInstance().AddEntity(this);
@@ -27,11 +27,11 @@ void ColliderComp::Update()
 	vertices[2] = { 0.5f, -0.5f, 1.f };
 	vertices[3] = {	-0.5f, -0.5f, 1.f };
 
-	const glm::mat3& mat = owner->GetComponent<TransformComp>()->GetMatrix();
+	colliderMatrix = owner->GetComponent<TransformComp>()->GetMatrixEx(pos, rot, scale);
 
 	for (int i = 0; i < 4; i++)
 	{
-		vertices[i] = mat * vertices[i];
+		vertices[i] = colliderMatrix * vertices[i];
 	}
 
 	if (isCollision == 2)
@@ -73,16 +73,13 @@ void ColliderComp::SetRot(const float& otherRot)
 
 void ColliderComp::SetCollider()
 {
-	TransformComp* t = owner->GetComponent<TransformComp>();
-	if (!t) return;
+	pos.x = 0;
+	pos.y = 0;
 
-	pos.x = t->GetPos().x;
-	pos.y = t->GetPos().y;
+	scale.x = 1;
+	scale.y = 1;
 
-	scale.x = abs(t->GetScale().x);
-	scale.y = abs(t->GetScale().y);
-
-	rot = t->GetRot();
+	rot = 0;
 }
 
 void ColliderComp::SetCollider(float posX, float posY, float scaleX, float scaleY, float _rot)
@@ -96,26 +93,9 @@ void ColliderComp::SetCollider(float posX, float posY, float scaleX, float scale
 	rot = _rot;
 }
 
-const glm::mat3x3 ColliderComp::GetMatrix() const
+const glm::mat3x3& ColliderComp::GetMatrix() const
 {
-	glm::mat3 transformMatrix = glm::identity<glm::mat3x3>();
-	//Create a translate matrix
-	glm::mat3 translateMtx = glm::identity<glm::mat3x3>();
-	Mtx33Trans(&translateMtx, pos.x, pos.y);
-
-	//Create a rotation matrix
-	glm::mat3 rotationMtx = glm::identity<glm::mat3x3>();
-	Mtx33Rot(&rotationMtx, rot);
-
-	//Create a scale matrix
-	glm::mat3 scaleMtx = glm::identity<glm::mat3x3>();
-	Mtx33Scale(&scaleMtx, scale.x, scale.y);
-
-	//Concatenate them
-	Mtx33Concat(&transformMatrix, &scaleMtx, &rotationMtx);
-	Mtx33Concat(&transformMatrix, &translateMtx, &transformMatrix);
-	
-	return transformMatrix;
+	return colliderMatrix;
 }
 
 void ColliderComp::Edit()

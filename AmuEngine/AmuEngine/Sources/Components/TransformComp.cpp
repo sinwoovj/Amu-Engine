@@ -46,6 +46,27 @@ void TransformComp::Update()
 	CalculateMatrix();
 }
 
+const glm::mat3x3 TransformComp::GetMatrixEx(glm::vec2 posv, float rotv, glm::vec2 scalev) const
+{
+	glm::mat3 matv = glm::identity<glm::mat3x3>();
+	//Create a translate matrix
+	glm::mat3 translateMtx = glm::identity<glm::mat3x3>();
+	Mtx33Trans(&translateMtx, pos.x + posv.x, pos.y + posv.y);
+
+	//Create a rotation matrix
+	glm::mat3 rotationMtx = glm::identity<glm::mat3x3>();
+	Mtx33Rot(&rotationMtx, rot + rotv);
+
+	//Create a scale matrix
+	glm::mat3 scaleMtx = glm::identity<glm::mat3x3>();
+	Mtx33Scale(&scaleMtx, scale.x * scalev.x, scale.y * scalev.y);
+
+	//Concatenate them
+	Mtx33Concat(&matv, &scaleMtx, &rotationMtx);
+	Mtx33Concat(&matv, &translateMtx, &matv);
+	return matv;
+}
+
 void TransformComp::SetPos(const glm::vec2& otherPos)
 {
 	this->pos = otherPos;
