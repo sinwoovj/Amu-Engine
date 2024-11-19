@@ -14,7 +14,6 @@ private:
 	glm::vec2 scale;
 
 	glm::mat3x3 colliderMatrix;
-	std::vector<bool> col_selected;
 public:
 	ColliderComp(GameObject* _owner);
 	~ColliderComp();
@@ -22,7 +21,7 @@ public:
 	glm::vec3 vertices[4];
 
 	bool isTrigger = false;
-	std::list<std::string> triggerLayer;
+	std::map<std::string, bool> triggerLayer;
 	int isCollision = 0;
 
 	void Update() override;

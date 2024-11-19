@@ -9,6 +9,8 @@
 #include "../imgui/imgui_internal.h"
 #include "../imgui/implot.h"
 #include <vector>
+#include <map>
 #include <string>
 
 void MultiSelectCombo(const char* label, const std::vector<std::string>& items, std::vector<bool>& selected);
+void MultiSelectCombo(const char* label, std::map<std::string, bool>& items);

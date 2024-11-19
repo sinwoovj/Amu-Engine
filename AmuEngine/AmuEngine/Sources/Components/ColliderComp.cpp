@@ -5,9 +5,10 @@
 #include "../EventManager/EventManager.h"
 #include "../Components/SpriteComp.h"
 #include <EasyImgui.h>
+#include <map>
 #include "../GameObjectManager/GameObjectManager.h"
 
-ColliderComp::ColliderComp(GameObject* _owner) : LogicComponent(_owner), pos(), scale(), rot(0), vertices(), colliderMatrix(glm::identity<glm::mat3>()), isTrigger(false), triggerLayer(), col_selected()
+ColliderComp::ColliderComp(GameObject* _owner) : LogicComponent(_owner), pos(), scale(), rot(0), vertices(), colliderMatrix(glm::identity<glm::mat3>()), isTrigger(false), triggerLayer()
 {
 	CollisionManager::GetInstance().AddCollider(this);
 	EventManager::GetInstance().AddEntity(this);
@@ -121,26 +122,21 @@ void ColliderComp::Edit()
 	ImGui::Checkbox("Is Trigger", &isTrigger);
 
 	//Trigger Layer
-	triggerLayer.clear();
 	std::vector<std::string> layers = GameObjectManager::GetInstance().GetLayers();
-	std::vector<std::string>::iterator layers_it = layers.begin();
-	std::vector<bool> selected; // 선택 상태 저장
-	if (col_selected.empty())
+	if (triggerLayer.empty())
 	{
-		col_selected = std::vector<bool>(layers.size(), false);
+		for (auto& it : layers)
+			triggerLayer.insert({ it, false });
 	}
-	selected = col_selected;
-	col_selected.clear();
-	MultiSelectCombo("Trigger Layers", layers, selected); // 다중 선택 Combo 호출
-	for (auto it : selected)
+	else if (triggerLayer.size() != layers.size())
 	{
-		if (it)
+		for (auto& it : layers)
 		{
-			triggerLayer.push_back(*layers_it);
+			if(triggerLayer.find(it) == triggerLayer.end())
+				triggerLayer.insert({ it, false });
 		}
-		col_selected.push_back(it);
-		layers_it++;
 	}
+	MultiSelectCombo("Trigger Layers", triggerLayer); // 다중 선택 Combo 호출
 
 	//Pos
 	ImGui::SeparatorText("Position");
@@ -211,9 +207,8 @@ void ColliderComp::LoadFromJson(const json& data)
 		auto t = compData->find("triggerList");
 		if (compData->end() != t)
 		{
-			for (auto it = t->begin(); it != t->end(); it++)
-			{
-				triggerLayer.push_back(it.value());
+			for (auto& kv : t.value().items()) {
+				triggerLayer[kv.key()] = kv.value().get<bool>();
 			}
 		}
 

@@ -41,12 +41,12 @@ void RigidbodyComp::CorrectPosByAABB(ColliderComp* oc, ColliderComp* c, float& x
 	switch (minInd)
 	{
 	case 0:
-		x = oc->GetPos().x + oc->GetScale().x / 2 + c->GetScale().x / 2 + 1;
-		//velocity.x = 0;
+		x = oc->GetPos().x + oc->GetScale().x / 2 + c->GetScale().x / 2;
+		velocity.x = 0;
 		break;
 	case 1:
-		x = oc->GetPos().x - oc->GetScale().x / 2 - c->GetScale().x / 2 - 1;
-		//velocity.x = 0;
+		x = oc->GetPos().x - oc->GetScale().x / 2 - c->GetScale().x / 2;
+		velocity.x = 0;
 		break;
 	case 2:
 		y = oc->GetPos().y + oc->GetScale().y / 2 + c->GetScale().y / 2;
@@ -206,9 +206,9 @@ void RigidbodyComp::Update()
 	if (c != nullptr && c->isTrigger)
 	{
 		//화이트 리스트에 해당하는 레이어에 해당하는 오브젝트들 중 콜라이더 컴포넌트가 있는 오브젝트 중 isTriger가 켜져 있는 오브젝트들만 oppoCollider에 넣고 검사
-		for (std::string layer : c->triggerLayer)
+		for (auto layer : c->triggerLayer)
 		{
-			for (GameObject* obj : GameObjectManager::GetInstance().ExtractGOToLayer(layer))
+			for (GameObject* obj : GameObjectManager::GetInstance().ExtractGOToLayer(layer.first))
 			{
 				if (obj != owner && obj->ExistComponent("ColliderComp"))
 				{
