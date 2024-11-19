@@ -585,6 +585,7 @@
     <ClCompile Include="Sources\Resource\TextureResource.cpp" />
     <ClCompile Include="Sources\RTTI\Registry.cpp" />
     <ClCompile Include="Sources\Serializer\Serializer.cpp" />
+    <ClCompile Include="Sources\Utils\EasyImgui.cpp" />
     <ClCompile Include="Sources\Utils\EasyOpengl.cpp" />
     <ClCompile Include="Sources\Utils\Utils.cpp" />
   </ItemGroup>

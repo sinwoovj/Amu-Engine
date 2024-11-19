@@ -520,6 +520,7 @@ void SpriteComp::SpriteDebugUpdate()
 		SetBoolShader("useBorder", true);
 	SpriteDrawRectBorder(select_edge_VAO, 3, { 255, 0, 0 });
 	SetBoolShader("useBorder", false);
+	DEBUG_EDITOR_MODE_OUT
 
 	if (isCollision || editor::MainEditor::editor_data.ShowCollider)
 	{
@@ -529,7 +530,6 @@ void SpriteComp::SpriteDebugUpdate()
 		SetBoolShader("useCollider", false);
 		SetBoolShader("useBorder", false);
 	}
-	DEBUG_EDITOR_MODE_OUT
 }
 void SpriteComp::SpriteUpdate()
 {

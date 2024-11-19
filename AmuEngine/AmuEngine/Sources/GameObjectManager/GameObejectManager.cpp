@@ -129,6 +129,17 @@ std::string GameObjectManager::GetObjectLayer(const std::string& obj)
 	return "";
 }
 
+std::vector<GameObject*> GameObjectManager::ExtractGOToLayer(const std::string& str)
+{
+	std::vector<GameObject*> res;
+	for (auto& obj : objects)
+	{
+		if (obj.second->GetLayer() == str)
+			res.push_back(obj.second);
+	}
+	return res;
+}
+
 void GameObjectManager::ChangeNameLayer(const std::string& oldstr, const std::string& newstr)
 {
 	for (auto& it : Layer)
@@ -221,6 +232,17 @@ std::string GameObjectManager::GetObjectTag(const std::string& obj)
 	if (objects.find(obj) != objects.end())
 		return objects.find(obj)->second->GetTag();
 	return "";
+}
+
+std::vector<GameObject*> GameObjectManager::ExtractGOToTag(const std::string& str)
+{
+	std::vector<GameObject*> res;
+	for (auto& obj : objects)
+	{
+		if (obj.second->GetTag() == str)
+			res.push_back(obj.second);
+	}
+	return res;
 }
 
 void GameObjectManager::ChangeNameTag(const std::string& oldstr, const std::string& newstr)

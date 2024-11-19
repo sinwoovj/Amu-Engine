@@ -5,8 +5,9 @@
 #include "../EventManager/EventManager.h"
 #include "../Components/SpriteComp.h"
 #include <EasyImgui.h>
+#include "../GameObjectManager/GameObjectManager.h"
 
-ColliderComp::ColliderComp(GameObject* _owner) : LogicComponent(_owner), pos(), scale(), rot(0), vertices(), colliderMatrix(glm::identity<glm::mat3>())
+ColliderComp::ColliderComp(GameObject* _owner) : LogicComponent(_owner), pos(), scale(), rot(0), vertices(), colliderMatrix(glm::identity<glm::mat3>()), isTrigger(false), triggerLayer(), col_selected()
 {
 	CollisionManager::GetInstance().AddCollider(this);
 	EventManager::GetInstance().AddEntity(this);
@@ -116,6 +117,31 @@ void ColliderComp::Edit()
 			owner->GetComponent<SpriteComp>()->SetIsCollision(false);
 	}
 
+	//Trigger
+	ImGui::Checkbox("Is Trigger", &isTrigger);
+
+	//Trigger Layer
+	triggerLayer.clear();
+	std::vector<std::string> layers = GameObjectManager::GetInstance().GetLayers();
+	std::vector<std::string>::iterator layers_it = layers.begin();
+	std::vector<bool> selected; // 선택 상태 저장
+	if (col_selected.empty())
+	{
+		col_selected = std::vector<bool>(layers.size(), false);
+	}
+	selected = col_selected;
+	col_selected.clear();
+	MultiSelectCombo("Trigger Layers", layers, selected); // 다중 선택 Combo 호출
+	for (auto it : selected)
+	{
+		if (it)
+		{
+			triggerLayer.push_back(*layers_it);
+		}
+		col_selected.push_back(it);
+		layers_it++;
+	}
+
 	//Pos
 	ImGui::SeparatorText("Position");
 	{
@@ -176,6 +202,21 @@ void ColliderComp::LoadFromJson(const json& data)
 
 	if (compData != data.end())
 	{
+		auto i = compData->find("isTrigger");
+		if (compData->end() == i)
+			isTrigger = false;
+		else
+			isTrigger = i->begin().value();
+
+		auto t = compData->find("triggerList");
+		if (compData->end() != t)
+		{
+			for (auto it = t->begin(); it != t->end(); it++)
+			{
+				triggerLayer.push_back(it.value());
+			}
+		}
+
 		auto p = compData->find("position");
 		pos.x = p->begin().value();
 		pos.y = (p->begin() + 1).value();
@@ -196,6 +237,8 @@ json ColliderComp::SaveToJson()
 	data["type"] = TypeName;
 
 	json compData;
+	compData["isTrigger"] = isTrigger;
+	compData["triggerList"] = triggerLayer;
 	compData["position"] = { pos.x, pos.y };
 	compData["scale"] = { scale.x, scale.y };
 	compData["rotation"] = rot;

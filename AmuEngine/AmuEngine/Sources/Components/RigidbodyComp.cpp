@@ -2,6 +2,8 @@
 #include "TransformComp.h"
 #include <EasyImgui.h>
 #include "../Utils/Direction.h"
+#include "../GameObjectManager/GameObjectManager.h"
+
 
 bool RigidbodyComp::CheckEpsilon(float v, float EP)
 {
@@ -200,85 +202,35 @@ void RigidbodyComp::Update()
 	if (CheckEpsilon(velocity.y) == false)
 		velocity.y = 0;
 
-	//ColliderComp* c = owner->GetComponent<ColliderComp>();
-	//if (c != nullptr)
-	//{
-	//	if (t->GetRot() < targetRot)
-	//	{
-	//		t->SetRot(t->GetRot() + dt * 10);
-	//	}
+	ColliderComp* c = owner->GetComponent<ColliderComp>();
+	if (c != nullptr && c->isTrigger)
+	{
+		//화이트 리스트에 해당하는 레이어에 해당하는 오브젝트들 중 콜라이더 컴포넌트가 있는 오브젝트 중 isTriger가 켜져 있는 오브젝트들만 oppoCollider에 넣고 검사
+		for (std::string layer : c->triggerLayer)
+		{
+			for (GameObject* obj : GameObjectManager::GetInstance().ExtractGOToLayer(layer))
+			{
+				if (obj != owner && obj->ExistComponent("ColliderComp"))
+				{
+					if (obj->GetComponent<ColliderComp>()->isTrigger)
+					{
+						oppoCollider.push(obj->GetComponent<ColliderComp>());
+					}
+				}
+			}
+		}
+		if (oppoCollider.size() > 1)
+		{
+			while (!oppoCollider.empty())
+			{
+				ColliderComp* oc = oppoCollider.front();
+				oppoCollider.pop();
 
-	//	if (t->GetRot() > targetRot)
-	//	{
-	//		t->SetRot(t->GetRot() - dt * 10);
-	//	}
-
-	//	if (abs(t->GetRot() - targetRot) < 0.2f)
-	//	{
-	//		t->SetRot(targetRot);
-	//	}
-
-	//	/*if (AERadToDeg(targetRot) > 40)
-	//		velocity.x = -10;
-	//	if (AERadToDeg(targetRot) < -40)
-	//		velocity.x = 10;*/
-
-	//	if (oppoCollider.size() > 1)
-	//		c->SetPos({ c->GetPos().x, c->GetPos().y + 1.f });
-
-	//	while (!oppoCollider.empty())
-	//	{
-	//		ColliderComp* oc = oppoCollider.front();
-	//		oppoCollider.pop();
-
-	//		GameObject::Type type = oc->GetOwner()->type;
-
-	//		if (type == GameObject::Square && !colliderType[GameObject::LeftTri] && !colliderType[GameObject::RightTri])
-	//		{
-	//			CorrectPosByAABB(oc, c, x, y);
-	//			targetRot = glm::radians<float>(0);
-	//		}
-
-	//		else if (type == GameObject::RightTri)
-	//		{
-	//			if (colliderType[GameObject::Square] && c->GetPos().x > oc->GetPos().x)
-	//			{
-	//				CorrectPosByAABB(oc, c, x, y);
-	//				targetRot = glm::radians<float>(0);
-	//			}
-	//			else
-	//			{
-	//				targetRot = glm::atan(oc->GetScale().y / oc->GetScale().x);
-	//				y = oc->GetPos().y +
-	//					(c->GetPos().x + (c->GetScale().x / 2 * (abs(glm::sin(targetRot) * 0.5f))) - oc->GetPos().x) *
-	//					(oc->GetScale().y / oc->GetScale().x) +
-	//					c->GetScale().y / 2;
-	//			}
-	//		}
-
-	//		else if (type == GameObject::LeftTri)
-	//		{
-	//			if (colliderType[GameObject::Square] && c->GetPos().x < oc->GetPos().x)
-	//			{
-	//				CorrectPosByAABB(oc, c, x, y);
-	//				targetRot = glm::radians<float>(0);
-	//			}
-	//			else
-	//			{
-	//				targetRot = glm::atan(-oc->GetScale().y / oc->GetScale().x);
-	//				y = oc->GetPos().y +
-	//					(c->GetPos().x - (c->GetScale().x / 2 * (abs(glm::sin(targetRot) * 0.5f))) - oc->GetPos().x) *
-	//					(-oc->GetScale().y / oc->GetScale().x) +
-	//					c->GetScale().y / 2;
-	//			}
-	//		}
-	//	}
-
-	//	for (auto& i : colliderType)
-	//		i = false;
-
-	//	c->SetPos({ x, y });
-	//}
+				CorrectPosByAABB(oc, c, x, y);
+				targetRot = glm::radians<float>(0);
+			}
+		}
+	}
 
 	t->SetPos({ x, y });
 }

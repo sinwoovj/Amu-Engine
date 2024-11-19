@@ -53,6 +53,8 @@
         {
           "type": "ColliderComp",
           "compData": {
+            "isTrigger": false,
+            "triggerList": [],
             "position": [
               0.0,
               0.0
@@ -126,6 +128,8 @@
         {
           "type": "ColliderComp",
           "compData": {
+            "isTrigger": false,
+            "triggerList": [],
             "position": [
               0.0,
               0.0

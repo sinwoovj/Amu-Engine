@@ -31,7 +31,6 @@ private:
 
 	bool CheckerTriCheck(ColliderComp*, ColliderComp*);
 	bool CheckerSquareCheck(ColliderComp*, ColliderComp*);
-
 public:
 	static bool isCollision(GameObject::Type, glm::vec2, glm::vec2, GameObject::Type, glm::vec2, glm::vec2);
 
