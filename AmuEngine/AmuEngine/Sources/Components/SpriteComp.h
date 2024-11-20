@@ -17,9 +17,9 @@ private:
 
 	//texture 
 	glm::vec2 textureSize;
-	float textureChannel;
+	int textureChannel;
 	static std::map<std::string, glm::vec2> nativeSize;
-	static std::map<std::string, float> nativeChannel;
+	static std::map<std::string, int> nativeChannel;
 	static std::map<std::string, std::string> fileExt;
 
 	unsigned char* texture = nullptr;
@@ -85,8 +85,8 @@ public:
 	static glm::vec2 GetNativeSize(std::string str);
 	static void SetNativeSize(std::string str, glm::vec2 size);
 
-	static float GetNativeChannel(std::string str);
-	static void SetNativeChannel(std::string str, float channel);
+	static int GetNativeChannel(std::string str);
+	static void SetNativeChannel(std::string str, int channel);
 
 	static std::string GetFileExt(std::string str);
 	static void SetFileExt(std::string str, std::string str2);

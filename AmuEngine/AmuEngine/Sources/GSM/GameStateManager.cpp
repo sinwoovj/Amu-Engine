@@ -35,7 +35,7 @@ void GSM::GameStateManager::Init()
         currentLevel->Init();
     }
     glm::vec2 size = Utility::GetCurrentWindowSize();
-    MapManager::GetInstance().SetCurrentMap(new Map("Demo", (int)size.x, (int)size.y, 100.f));
+    MapManager::GetInstance().SetCurrentMap(new Map("Demo", (int)size.x, (int)size.y, 100));
 }
 
 void GSM::GameStateManager::Update()

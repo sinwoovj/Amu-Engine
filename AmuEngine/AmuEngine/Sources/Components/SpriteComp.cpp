@@ -82,7 +82,7 @@ void main()
 })";
 
 std::map<std::string, glm::vec2> SpriteComp::nativeSize;
-std::map<std::string, float> SpriteComp::nativeChannel;
+std::map<std::string, int> SpriteComp::nativeChannel;
 std::map<std::string, std::string> SpriteComp::fileExt;
 
 SpriteComp::SpriteComp(GameObject* _owner) : GraphicComponent(_owner)
@@ -565,7 +565,7 @@ void SpriteComp::SetNativeSize(std::string str, glm::vec2 size)
 	}
 }
 
-float SpriteComp::GetNativeChannel(std::string str)
+int SpriteComp::GetNativeChannel(std::string str)
 {
 	if (nativeChannel.find(str) != nativeChannel.end())
 	{
@@ -575,7 +575,7 @@ float SpriteComp::GetNativeChannel(std::string str)
 	return -1;
 }
 
-void SpriteComp::SetNativeChannel(std::string str, float channel)
+void SpriteComp::SetNativeChannel(std::string str, int channel)
 {
 	if (nativeChannel.find(str) == nativeChannel.end())
 	{

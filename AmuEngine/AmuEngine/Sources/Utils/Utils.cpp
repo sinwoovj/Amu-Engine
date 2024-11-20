@@ -382,11 +382,11 @@ bool Utility::GetStateWindowSize()
     return false;
 }
 
-glm::vec2 Utility::GetCurrentWindowSize()
+glm::vec<2, int> Utility::GetCurrentWindowSize()
 {
     int x, y;
     glfwGetWindowSize(glfwGetCurrentContext(), &x, &y);
-    return glm::vec2(x,y);
+    return glm::vec<2, int>(x,y);
 }
 
 void Utility::SetCurrentWindowSize(glm::vec2 size)

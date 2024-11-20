@@ -1107,6 +1107,7 @@ void editor::MainEditor::ShowMapEditor(bool* p_open)
 {
     if (ImGui::Begin("Map Editor", p_open))
     {
+
     }
     ImGui::End();
 }

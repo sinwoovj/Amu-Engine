@@ -10,7 +10,6 @@ namespace editor
 {
 	class MainEditor
 	{
-
 	public:
 		void RenderTopMenuBar(float deltaTime);
 		~MainEditor();

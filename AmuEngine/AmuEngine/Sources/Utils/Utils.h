@@ -35,7 +35,7 @@ namespace Utility {
 	std::string AbsToRelPath(const std::string& base, const std::string& target);
 
 	bool GetStateWindowSize(); // true = changed, false = not changed
-	glm::vec2 GetCurrentWindowSize();
+	glm::vec<2, int> GetCurrentWindowSize();
 	void SetCurrentWindowSize(glm::vec2 size);
 	bool isMultibyte(std::string str);
 

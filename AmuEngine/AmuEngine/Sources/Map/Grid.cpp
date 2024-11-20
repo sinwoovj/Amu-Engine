@@ -1,10 +1,10 @@
 #include "Grid.h"
 
-std::vector<float> Grid::GenerateGridVertices(float gridWidth, float gridHeight, float gridSpacing) {
+std::vector<float> Grid::GenerateGridVertices(int gridWidth, int gridHeight, int gridSpacing) {
     std::vector<float> vertices;
 
     // 세로 선 (y축 기준)
-    for (float x = -1; x <= 1; x += gridSpacing / gridWidth) {
+    for (float x = -1; x <= 1; x += (float)gridSpacing / gridWidth) {
         vertices.push_back(x);
         vertices.push_back(-1);
         vertices.push_back(0.0f); // z축 (2D 그리드의 경우 z는 0)
@@ -15,7 +15,7 @@ std::vector<float> Grid::GenerateGridVertices(float gridWidth, float gridHeight,
     }
 
     // 가로 선 (x축 기준)
-    for (float y = -1; y <= 1; y += gridSpacing / gridHeight) {
+    for (float y = -1; y <= 1; y += (float)gridSpacing / gridHeight) {
         vertices.push_back(-1);
         vertices.push_back(y);
         vertices.push_back(0.0f);
@@ -28,7 +28,7 @@ std::vector<float> Grid::GenerateGridVertices(float gridWidth, float gridHeight,
     return vertices;
 }
 
-void Grid::SetupGrid(float gridWidth, float gridHeight, float gridSpacing) { // 셰이더 프로그램 안에 넣어야 함.
+void Grid::SetupGrid(int gridWidth, int gridHeight, int gridSpacing) { // 셰이더 프로그램 안에 넣어야 함.
     vertices = GenerateGridVertices(gridWidth, gridHeight, gridSpacing);
 
     glGenVertexArrays(1, &gridVAO);

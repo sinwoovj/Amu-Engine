@@ -1,4 +1,5 @@
 #pragma once
+#include "../Components/SpriteComp.h"
 /*
  Tile 클래스
 각 타일의 정보를 나타내는 Tile 클래스입니다.
@@ -9,9 +10,7 @@ public:
     enum TileType {
         Empty,
         Wall,
-        DestructibleBlock,
-        SpawnPoint,
-        PowerUp
+        DestructibleBlock
     };
     /*
     플래그 및 상태 관리
@@ -20,13 +19,14 @@ public:
     */
     enum TileFlags {
         HasBomb = 1 << 0,     // 타일에 폭탄이 있는지 여부
-        HasItem = 1 << 1,     // 타일에 아이템이 있는지 여부
-        IsOccupied = 1 << 2   // 타일에 캐릭터가 있는지 여부
+         HasItem = 1 << 1,     // 타일에 아이템이 있는지 여부
+        IsOccupied = 1 << 2,   // 타일에 캐릭터가 있는지 여부
+        IsSpawnpoint = 1 << 3  // 타일에 스폰포인트가 있는지 여부
     };
     TileType type;
-    bool destructible;
-    float x, y;  // 타일 좌표
+    int x, y;  // 타일 좌표
+    std::string spritePath;
 
-    Tile(TileType type, bool destructible, float x, float y)
-        : type(type), destructible(destructible), x(x), y(y) {}
+    Tile(TileType type, int x, int y)
+        : type(type), x(x), y(y), spritePath(SpriteComp::DefaultSprite) {}
 };

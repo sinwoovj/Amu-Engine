@@ -16,16 +16,16 @@ public:
     std::string mapName;
     int width;
     int height;
-    float spacing;
+    int spacing;
     std::vector<std::vector<Tile>> tiles;       // 2D 배열 형태의 타일 맵
     std::vector<Item> items;                    // 맵에 배치된 아이템들
-    std::vector<std::pair<float, float>> spawnPoints;  // 플레이어 및 NPC의 시작 위치들
+    std::vector<std::pair<int, int>> spawnPoints;  // 플레이어 및 NPC의 시작 위치들
     bool isViewGrid;
     Grid grid;
 
     Map() : mapName(""), width(0), height(0), spacing(0), tiles(), items(), spawnPoints(), isViewGrid(false), grid() {}
 
-    Map(std::string mapName_, int width_, int height_, float spacing_);
+    Map(std::string mapName_, int width_, int height_, int spacing_);
 
     ~Map() {}
 
@@ -33,7 +33,7 @@ public:
 
     void addSpawnPoint(int x, int y);
 
-    void setTile(int x, int y, Tile::TileType type, bool destructible);
+    void setTile(int x, int y, Tile::TileType type);
 
     void Update();
 
