@@ -125,6 +125,8 @@ void PlayerComp::Update()
 	r->SetVelocityY(velocityY);
 	
 	SetCamera(focusMe);
+
+	std::cout << "P, fc : " << FrameCounter::GetInstance().getFrameCount() << "x : " << GetOwner()->GetComponent<TransformComp>()->GetPos().x << std::endl;
 }
 
 void PlayerComp::Edit()

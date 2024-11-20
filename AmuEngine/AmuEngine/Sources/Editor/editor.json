@@ -4,7 +4,8 @@
     "UI",
     "Particle",
     "Tile",
-    "Player"
+    "Player",
+    "Wall"
   ],
   "tags": [
     "Untagged",

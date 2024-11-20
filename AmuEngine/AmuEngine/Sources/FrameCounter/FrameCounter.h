@@ -37,5 +37,10 @@ public:
         return deltaTime; 
     }
 
+    float getFrameCount() const
+    {
+        return frameCount;
+    }
+
     void printFrameData() { std::cout << "FPS: " << GetInstance().getFPS() << " | Frame Time: " << GetInstance().getDeltaTime() << " seconds\n"; }
 };

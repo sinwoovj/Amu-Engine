@@ -6,6 +6,7 @@
 #include "../CollisionManager/CollisionManager.h"
 #include "PlayerComp.h"
 #include "SpriteComp.h"
+#include "../FrameCounter/FrameCounter.h"
 bool RigidbodyComp::CheckEpsilon(float v, float EP)
 {
 	if (v < -EP || v > EP)
@@ -33,12 +34,12 @@ void RigidbodyComp::CorrectPosByAABB(ColliderComp* oc, ColliderComp* c, float& x
 		return;
 	}
 
-	Rect a = { octp.x, octp.y, octs.x, octs.y };
-	Rect b = { ctp.x, ctp.y, cts.x, cts.y };
+	Rect a = { ctp.x, ctp.y, cts.x, cts.y }; 
+	Rect b = { octp.x, octp.y, octs.x, octs.y }; 
 
 	float overlapX = std::min(a.x + a.width, b.x + b.width) - std::max(a.x, b.x);
 	float overlapY = std::min(a.y + a.height, b.y + b.height) - std::max(a.y, b.y);
-	float offset = 2;
+	float offset = 0;
 	// X 또는 Y 방향으로 더 적게 겹친 방향으로 이동
 	if (overlapX < overlapY) {
 		if (a.x < b.x) {
@@ -59,6 +60,8 @@ void RigidbodyComp::CorrectPosByAABB(ColliderComp* oc, ColliderComp* c, float& x
 
 	x = a.x;
 	y = a.y;
+
+	std::cout << "R, fc : " << FrameCounter::GetInstance().getFrameCount() << "x : " << x << " a.x : " << a.x << std::endl;
 }
 
 RigidbodyComp::RigidbodyComp(GameObject* _owner) : EngineComponent(_owner), velocity(), maxVelocity()

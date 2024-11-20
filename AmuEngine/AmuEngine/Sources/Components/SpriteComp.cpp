@@ -82,6 +82,7 @@ void main()
 })";
 
 std::map<std::string, glm::vec2> SpriteComp::nativeSize;
+std::map<std::string, float> SpriteComp::nativeChannel;
 std::map<std::string, std::string> SpriteComp::fileExt;
 
 SpriteComp::SpriteComp(GameObject* _owner) : GraphicComponent(_owner)
@@ -105,6 +106,7 @@ SpriteComp::SpriteComp(GameObject* _owner) : GraphicComponent(_owner)
 	sprite_texture = 0;
 	texturePath = "";
 	textureSize = { 400, 400 };
+	textureChannel = 3;
 	trans = nullptr;
 	SpriteSetSprite();
 	SpriteCreateRect(select_edge_VAO, select_edge_VBO, select_edge_EBO);
@@ -409,6 +411,8 @@ void SpriteComp::SpriteApplyTransform(float offset)
 	}
 
 	glUseProgram(0);
+
+	std::cout << "S, fc : " << FrameCounter::GetInstance().getFrameCount() << "x : " << GetOwner()->GetComponent<TransformComp>()->GetPos().x << std::endl;
 }
 
 bool SpriteComp::SetTexture(std::string path)
@@ -430,15 +434,16 @@ bool SpriteComp::SetTexture(std::string path)
 	if (texture)
 	{
 		textureSize = nativeSize.find(path)->second;
+		textureChannel = nativeChannel.find(path)->second;
 
 		glBindTexture(GL_TEXTURE_2D, sprite_texture);
 		glUseProgram(_shader);
 		int channel = 0;
 		if (owner->GetComponent<SpriteComp>() != nullptr)
 		{
-			if (GetFileExt(owner->GetComponent<SpriteComp>()->GetTexturePath()) == "png")
+			if (textureChannel == 4)
 				channel = GL_RGBA;
-			else if (GetFileExt(owner->GetComponent<SpriteComp>()->GetTexturePath()) == "jpg")
+			else 
 				channel = GL_RGB;
 		}
 		
@@ -557,6 +562,24 @@ void SpriteComp::SetNativeSize(std::string str, glm::vec2 size)
 	if (nativeSize.find(str) == nativeSize.end())
 	{
 		nativeSize.insert({ str, size });
+	}
+}
+
+float SpriteComp::GetNativeChannel(std::string str)
+{
+	if (nativeChannel.find(str) != nativeChannel.end())
+	{
+		return nativeChannel.find(str)->second;
+	}
+	std::cout << "Invaild fileName" << std::endl;
+	return -1;
+}
+
+void SpriteComp::SetNativeChannel(std::string str, float channel)
+{
+	if (nativeChannel.find(str) == nativeChannel.end())
+	{
+		nativeChannel.insert({ str, channel });
 	}
 }
 

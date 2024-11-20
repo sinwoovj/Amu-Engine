@@ -83,7 +83,7 @@
     },
     {
       "object": "Player2",
-      "layer": "Player",
+      "layer": "Wall",
       "tag": "Player",
       "components": [
         {
@@ -134,11 +134,11 @@
         {
           "type": "ColliderComp",
           "compData": {
-            "isTrigger": false,
+            "isTrigger": true,
             "triggerList": {
               "Default": false,
               "Particle": false,
-              "Player": false,
+              "Player": true,
               "Tile": false,
               "UI": false
             },
@@ -158,6 +158,67 @@
           "compData": {
             "speed": 100.0,
             "focusMe": false
+          }
+        }
+      ]
+    },
+    {
+      "object": "wall",
+      "layer": "Wall",
+      "tag": "Untagged",
+      "components": [
+        {
+          "type": "TransformComp",
+          "compData": {
+            "position": [
+              -700.0,
+              400.0
+            ],
+            "scale": [
+              1.0,
+              1.0
+            ],
+            "rotation": 0.0
+          }
+        },
+        {
+          "type": "SpriteComp",
+          "compData": {
+            "color": [
+              1.0,
+              1.0,
+              1.0
+            ],
+            "alpha": 1.0,
+            "texturePath": "./Sources/Assets/Sprite/Object/fields_tileset/1_Tiles/FieldsTile_10.png",
+            "textureSize": [
+              50.0,
+              50.0
+            ],
+            "orderinLayer": 0
+          }
+        },
+        {
+          "type": "ColliderComp",
+          "compData": {
+            "isTrigger": false,
+            "triggerList": {
+              "Default": false,
+              "Particle": false,
+              "Player": false,
+              "Tile": false,
+              "UI": false,
+              "Wall": false
+            },
+            "position": [
+              0.0,
+              0.0
+            ],
+            "scale": [
+              1.0,
+              1.0
+            ],
+            "rotation": 0.0
           }
         }
       ]

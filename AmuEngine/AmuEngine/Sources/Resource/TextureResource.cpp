@@ -28,6 +28,7 @@ void TextureResource::LoadData(const std::string& filename)
 		std::cout << stbi_failure_reason() << std::endl;
 	SpriteComp::SetFileExt(filename, fileExtension);
 	SpriteComp::SetNativeSize(filename, { width, height });
+	SpriteComp::SetNativeChannel(filename, nrChannels);
 }
 
 void TextureResource::UnloadData()
