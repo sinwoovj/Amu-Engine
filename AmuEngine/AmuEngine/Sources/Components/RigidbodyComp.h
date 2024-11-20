@@ -45,6 +45,7 @@ public:
 	void ClearAcceleration();
 
 	void Update() override;
+	void CollideUpdate();
 
 	void Edit() override;
 

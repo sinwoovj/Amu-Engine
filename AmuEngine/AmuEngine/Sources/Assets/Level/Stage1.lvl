@@ -9,12 +9,12 @@
           "type": "TransformComp",
           "compData": {
             "position": [
-              288.0,
-              0.0
+              -25.100000381469727,
+              25.0
             ],
             "scale": [
-              0.25,
-              0.25
+              1.0,
+              1.0
             ],
             "rotation": 0.0
           }
@@ -30,8 +30,8 @@
             "alpha": 1.0,
             "texturePath": "./Sources/Assets/Sprite/Example/Icon1.png",
             "textureSize": [
-              200.0,
-              200.0
+              50.0,
+              50.0
             ],
             "orderinLayer": 0
           }
@@ -57,9 +57,10 @@
             "triggerList": {
               "Default": false,
               "Particle": false,
-              "Player": true,
+              "Player": false,
               "Tile": false,
-              "UI": false
+              "UI": false,
+              "Wall": true
             },
             "position": [
               0.0,
@@ -83,15 +84,15 @@
     },
     {
       "object": "Player2",
-      "layer": "Wall",
+      "layer": "Player",
       "tag": "Player",
       "components": [
         {
           "type": "TransformComp",
           "compData": {
             "position": [
-              124.0,
-              0.0
+              25.0,
+              25.0
             ],
             "scale": [
               0.25,
@@ -138,9 +139,10 @@
             "triggerList": {
               "Default": false,
               "Particle": false,
-              "Player": true,
+              "Player": false,
               "Tile": false,
-              "UI": false
+              "UI": false,
+              "Wall": true
             },
             "position": [
               0.0,
@@ -163,7 +165,7 @@
       ]
     },
     {
-      "object": "wall",
+      "object": "Wall1",
       "layer": "Wall",
       "tag": "Untagged",
       "components": [
@@ -191,6 +193,67 @@
             ],
             "alpha": 1.0,
             "texturePath": "./Sources/Assets/Sprite/Object/fields_tileset/1_Tiles/FieldsTile_10.png",
+            "textureSize": [
+              50.0,
+              50.0
+            ],
+            "orderinLayer": 0
+          }
+        },
+        {
+          "type": "ColliderComp",
+          "compData": {
+            "isTrigger": false,
+            "triggerList": {
+              "Default": false,
+              "Particle": false,
+              "Player": false,
+              "Tile": false,
+              "UI": false,
+              "Wall": false
+            },
+            "position": [
+              0.0,
+              0.0
+            ],
+            "scale": [
+              1.0,
+              1.0
+            ],
+            "rotation": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "object": "Wall2",
+      "layer": "Wall",
+      "tag": "Untagged",
+      "components": [
+        {
+          "type": "TransformComp",
+          "compData": {
+            "position": [
+              -700.0,
+              350.0
+            ],
+            "scale": [
+              1.0,
+              1.0
+            ],
+            "rotation": 0.0
+          }
+        },
+        {
+          "type": "SpriteComp",
+          "compData": {
+            "color": [
+              1.0,
+              1.0,
+              1.0
+            ],
+            "alpha": 1.0,
+            "texturePath": "./Sources/Assets/Sprite/Object/fields_tileset/1_Tiles/FieldsTile_13.png",
             "textureSize": [
               50.0,
               50.0

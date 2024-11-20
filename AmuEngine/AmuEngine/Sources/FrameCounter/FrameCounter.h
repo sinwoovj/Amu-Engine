@@ -37,7 +37,7 @@ public:
         return deltaTime; 
     }
 
-    float getFrameCount() const
+    int getFrameCount() const
     {
         return frameCount;
     }

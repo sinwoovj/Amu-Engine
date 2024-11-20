@@ -84,6 +84,7 @@ namespace editor
 			bool ShowFps = false;
 			bool ShowGrid = false;
 			bool GridViewTop = false;
+			bool FixedWindowSize = true;
 
 			// Constant Variable
 			const std::string editorFileName = "./Sources/Editor/editor.json";

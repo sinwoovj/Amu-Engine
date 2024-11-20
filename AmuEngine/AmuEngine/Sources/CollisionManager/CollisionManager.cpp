@@ -373,19 +373,44 @@ void CollisionManager::DelCollider(ColliderComp* trans)
 	}
 }
 
-void CollisionManager::Update()
+void CollisionManager::AddRigidbody(RigidbodyComp* rigid)
 {
-	if (colliderList.empty())
-		return;
+	rigidbodyList.push_back(rigid);
+}
 
-	EventManager& em = EventManager::GetInstance();
-
-	for (unsigned int i = 0; i < colliderList.size() - 1; i++)
+void CollisionManager::DelRigidbody(RigidbodyComp* rigid)
+{
+	for (auto it = rigidbodyList.begin(); it != rigidbodyList.end(); it++)
 	{
-		for (unsigned int j = i + 1; j < colliderList.size(); j++)
+		if (*it == rigid)
 		{
-			ColliderComp* a = colliderList[i];
-			ColliderComp* b = colliderList[j];
+			rigidbodyList.erase(it);
+			break;
 		}
 	}
+}
+
+void CollisionManager::Update()
+{
+	if (!colliderList.empty())
+	{
+		EventManager& em = EventManager::GetInstance();
+
+		for (unsigned int i = 0; i < colliderList.size() - 1; i++)
+		{
+			for (unsigned int j = i + 1; j < colliderList.size(); j++)
+			{
+				ColliderComp* a = colliderList[i];
+				ColliderComp* b = colliderList[j];
+			}
+		}
+	}
+	if (!rigidbodyList.empty())
+	{
+		for (auto& it : rigidbodyList)
+		{
+			it->CollideUpdate();
+		}
+	}
+		
 }

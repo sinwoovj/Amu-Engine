@@ -6,15 +6,15 @@
 class Grid
 {
     GLuint gridVAO, gridVBO;
-    std::vector<float> vertices;
 public:
+    std::vector<float> vertices;
     Grid() : gridVAO(0), gridVBO(0), vertices({}) {};
-    Grid(float gridSize_, float gridSpacing_) : gridVAO(0), gridVBO(0), vertices({}) {
-        SetupGrid(gridSize_, gridSpacing_);
+    Grid(float gridWidth_, float gridHeight_, float gridSpacing_) : gridVAO(0), gridVBO(0), vertices({}) {
+        SetupGrid(gridWidth_, gridHeight_, gridSpacing_);
     };
-    void SetupGrid(float gridSize, float gridSpacing);
+    void SetupGrid(float gridWidth, float gridHeight, float gridSpacing);
 
-    std::vector<float> GenerateGridVertices(float gridSize, float gridSpacing);
+    std::vector<float> GenerateGridVertices(float gridWidth, float gridHeight, float gridSpacing);
 
     void RenderGrid();
 };

@@ -15,7 +15,7 @@
 #include <map>
 #include <string>
 #include "../FrameCounter/FrameCounter.h"
-
+#include <Utils.h>
 // 전역 변수: 애니메이션 상태
 float menuHeight = 0.0f;        // 현재 메뉴 높이
 float menuTargetHeight = 50.f; // 목표 메뉴 높이
@@ -535,16 +535,14 @@ void editor::MainEditor::TopBar()
     {
         editor_data.currLevelName = dynamic_cast<level::NormalLevel*>(GSM::GameStateManager::GetInstance().GetCurrentLevel())->GetName();
     }
-    
+
     ImGui::BeginMainMenuBar();
     {
         if (ImGui::BeginMenu("File"))
         {
             if (ImGui::MenuItem("Quit")) { glfwSetWindowShouldClose(glfwGetCurrentContext(), true); }
-
             ImGui::Separator();
             if (ImGui::MenuItem("Close")) { ImGui::CloseCurrentPopup(); }
-
             ImGui::EndMenu();
         }
         ImGui::PushItemFlag(ImGuiItemFlags_Disabled, editorMode == Play || editorMode == Pause);
@@ -552,7 +550,7 @@ void editor::MainEditor::TopBar()
         {
             ImGui::SeparatorText("Level List");
             LevelManager::GetInstance().LoadLevels();
-            
+
             for (auto& lvl : LevelManager::GetInstance().GetLevels())
             {
                 if (lvl == "")
@@ -577,7 +575,7 @@ void editor::MainEditor::TopBar()
                         editor_data.showChangeLevelPopup = true;
                     }
                     ImGui::Separator();
-                    if (ImGui::MenuItem("Delete Level")) { 
+                    if (ImGui::MenuItem("Delete Level")) {
                         if (LevelManager::GetInstance().DeleteLevel(lvl)) //Delete
                         {
                             // 성공
@@ -623,8 +621,8 @@ void editor::MainEditor::TopBar()
                 editor_data.showAddLevelPopup = true;
             }
             ImGui::Separator();
-            if (ImGui::MenuItem("Close")) { 
-                ImGui::CloseCurrentPopup(); 
+            if (ImGui::MenuItem("Close")) {
+                ImGui::CloseCurrentPopup();
             }
             ImGui::EndMenu();
         }
@@ -648,12 +646,17 @@ void editor::MainEditor::TopBar()
             if (ImGui::MenuItem("Game Data Editor", 0, &editor_data.showGameDataEditor))
             {
             }
-
+            ImGui::Separator();
+            if (ImGui::MenuItem("Fixed Window Size", 0, &editor_data.FixedWindowSize)) 
+            {
+            }
+            if (ImGui::MenuItem("Initialize Window Size")) {
+                glfwSetWindowSize(glfwGetCurrentContext(), 1600, 900);
+            }
             ImGui::Separator();
             if (ImGui::MenuItem("Close")) { ImGui::CloseCurrentPopup(); }
-            ImGui::EndMenu();
+                ImGui::EndMenu();
         }
-
         if (ImGui::BeginMenu("View"))
         {
             if (ImGui::MenuItem("Show All Collider Border", 0, &editor_data.ShowCollider)) {
@@ -677,7 +680,7 @@ void editor::MainEditor::TopBar()
 
             ImGui::Separator();
             if (ImGui::MenuItem("Close")) { ImGui::CloseCurrentPopup(); }
-            ImGui::EndMenu();
+                ImGui::EndMenu();
         }
 
         for (int i = 0; i < 20; i++)
@@ -690,10 +693,10 @@ void editor::MainEditor::TopBar()
             Serializer::GetInstance().SaveEditorSetting();
             Serializer::GetInstance().SaveGameDataSetting();
             //save가 안되어 있을 시 팝업
-            
+
             editorMode = Play;
             // 게임 모드에서는 ImGui 입력을 비활성화
-            ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoKeyboard; 
+            ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoKeyboard;
             BOMB::BombManager::BombCount = 0;
         }
         ImGui::PopItemFlag();

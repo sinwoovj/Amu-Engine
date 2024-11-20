@@ -375,11 +375,23 @@ std::string Utility::AbsToRelPath(const std::string& base, const std::string& ta
     return "./" + result;
 }
 
+bool Utility::GetStateWindowSize()
+{
+    if (GetCurrentWindowSize().x != 1600 || GetCurrentWindowSize().y != 900)
+        return true;
+    return false;
+}
+
 glm::vec2 Utility::GetCurrentWindowSize()
 {
     int x, y;
     glfwGetWindowSize(glfwGetCurrentContext(), &x, &y);
     return glm::vec2(x,y);
+}
+
+void Utility::SetCurrentWindowSize(glm::vec2 size)
+{
+    glfwSetWindowSize(glfwGetCurrentContext(), size.x, size.y);
 }
 
 bool Utility::isMultibyte(std::string str)

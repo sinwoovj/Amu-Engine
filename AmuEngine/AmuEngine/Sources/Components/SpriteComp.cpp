@@ -412,7 +412,7 @@ void SpriteComp::SpriteApplyTransform(float offset)
 
 	glUseProgram(0);
 
-	std::cout << "S, fc : " << FrameCounter::GetInstance().getFrameCount() << "x : " << GetOwner()->GetComponent<TransformComp>()->GetPos().x << std::endl;
+	//std::cout << "S, fc : " << FrameCounter::GetInstance().getFrameCount() << "x : " << GetOwner()->GetComponent<TransformComp>()->GetPos().x << std::endl;
 }
 
 bool SpriteComp::SetTexture(std::string path)

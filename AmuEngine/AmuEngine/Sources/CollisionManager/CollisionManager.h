@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "../Components/ColliderComp.h"
+#include "../Components/RigidbodyComp.h"
 #include "../Components/TransformComp.h"
 #include "../EventManager/EventManager.h"
 #include "../Event/CollisionEvent.h"
@@ -17,6 +18,7 @@ private:
 
 	static CollisionManager* ptr;
 	std::vector<ColliderComp*> colliderList;
+	std::vector<RigidbodyComp*> rigidbodyList;
 	bool isCollisionPointTri(ColliderComp*, ColliderComp*) const;
 	bool isCollisionPointSquare(ColliderComp*, ColliderComp*) const;
 	bool isCollisionSquareTri(ColliderComp*, ColliderComp*) const;
@@ -40,6 +42,8 @@ public:
 
 	void AddCollider(ColliderComp* trans);
 	void DelCollider(ColliderComp* trans);
+	void AddRigidbody(RigidbodyComp* rigid);
+	void DelRigidbody(RigidbodyComp* rigid);
 
 	void Update();
 };

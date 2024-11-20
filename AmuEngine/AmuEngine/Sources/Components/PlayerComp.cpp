@@ -126,7 +126,7 @@ void PlayerComp::Update()
 	
 	SetCamera(focusMe);
 
-	std::cout << "P, fc : " << FrameCounter::GetInstance().getFrameCount() << "x : " << GetOwner()->GetComponent<TransformComp>()->GetPos().x << std::endl;
+	//std::cout << "P, fc : " << FrameCounter::GetInstance().getFrameCount() << "x : " << GetOwner()->GetComponent<TransformComp>()->GetPos().x << std::endl;
 }
 
 void PlayerComp::Edit()
